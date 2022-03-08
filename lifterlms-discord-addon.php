@@ -54,7 +54,7 @@ function deactivate_lifterlms_discord_addon() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-lifterlms-discord-addon-deactivator.php';
 	Lifterlms_Discord_Addon_Deactivator::deactivate();
 }
-
+ 
 register_activation_hook( __FILE__, 'activate_lifterlms_discord_addon' );
 register_deactivation_hook( __FILE__, 'deactivate_lifterlms_discord_addon' );
 
