@@ -54,6 +54,30 @@ class Lifterlms_Discord_Addon_Admin {
 
 	}
 
+	/* 
+		Adding child menu under top level lifterlms menu
+	*/
+
+	public function add_admin_menu() {
+		add_submenu_page(
+		 'lifterlms',
+		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
+		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
+		 'manage_options', 
+		 'lifterlms-discord', 
+		 'ets_lifterlms_discord_setting_page'
+		);
+	}
+    /* 
+		Details of page
+	*/
+
+	public function ets_lifterlms_discord_setting_page(){
+		if ( !current_user_can('manage_options') ) {
+			return;
+		}
+	}
+
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
