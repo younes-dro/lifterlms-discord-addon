@@ -64,7 +64,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
 		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
 		 'manage_options', 
-		 'lifterlms-discord-addon', 
+		 'lifterlms-discord', 
 		 'ets_lifterlms_discord_setting_page'
 		);
 	}
@@ -73,9 +73,10 @@ class Lifterlms_Discord_Addon_Admin {
 	*/
 
 	public function ets_lifterlms_discord_setting_page(){
-		if ( !current_user_can('manage_options') ) {
+		if ( !current_user_can('administrator') ) {
 			return;
 		}
+		require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH.'admin/partials/lifterlms-discord-addon-admin-display.php';
 	}
 
 	/**
@@ -98,7 +99,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
-
+		
 	}
 
 	/**
@@ -121,7 +122,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
 	}
 
 }

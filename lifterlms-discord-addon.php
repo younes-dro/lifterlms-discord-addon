@@ -35,7 +35,15 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
+define( 'LIFTERLMS_DISCORD_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
+
 define( 'LIFTERLMS_DISCORD_ADDON_VERSION', '1.0.0' );
+
+
+/**
+ * Define Plugin Dir Constant
+ */
+
 
 /**
  * The code that runs during plugin activation.
@@ -74,9 +82,7 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-lifterlms-discord-addon.ph
  * @since    1.0.0
  */
 function run_lifterlms_discord_addon() {
-
 	$plugin = new Lifterlms_Discord_Addon();
 	$plugin->run();
-
 }
 run_lifterlms_discord_addon();
