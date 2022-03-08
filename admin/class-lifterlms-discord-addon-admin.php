@@ -64,7 +64,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
 		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
 		 'manage_options', 
-		 'lifterlms-discord', 
+		 'lifterlms-discord-addon', 
 		 'ets_lifterlms_discord_setting_page'
 		);
 	}
