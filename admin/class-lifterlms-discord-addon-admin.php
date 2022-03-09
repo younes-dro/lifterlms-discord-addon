@@ -58,21 +58,14 @@ class Lifterlms_Discord_Addon_Admin {
 		Adding child menu under top level lifterlms menu
 	*/
 
-	public function add_admin_menu() {
-		add_submenu_page(
-		 'lifterlms',
-		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
-		 __( 'Discord Settings', 'lifterlms-discord-addon' ),
-		 'manage_options', 
-		 'lifterlms-discord', 
-		 'ets_lifterlms_discord_setting_page'
-		);
+	public function ets_lifterlms_add_admin_menu() {
+		add_submenu_page( 'lifterlms', _( 'Discord Settings'), _( 'Discord Settings'), 'manage_options', 'lifterlms-discord-addon', array( $this, 'ets_lifterlms_discord_view' ), 999 );
 	}
     /* 
 		Details of page
 	*/
 
-	public function ets_lifterlms_discord_setting_page(){
+	public function ets_lifterlms_discord_view(){
 		if ( !current_user_can('administrator') ) {
 			return;
 		}
@@ -97,7 +90,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
+		wp_enqueue_style( $this->plugin_name . 'skeletabs.js', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
 		
 	}
@@ -108,7 +101,6 @@ class Lifterlms_Discord_Addon_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -120,9 +112,9 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name.'skeletabs.js', plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
+		
 	}
 
 }
