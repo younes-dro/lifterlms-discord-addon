@@ -37,7 +37,6 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'LIFTERLMS_DISCORD_ADDON_VERSION', '1.0.0' );
 
-
 /**
  * Define Plugin Dir Constant
  */

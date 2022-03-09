@@ -156,7 +156,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ets_lifterlms_add_admin_menu', 11 );
-
+		$this->loader->add_action( 'admin_post_lifterlms_discord_save_application_details', $plugin_admin, 'ets_lifterlms_discord_save_application_details' );
 	}
 
 	/**
