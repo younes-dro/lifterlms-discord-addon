@@ -18,6 +18,12 @@
 	 */
 	$redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
 	
+	// if ( empty( $ets_lifterlms_discord_redirect_page_id ) ) {
+	// 	$acc_url  = sanitize_text_field( trim( get_site_url() . '/account' ) );
+	// 	$ets_lifterlms_discord_redirect_page_id = ets_get_lifterlms_discord_formated_discord_redirect_url( $acc_url );
+	// }
+
+
 ?>
 
 
@@ -25,7 +31,7 @@
 <form method="post" action="<?php echo esc_attr( get_site_url() ) . '/wp-admin/admin-post.php'; ?>">
 
 <input type="hidden" name="action" value="lifterlms_discord_save_application_details">
-<!-- <input type="hidden" name="action" value="lifterlms_discord_get_current_screen_url"> -->
+<input type="hidden" name="current_url" value="<?php echo ets_lifterlms_discord_get_current_screen_url()?>">
 <?php wp_nonce_field( 'save_lifterlms_discord_settings', 'ets_lifterlms_discord_save_settings' ); ?>
 	
 		<div class="ets-input-group">
@@ -40,8 +46,11 @@
 
 		<div class="ets-input-group">
 			<label><?php echo __( 'Redirect URL', 'lifterlms-discord-addon' ); ?> :</label>
-			<?php echo $redirect_url."<br>";?>
-			<select class="form-control js-example-tags ets-input" name="ets_lifterlms_discord_redirect_page_id" >
+			<p class="ets-danger-text description redirect-url">
+				<?php echo $redirect_url."<br><br>";?>
+		    </p>
+			
+			<select class="form-control ets_wp_pages_list ets-input" name="ets_lifterlms_discord_redirect_page_id" >
 		   		<?php echo $pages; ?>
   			</select>
 	    </div>
@@ -58,7 +67,7 @@
 	
 <!--check field Empty or Not-->
 
-	<?php if ( empty( $ets_lifterlms_discord_client_id ) || empty( $ets_lifterlms_discord_client_secret ) || empty( $ets_lifterlms_discord_bot_token) || empty( $ets_lifterlms_discord_redirect_url ) || empty( $ets_lifterlms_discord_server_id ) ) { ?>
+	<?php if ( empty( $ets_lifterlms_discord_client_id ) || empty( $ets_lifterlms_discord_client_secret ) || empty( $ets_lifterlms_discord_bot_token) || empty( $ets_lifterlms_discord_redirect_page_id ) || empty( $ets_lifterlms_discord_server_id ) ) { ?>
 		<p class="ets-danger-text description">
 		    <?php echo __( 'Please save your form Now', 'lifterlms-discord-addon' ); ?>
 		</p>
