@@ -1,37 +1,48 @@
 <?php 
+	/**
+	 *  Get value of the field
+	 */
 	$ets_lifterlms_discord_client_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ));
 	$ets_lifterlms_discord_client_secret  = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_secret' ));
-	$ets_lifterlms_discord_redirect_url  = sanitize_text_field( get_option( 'ets_lifterlms_discord_redirect_url' ));
+	$ets_lifterlms_discord_redirect_page_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_redirect_page_id' ));
 	$ets_lifterlms_discord_bot_token  = sanitize_text_field( get_option( 'ets_lifterlms_discord_bot_token' ));
 	$ets_lifterlms_discord_server_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ));
+	/**
+	 *  Passed Redirect-URL in function ets_lifterlms_discord_pages_list
+	*/
 
+	$pages = ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_id );
+
+	/**
+	 *  Passed Redirect-URL in function ets_get_lifterlms_discord_formated_discord_redirect_url
+	 */
+	$redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
+	
 ?>
+
+
 
 <form method="post" action="<?php echo esc_attr( get_site_url() ) . '/wp-admin/admin-post.php'; ?>">
 
 <input type="hidden" name="action" value="lifterlms_discord_save_application_details">
-
+<!-- <input type="hidden" name="action" value="lifterlms_discord_get_current_screen_url"> -->
 <?php wp_nonce_field( 'save_lifterlms_discord_settings', 'ets_lifterlms_discord_save_settings' ); ?>
 	
 		<div class="ets-input-group">
-			<label><?php echo __( 'ID', 'lifterlms-discord-addon' ); ?> :</label>
+			<label><?php echo __( 'Client ID', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="<?php if ( isset( $ets_lifterlms_discord_client_id ) ) { echo $ets_lifterlms_discord_client_id;} ?>" required placeholder="<?php echo __( 'Discord Client ID', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 	
 		<div class="ets-input-group">
-			<label><?php echo __( 'Secret', 'lifterlms-discord-addon' ); ?> :</label>
+			<label><?php echo __( 'Client Secret', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php if ( isset( $ets_lifterlms_discord_client_secret ) ) { echo esc_attr( $ets_lifterlms_discord_client_secret ); } ?>" required placeholder="<?php echo __( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 
 		<div class="ets-input-group">
 			<label><?php echo __( 'Redirect URL', 'lifterlms-discord-addon' ); ?> :</label>
-			
-			<?php echo $ets_lifterlms_discord_redirect_url;?></br>
-			<select class="form-control js-example-tags ets-input" name="ets_lifterlms_discord_redirect_url" id="select1">
-				<option value="volvo">Volvo</option>
-				<option value="saab">Saab</option>
-				<option value="opel">Opel</option>
-				<option value="audi">Audi</option>
+			<?php echo $redirect_url."<br>";?>
+			<select class="form-control js-example-tags ets-input" name="ets_lifterlms_discord_redirect_page_id" >
+		   		<?php echo $pages; ?>
   			</select>
 	    </div>
 

@@ -103,6 +103,13 @@ class Lifterlms_Discord_Addon {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
+
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/functions.php';
+
+		/**
+		 * Include file function.php
+		 */
+		
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lifterlms-discord-addon-loader.php';
 
 		/**
@@ -157,6 +164,8 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ets_lifterlms_add_admin_menu', 11 );
 	    $this->loader->add_action( 'admin_post_lifterlms_discord_save_application_details', $plugin_admin, 'ets_lifterlms_discord_save_application_details' );
+	
+		//$this->loader->add_action( 'admin_post_lifterlms_discord_get_current_screen_url', $plugin_admin, 'ets_lifterlms_discord_get_current_screen_url' );
 	}
                 
 	/**
