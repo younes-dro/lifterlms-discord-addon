@@ -5,8 +5,10 @@
 	$ets_lifterlms_discord_client_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ));
 	$ets_lifterlms_discord_client_secret  = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_secret' ));
 	$ets_lifterlms_discord_redirect_page_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_redirect_page_id' ));
+	$ets_lifterlms_admin_redirect_url  = sanitize_text_field( get_option( 'ets_lifterlms_admin_redirect_url' ));
 	$ets_lifterlms_discord_bot_token  = sanitize_text_field( get_option( 'ets_lifterlms_discord_bot_token' ));
 	$ets_lifterlms_discord_server_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ));
+	
 	/**
 	 *  Passed Redirect-URL in function ets_lifterlms_discord_pages_list
 	*/
@@ -17,12 +19,7 @@
 	 *  Passed Redirect-URL in function ets_get_lifterlms_discord_formated_discord_redirect_url
 	 */
 	$redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
-	
-	// if ( empty( $ets_lifterlms_discord_redirect_page_id ) ) {
-	// 	$acc_url  = sanitize_text_field( trim( get_site_url() . '/account' ) );
-	// 	$ets_lifterlms_discord_redirect_page_id = ets_get_lifterlms_discord_formated_discord_redirect_url( $acc_url );
-	// }
-
+	$bot_username = $this->ets_lifterlms_discord_get_bot_name($ets_lifterlms_discord_bot_token);
 
 ?>
 
@@ -49,13 +46,22 @@
 			<p class="ets-danger-text description redirect-url">
 				<?php echo $redirect_url."<br><br>";?>
 		    </p>
-			
 			<select class="form-control ets_wp_pages_list ets-input" name="ets_lifterlms_discord_redirect_page_id" >
 		   		<?php echo $pages; ?>
   			</select>
 	    </div>
 
 		<div class="ets-input-group">
+
+			<label><?php echo __( 'Admin Redirect URL Connect to the bot', 'lifterlms-discord-addon' ); ?> :</label>
+			<input type="text" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo get_admin_url('', 'admin.php').'?page=lifterlms-discord-addon'; ?>" disabled="" />
+
+		</div>
+
+		<div class="ets-input-group">
+			
+			<?php echo sprintf(" <b>(%s)</b> Bot name, should have the higher priority than the role it has to manage. <a href='https://discord.com/channels/%d'>Open discord server</a>.", $bot_username,$ets_lifterlms_discord_server_id );?><br>	
+		
 			<label><?php echo __( 'Bot Token', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php if ( isset( $ets_lifterlms_discord_bot_token ) ) { echo esc_attr( $ets_lifterlms_discord_bot_token ); } ?>" required placeholder="<?php echo __( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
 		</div>
@@ -65,6 +71,8 @@
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php echo __( 'Discord Server Id', 'lifterlms-discord-add-on' ); ?>" value="<?php if ( isset( $ets_lifterlms_discord_server_id  ) ) { echo esc_attr( $ets_lifterlms_discord_server_id  ); } ?>" required>
 		</div>
 	
+		
+
 <!--check field Empty or Not-->
 
 	<?php if ( empty( $ets_lifterlms_discord_client_id ) || empty( $ets_lifterlms_discord_client_secret ) || empty( $ets_lifterlms_discord_bot_token) || empty( $ets_lifterlms_discord_redirect_page_id ) || empty( $ets_lifterlms_discord_server_id ) ) { ?>

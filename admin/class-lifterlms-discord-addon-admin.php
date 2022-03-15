@@ -143,15 +143,22 @@ class Lifterlms_Discord_Addon_Admin {
 				$ets_lifterlms_discord_redirect_page_id = isset( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ) : '';	
 				$ets_lifterlms_discord_bot_token = isset( $_POST['ets_lifterlms_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_bot_token'] ) ) : '';		
 				$ets_lifterlms_discord_server_id = isset( $_POST['ets_lifterlms_discord_server_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_server_id'] ) ) : '';
-				$redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
+				$ets_lifterlms_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
 				$current_url = isset( $_POST['current_url'] ) ? sanitize_text_field( trim( $_POST['current_url'] ) ) : '';
+				$ets_lifterlms_admin_redirect_url = isset( $_POST['ets_lifterlms_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_admin_redirect_url'] ) ) : '';	
+				
+				// $ets_lifterlms_admin_redirect_url
 
+				if ( $ets_lifterlms_admin_redirect_url ) {
+					update_option( 'ets_lifterlms_admin_redirect_url', $ets_lifterlms_admin_redirect_url );
+				}
+				
 				if ( $ets_lifterlms_discord_client_id ) {
 					update_option( 'ets_lifterlms_discord_client_id', $ets_lifterlms_discord_client_id );
 				}
 				// ets_lifterlms_discord_redirect_url
-				if ( $redirect_url ) {
-					update_option( 'ets_lifterlms_discord_redirect_page_id', $redirect_url );
+				if ( $ets_lifterlms_discord_redirect_url ) {
+					update_option( 'ets_lifterlms_discord_redirect_url', $ets_lifterlms_discord_redirect_url );
 				}
 
 				if ( $ets_lifterlms_discord_client_secret ) {
@@ -171,6 +178,16 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_server_id', $ets_lifterlms_discord_server_id );
 				}
 
+				/**
+				 *   return username from discord
+				 */
+				$bot_username = $this->ets_lifterlms_discord_get_bot_name($ets_lifterlms_discord_bot_token);
+				
+				if ( $bot_username ) {
+					update_option( 'ets_lifterlms_discord_bot_username', $bot_username );
+				}
+
+
 				$message = 'Your settings are saved successfully.';
 				if ( isset( $current_url ) ) {
 					$pre_location = $current_url . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
@@ -178,4 +195,22 @@ class Lifterlms_Discord_Addon_Admin {
 				}
 		    }	 
     }
+
+	private function ets_lifterlms_discord_get_bot_name($bot_token) {
+		if ( !current_user_can('administrator') ) {
+			return;
+		}
+
+		$discord_cuser_api_url = LIFTERLMS_DISCORD_API_URL . 'users/@me';
+		$param          = array(
+								'headers' => array(
+								'Content-Type'  => 'application/x-www-form-urlencoded',
+								'Authorization' => 'Bot ' . $bot_token,
+			                ),
+
+		);
+		$bot_response    =    wp_remote_get( $discord_cuser_api_url, $param );
+		$response_arr = json_decode( wp_remote_retrieve_body( $bot_response ), true );
+		return $response_arr['username'];	
+	}
 }

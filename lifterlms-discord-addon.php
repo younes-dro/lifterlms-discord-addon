@@ -40,6 +40,15 @@ define( 'LIFTERLMS_DISCORD_ADDON_VERSION', '1.0.0' );
 /**
  * Define Plugin Dir Constant
  */
+
+/**
+ * Discord API URL
+ */
+define( 'LIFTERLMS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
+
+/**
+ * LIFTERLMS_DISCORD_PLUGIN_DIR_PATH
+ */
 define( 'LIFTERLMS_DISCORD_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
