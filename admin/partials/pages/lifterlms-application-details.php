@@ -68,7 +68,7 @@
 	
 		<div class="ets-input-group">
 			<label><?php echo __( 'Server Id', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php echo __( 'Discord Server Id', 'lifterlms-discord-add-on' ); ?>" value="<?php if ( isset( $ets_lifterlms_discord_server_id  ) ) { echo esc_attr( $ets_lifterlms_discord_server_id  ); } ?>" required>
+			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php echo __( 'Discord Server Id', 'lifterlms-discord-addon' ); ?>" value="<?php if ( isset( $ets_lifterlms_discord_server_id  ) ) { echo esc_attr( $ets_lifterlms_discord_server_id  ); } ?>" required>
 		</div>
 	
 		
@@ -86,6 +86,10 @@
 		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
 	    	<?php echo __( 'Save Settings', 'lifterlms-discord-addon' ); ?>
 		</button>
+
+		<?php if ( get_option( 'ets_lifterlms_discord_client_id' ) ) : ?>
+		   <a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php echo __( 'Connect your Bot', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
+		<?php endif; ?>
 	</p>
 
 </form>
