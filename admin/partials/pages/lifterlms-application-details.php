@@ -54,7 +54,7 @@
 		<div class="ets-input-group">
 
 			<label><?php echo __( 'Admin Redirect URL Connect to the bot', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo get_admin_url('', 'admin.php').'?page=lifterlms-discord-addon'; ?>" disabled="" />
+			<input type="text" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo get_admin_url('', 'admin.php').'?page=lifterlms-discord-addon'; ?>" />
 
 		</div>
 
@@ -88,7 +88,7 @@
 		</button>
 
 		<?php if ( get_option( 'ets_lifterlms_discord_client_id' ) ) : ?>
-		   <a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php echo __( 'Connect your Bot', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
+		   <a href="?action=lifterlms-discord-connectToBot" class="ets-btn" ><?php echo __( 'Connect your Bot', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
 		<?php endif; ?>
 	</p>
 

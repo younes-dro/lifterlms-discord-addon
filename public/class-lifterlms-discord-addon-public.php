@@ -100,34 +100,34 @@ class Lifterlms_Discord_Addon_Public {
 
 	}
 
-	public function ets_lifterlms_discord_discord_api_callback() {
-		if ( is_user_logged_in() ) {
+	// public function ets_lifterlms_discord_discord_api_callback() {
+	// 	if ( is_user_logged_in() ) {
 			
-			if ( isset( $_GET['action'] ) && 'lifterlms-discord-login' === $_GET['action'] ) {
-				$params                    = array(
-					'client_id'     => sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ) ),
-					'redirect_uri'  => sanitize_text_field( get_option( 'ets_lifterlms_admin_redirect_url' ) ),
-					'response_type' => 'code',
-					'scope'         => 'identify email connections guilds guilds.join messages.read',
-				);
-				$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
+	// 		if ( isset( $_GET['action'] ) && 'lifterlms-discord-login' === $_GET['action'] ) {
+	// 			$params                    = array(
+	// 				'client_id'     => sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ) ),
+	// 				'redirect_uri'  => sanitize_text_field( get_option( 'ets_lifterlms_admin_redirect_url' ) ),
+	// 				'response_type' => 'code',
+	// 				'scope'         => 'identify email connections guilds guilds.join messages.read',
+	// 			);
+	// 			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
  
-				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
-				exit;
-			}
-			if ( isset( $_GET['action'] ) && 'discord-connectToBot' === $_GET['action'] ) {
-				$params                    = array(
-					'client_id'   => sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ) ),
-					'permissions' => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
-					'scope'       => 'bot',
-					'guild_id'    => sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ) ),
-				);
-				$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
+	// 			wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+	// 			exit;
+	// 		}
+	// 		if ( isset( $_GET['action'] ) && 'discord-connectToBot' === $_GET['action'] ) {
+	// 			$params                    = array(
+	// 				'client_id'   => sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ) ),
+	// 				'permissions' => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
+	// 				'scope'       => 'bot',
+	// 				'guild_id'    => sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ) ),
+	// 			);
+	// 			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 
-				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
-				exit;
-			}
-		}
-	}
+	// 			wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+	// 			exit;
+	// 		}
+	// 	}
+	// }
 
 }
