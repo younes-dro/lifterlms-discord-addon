@@ -4,6 +4,8 @@
 	/* Select2 -Plugin jquery */
 	$('document').ready(function () {
 
+
+
 		/*Load all roles from discord server
 		1) Call discord API to get bot status.
 		*/
@@ -18,6 +20,7 @@
 			},
 
 			success: function (response) {
+				console.log(response);
 				if (response != null && response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access')
 				{
 					$(".btn-connect-to-bot").show();
