@@ -292,4 +292,38 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 	}
 
+
+	/* 
+	  Role-level-screen
+	*/
+	public function ets_lifterlms_discord_role_mapping() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+
+		$ets_discord_roles = isset( $_POST['ets_memberpress_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_memberpress_discord_role_mapping'] ) ) : '';
+		$ets_discord_roles   = stripslashes( $ets_discord_roles );
+		$current_url_role                            = isset( $_POST['current_url_role'] ) ? sanitize_text_field( trim( $_POST['current_url_role'] ) ) : '';
+			
+		$save_mapping_status = update_option( 'ets_lifterlms_discord_role_mapping', $ets_discord_roles );
+				
+			if ( ( $save_mapping_status || isset( $_POST['ets_lifterlms_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
+				
+				$message = 'Your mappings are saved successfully.';
+				if ( isset( $current_url_role ) ) {
+					$pre_location = $current_url_role . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
+					wp_safe_redirect( $pre_location );
+				}
+			}
+			if ( isset( $_POST['flush'] ) ) {
+				delete_option( 'ets_lifterlms_discord_role_mapping' );
+				$message = ' Your settings are flushed successfully.';
+				if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+					$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#lifterlms_role_level';
+					wp_safe_redirect( $pre_location );
+				}
+			}	
+	}
+
 }
