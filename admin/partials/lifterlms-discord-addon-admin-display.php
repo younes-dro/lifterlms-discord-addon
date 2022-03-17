@@ -38,7 +38,7 @@ if ( isset( $_GET['save_settings_msg'] ) ) {
 				   <button class="skltbs-tab" data-identity="lifterlms_application" ><?php echo __( 'Application Details', 'lifterlms-discord-addon' ); ?><span class="initialtab spinner"></span></button>
 				</li>	
 				<li class="skltbs-tab-item">
-				   <button class="skltbs-tab" data-identity="lifterlms_role_level_map" ><?php echo __( 'Role Mapping', 'lifterlms-discord-addon' ); ?></button>
+				   <button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mapping', 'lifterlms-discord-addon' ); ?></button>
 					<!--style="display:none"-->
 				</li>
 		</ul>

@@ -4,8 +4,6 @@
 	/* Select2 -Plugin jquery */
 	$('document').ready(function () {
 
-
-
 		/*Load all roles from discord server
 		1) Call discord API to get bot status.
 		*/
@@ -28,40 +26,43 @@
 				else if (response == null || response.message == '401: Unauthorized' || response.hasOwnProperty('code') || response == 0) {
 					$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
 				} else {
+					if ($('.ets-tabs button[data-identity="level-mapping"]').length) {
+						$('.ets-tabs button[data-identity="level-mapping"]').show();
+					}
 					$("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
+					
+					var activeTab = localStorage.getItem('activeTab');
+						if ($('.ets-tabs button[data-identity="level-mapping"]').length == 0 && activeTab == 'level-mapping') {
+							$('.ets-tabs button[data-identity="lifterlms_application"]').trigger('click');
+						}
 
-				}
+					$.each(response, function (key, val) {
+						var isbot = false;
+						
+						if (val.hasOwnProperty('tags')) {
+							if (val.tags.hasOwnProperty('bot_id')) {
+								isbot = true;
+							}
+						}
+						
+					});
+
+			}
 
 			},
 			error: function (response) {
 				$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
 				console.error(response);
 			},
+			complete: function () {
+				$(".discord-roles .spinner").removeClass("is-active").css({ "float": "right" });
+				$("#skeletabsTab1 .spinner").removeClass("is-active").css({ "float": "right", "display": "none" });
+			}	
 			
 		});
 		
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		
-
 		/*Select-tabs plugin options*/
 
 		let select2 = jQuery(".ets_wp_pages_list").select2({

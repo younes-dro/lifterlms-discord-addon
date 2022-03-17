@@ -8,7 +8,7 @@
 	$ets_lifterlms_admin_redirect_url  = sanitize_text_field( get_option( 'ets_lifterlms_admin_redirect_url' ));
 	$ets_lifterlms_discord_bot_token  = sanitize_text_field( get_option( 'ets_lifterlms_discord_bot_token' ));
 	$ets_lifterlms_discord_server_id  = sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ));
-	
+	$ets_discord_roles                = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_role_mapping' ) ) );
 	/**
 	 *  Passed Redirect-URL in function ets_lifterlms_discord_pages_list
 	*/
@@ -29,6 +29,7 @@
 
 <input type="hidden" name="action" value="lifterlms_discord_save_application_details">
 <input type="hidden" name="current_url" value="<?php echo ets_lifterlms_discord_get_current_screen_url()?>">
+
 <?php wp_nonce_field( 'save_lifterlms_discord_settings', 'ets_lifterlms_discord_save_settings' ); ?>
 	
 		<div class="ets-input-group">
