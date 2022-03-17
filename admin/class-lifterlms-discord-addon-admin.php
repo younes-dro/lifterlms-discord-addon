@@ -54,27 +54,30 @@ class Lifterlms_Discord_Addon_Admin {
 
 	}
 
-	/* 
+	/*
 		Adding child menu under top level lifterlms menu
 	*/
 
 	public function ets_lifterlms_add_admin_menu() {
-		add_submenu_page( 'lifterlms', 
-		_( 'Discord Settings'),
-		 _( 'Discord Settings'), 
-		 'manage_options', 
-		 'lifterlms-discord-addon',
-		  array( $this, 'ets_lifterlms_discord_view' ), 999 );
+		add_submenu_page(
+			'lifterlms',
+			_( 'Discord Settings' ),
+			_( 'Discord Settings' ),
+			'manage_options',
+			'lifterlms-discord-addon',
+			array( $this, 'ets_lifterlms_discord_view' ),
+			999
+		);
 	}
-    /* 
+	/*
 		Details of page
 	*/
 
-	public function ets_lifterlms_discord_view(){
-		if ( !current_user_can('administrator') ) {
+	public function ets_lifterlms_discord_view() {
+		if ( ! current_user_can( 'administrator' ) ) {
 			return;
 		}
-		require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH.'admin/partials/lifterlms-discord-addon-admin-display.php';
+		require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/lifterlms-discord-addon-admin-display.php';
 	}
 
 	/**
@@ -95,14 +98,14 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_style( $this->plugin_name .'skeletabs.css', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
-		
-		wp_enqueue_style( $this->plugin_name."select2.css", plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
-		
+		wp_enqueue_style( $this->plugin_name . 'skeletabs.css', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
+
+		wp_enqueue_style( $this->plugin_name . 'select2.css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
-		
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
-		
+
 	}
 
 	/**
@@ -122,131 +125,129 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_script( $this->plugin_name.'select2.js', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), $this->version, false );
-		
-		wp_enqueue_script( $this->plugin_name.'skeletabs.js', plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
-		
+		wp_enqueue_script( $this->plugin_name . 'select2.js', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), $this->version, false );
+
+		wp_enqueue_script( $this->plugin_name . 'skeletabs.js', plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
+
 		// /wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-admin.min.js', array( 'jquery' ), $this->version, false );
-		
+
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery' ), $this->version, false );
 		$script_params = array(
-			'admin_ajax'                    => admin_url( 'admin-ajax.php' ),
-			'permissions_const'             => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
-			'is_admin'                      => is_admin(),
-			'ets_lifterlms_discord_nonce'   => wp_create_nonce( 'ets-lifterlms-discord-ajax-nonce' ),
+			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
+			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
+			'is_admin'                    => is_admin(),
+			'ets_lifterlms_discord_nonce' => wp_create_nonce( 'ets-lifterlms-discord-ajax-nonce' ),
 		);
 		wp_localize_script( $this->plugin_name, 'ets_lifterlms_js_params', $script_params );
 	}
 
 	/**
-	 * Save application details on Server 
-	 * 
+	 * Save application details on Server
 	 */
 
-	public function ets_lifterlms_discord_save_application_details(){
+	public function ets_lifterlms_discord_save_application_details() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-			
-			if ( wp_verify_nonce( $_POST['ets_lifterlms_discord_save_settings'], 'save_lifterlms_discord_settings' ) ) {
-				
-				$ets_lifterlms_discord_client_id = isset( $_POST['ets_lifterlms_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_client_id'] ) ) : '';		
-				$ets_lifterlms_discord_client_secret = isset( $_POST['ets_lifterlms_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_client_secret'] ) ) : '';		
-				$ets_lifterlms_discord_redirect_page_id = isset( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ) : '';	
-				$ets_lifterlms_discord_bot_token = isset( $_POST['ets_lifterlms_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_bot_token'] ) ) : '';		
-				$ets_lifterlms_discord_server_id = isset( $_POST['ets_lifterlms_discord_server_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_server_id'] ) ) : '';
-				$ets_lifterlms_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
-				$current_url = isset( $_POST['current_url'] ) ? sanitize_text_field( trim( $_POST['current_url'] ) ) : '';
-				$ets_lifterlms_admin_redirect_url = isset( $_POST['ets_lifterlms_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_admin_redirect_url'] ) ) : '';	
-				
-				if ( $ets_lifterlms_admin_redirect_url ) {
-					update_option( 'ets_lifterlms_admin_redirect_url', $ets_lifterlms_admin_redirect_url );
-				}
-				
-				if ( $ets_lifterlms_discord_client_id ) {
-					update_option( 'ets_lifterlms_discord_client_id', $ets_lifterlms_discord_client_id );
-				}
-				// ets_lifterlms_discord_redirect_url
-				if ( $ets_lifterlms_discord_redirect_url ) {
-					update_option( 'ets_lifterlms_discord_redirect_url', $ets_lifterlms_discord_redirect_url );
-				}
-				
-				if ( $ets_lifterlms_discord_client_secret ) {
-					update_option( 'ets_lifterlms_discord_client_secret', $ets_lifterlms_discord_client_secret );
-				}
 
-				if ( $ets_lifterlms_discord_bot_token ) {
-					update_option( 'ets_lifterlms_discord_bot_token', $ets_lifterlms_discord_bot_token );
-				}
+		if ( wp_verify_nonce( $_POST['ets_lifterlms_discord_save_settings'], 'save_lifterlms_discord_settings' ) ) {
 
-				if ( $ets_lifterlms_discord_redirect_page_id) {
-					
-					update_option( 'ets_lifterlms_discord_redirect_page_id', $ets_lifterlms_discord_redirect_page_id );
-				}
+			$ets_lifterlms_discord_client_id        = isset( $_POST['ets_lifterlms_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_client_id'] ) ) : '';
+			$ets_lifterlms_discord_client_secret    = isset( $_POST['ets_lifterlms_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_client_secret'] ) ) : '';
+			$ets_lifterlms_discord_redirect_page_id = isset( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_redirect_page_id'] ) ) : '';
+			$ets_lifterlms_discord_bot_token        = isset( $_POST['ets_lifterlms_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_bot_token'] ) ) : '';
+			$ets_lifterlms_discord_server_id        = isset( $_POST['ets_lifterlms_discord_server_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_server_id'] ) ) : '';
+			$ets_lifterlms_discord_redirect_url     = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
+			$current_url                            = isset( $_POST['current_url'] ) ? sanitize_text_field( trim( $_POST['current_url'] ) ) : '';
+			$ets_lifterlms_admin_redirect_url       = isset( $_POST['ets_lifterlms_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_admin_redirect_url'] ) ) : '';
 
-				if ( $ets_lifterlms_discord_server_id ) {
-					update_option( 'ets_lifterlms_discord_server_id', $ets_lifterlms_discord_server_id );
-				}
+			if ( $ets_lifterlms_admin_redirect_url ) {
+				update_option( 'ets_lifterlms_admin_redirect_url', $ets_lifterlms_admin_redirect_url );
+			}
 
-				/**
-				 *   return username from discord
-				 */
-				$bot_username = $this->ets_lifterlms_discord_get_bot_name($ets_lifterlms_discord_bot_token);
-				
-				if ( $bot_username ) {
-					update_option( 'ets_lifterlms_discord_bot_username', $bot_username );
-				}
+			if ( $ets_lifterlms_discord_client_id ) {
+				update_option( 'ets_lifterlms_discord_client_id', $ets_lifterlms_discord_client_id );
+			}
+			// ets_lifterlms_discord_redirect_url
+			if ( $ets_lifterlms_discord_redirect_url ) {
+				update_option( 'ets_lifterlms_discord_redirect_url', $ets_lifterlms_discord_redirect_url );
+			}
 
+			if ( $ets_lifterlms_discord_client_secret ) {
+				update_option( 'ets_lifterlms_discord_client_secret', $ets_lifterlms_discord_client_secret );
+			}
 
-				$message = 'Your settings are saved successfully.';
-				if ( isset( $current_url ) ) {
-					$pre_location = $current_url . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
-					wp_safe_redirect( $pre_location );
-				}
-		    }	 
-    }
+			if ( $ets_lifterlms_discord_bot_token ) {
+				update_option( 'ets_lifterlms_discord_bot_token', $ets_lifterlms_discord_bot_token );
+			}
 
-	private function ets_lifterlms_discord_get_bot_name($bot_token) {
-		if ( !current_user_can('administrator') ) {
+			if ( $ets_lifterlms_discord_redirect_page_id ) {
+
+				update_option( 'ets_lifterlms_discord_redirect_page_id', $ets_lifterlms_discord_redirect_page_id );
+			}
+
+			if ( $ets_lifterlms_discord_server_id ) {
+				update_option( 'ets_lifterlms_discord_server_id', $ets_lifterlms_discord_server_id );
+			}
+
+			/**
+			 *   return username from discord
+			 */
+			$bot_username = $this->ets_lifterlms_discord_get_bot_name( $ets_lifterlms_discord_bot_token );
+
+			if ( $bot_username ) {
+				update_option( 'ets_lifterlms_discord_bot_username', $bot_username );
+			}
+
+			$message = 'Your settings are saved successfully.';
+			if ( isset( $current_url ) ) {
+				$pre_location = $current_url . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
+				wp_safe_redirect( $pre_location );
+			}
+		}
+	}
+
+	private function ets_lifterlms_discord_get_bot_name( $bot_token ) {
+		if ( ! current_user_can( 'administrator' ) ) {
 			return;
 		}
 
 		$discord_cuser_api_url = LIFTERLMS_DISCORD_API_URL . 'users/@me';
-		$param          = array(
-								'headers' => array(
-								'Content-Type'  => 'application/x-www-form-urlencoded',
-								'Authorization' => 'Bot ' . $bot_token,
-			                ),
+		$param                 = array(
+			'headers' => array(
+				'Content-Type'  => 'application/x-www-form-urlencoded',
+				'Authorization' => 'Bot ' . $bot_token,
+			),
 
 		);
-		$bot_response    =    wp_remote_get( $discord_cuser_api_url, $param );
+		$bot_response = wp_remote_get( $discord_cuser_api_url, $param );
 		$response_arr = json_decode( wp_remote_retrieve_body( $bot_response ), true );
-		return $response_arr['username'];	
+		return $response_arr['username'];
 	}
 
 	/*
 	Catch the Connect to Bot action from admin.
 	*/
-	public function ets_lifterlms_discord_action_connect_bot(){
+	public function ets_lifterlms_discord_action_connect_bot() {
 
-		if( isset($_GET['action'])  && $_GET['action']=='lifterlms-discord-connectToBot' ){
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'lifterlms-discord-connectToBot' ) {
 			if ( ! current_user_can( 'administrator' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 			}
 			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize';
-			$params = array(
-				'client_id'     => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
-				'permissions' => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
-				'scope'       => 'bot',
-				'guild_id'    => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) ),
-				'disable_guild_select'=> 'true',
-				'redirect_uri' => sanitize_text_field( trim( get_option( 'ets_lifterlms_admin_redirect_url' ) ) ),
-				'response_type' => 'code',
+			$params                    = array(
+				'client_id'            => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
+				'permissions'          => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
+				'scope'                => 'bot',
+				'guild_id'             => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) ),
+				'disable_guild_select' => 'true',
+				'redirect_uri'         => sanitize_text_field( trim( get_option( 'ets_lifterlms_admin_redirect_url' ) ) ),
+				'response_type'        => 'code',
 			);
-			
-			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?'.http_build_query( $params );
+
+			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 			wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
 			exit;
 		}
@@ -256,7 +257,7 @@ class Lifterlms_Discord_Addon_Admin {
 	 *
 	 * GET OBJECT REST API response
 	 */
-	
+
 
 	public function ets_lifterlms_load_discord_roles() {
 		if ( ! current_user_can( 'administrator' ) ) {
@@ -269,48 +270,26 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-
-		// $guild_args  = array(
-		// 	"id": "697464405281210408", 
-		// 	"name": "@everyone", 
-		// 	"permissions": 0, 
-		// 	"position": 0,
-		// 	 "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "1071594340352"}, {"id": "793091232107986946", "name": "MathBot", "permissions": 117824, "position": 19, "color": 0, "hoist": true, "managed": true, "mentionable": true, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "134073775925886976"}, "permissions_new": "6442568768"}, {"id": "800663607074750475", "name": "spectator", "permissions": 254921793, "position": 10, "color": 3447003, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6697372737"}, {"id": "801000713366667314", "name": "contentator", "permissions": 120704065, "position": 11, "color": 15844367, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6563155009"}, {"id": "857193694129684490", "name": "new role", "permissions": 0, "position": 9, "color": 15277667, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "857511112702558250", "name": "New Role", "permissions": 0, "position": 8, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "885134685007675402", "name": "Trial Memberpress", "permissions": 0, "position": 7, "color": 3066993, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "885139683896623125", "name": "new role", "permissions": 0, "position": 6, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "920938521102008361", "name": "ultimate-member", "permissions": 8, "position": 17, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "920936082118443049"}, "permissions_new": "8"}, {"id": "923587208554876999", "name": "Restrictcontentpro discord addon", "permissions": 8, "position": 18, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923586881113960458"}, "permissions_new": "8"}, {"id": "928267478054879233", "name": "wc-discord", "permissions": 8, "position": 16, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "928267171073785856"}, "permissions_new": "8"}, {"id": "935062985620197436", "name": "Gold Role", "permissions": 0, "position": 5, "color": 16766720, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "0"}, {"id": "938080152565481514", "name": "Zapier", "permissions": 2146958591, "position": 4, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "368105370532577280"}, "permissions_new": "2146958591"}, {"id": "943033610615816235", "name": "MEE6", "permissions": 1945627743, "position": 3, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "159985870458322944"}, "permissions_new": "1945627743"}, {"id": "943765597659992087", "name": "Excuseme_IamNext", "permissions": 8, "position": 2, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "943553617003175957"}, "permissions_new": "8"}, {"id": "945186904972857356", "name": "ets-lifter-lms", "permissions": 8, "position": 1, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "945186562755424266"}, "permissions_new": "8"}, {"id": "946788807649394761", "name": "NewPluginInstall", "permissions": 8, "position": 14, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "863801582851325983"}, "permissions_new": "8"}, {"id": "950700255601627189", "name": "wp-learndash", "permissions": 8, "position": 15, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923202091722358795"}, "permissions_new": "8"}, {"id": "950756944036106243", "name": "MemberPress Discord", "permissions": 8, "position": 12, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "865181205379940373"}, "permissions_new": "8"}, {"id": "951003472956895285", "name": "wp-learnpress", "permissions": 8, "position": 13, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "940488526963802183"}, "permissions_new": "8"
-		// );
-
-
-
-		$response_arr = json_decode('[{"id": "697464405281210408", "name": "@everyone", "permissions": 0, "position": 0, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "1071594340352"}, {"id": "793091232107986946", "name": "MathBot", "permissions": 117824, "position": 19, "color": 0, "hoist": true, "managed": true, "mentionable": true, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "134073775925886976"}, "permissions_new": "6442568768"}, {"id": "800663607074750475", "name": "spectator", "permissions": 254921793, "position": 10, "color": 3447003, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6697372737"}, {"id": "801000713366667314", "name": "contentator", "permissions": 120704065, "position": 11, "color": 15844367, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6563155009"}, {"id": "857193694129684490", "name": "new role", "permissions": 0, "position": 9, "color": 15277667, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "857511112702558250", "name": "New Role", "permissions": 0, "position": 8, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "885134685007675402", "name": "Trial Memberpress", "permissions": 0, "position": 7, "color": 3066993, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "885139683896623125", "name": "new role", "permissions": 0, "position": 6, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "920938521102008361", "name": "ultimate-member", "permissions": 8, "position": 17, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "920936082118443049"}, "permissions_new": "8"}, {"id": "923587208554876999", "name": "Restrictcontentpro discord addon", "permissions": 8, "position": 18, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923586881113960458"}, "permissions_new": "8"}, {"id": "928267478054879233", "name": "wc-discord", "permissions": 8, "position": 16, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "928267171073785856"}, "permissions_new": "8"}, {"id": "935062985620197436", "name": "Gold Role", "permissions": 0, "position": 5, "color": 16766720, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "0"}, {"id": "938080152565481514", "name": "Zapier", "permissions": 2146958591, "position": 4, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "368105370532577280"}, "permissions_new": "2146958591"}, {"id": "943033610615816235", "name": "MEE6", "permissions": 1945627743, "position": 3, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "159985870458322944"}, "permissions_new": "1945627743"}, {"id": "943765597659992087", "name": "Excuseme_IamNext", "permissions": 8, "position": 2, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "943553617003175957"}, "permissions_new": "8"}, {"id": "945186904972857356", "name": "ets-lifter-lms", "permissions": 8, "position": 1, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "945186562755424266"}, "permissions_new": "8"}, {"id": "946788807649394761", "name": "NewPluginInstall", "permissions": 8, "position": 14, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "863801582851325983"}, "permissions_new": "8"}, {"id": "950700255601627189", "name": "wp-learndash", "permissions": 8, "position": 15, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923202091722358795"}, "permissions_new": "8"}, {"id": "950756944036106243", "name": "MemberPress Discord", "permissions": 8, "position": 12, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "865181205379940373"}, "permissions_new": "8"}, {"id": "951003472956895285", "name": "wp-learnpress", "permissions": 8, "position": 13, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "940488526963802183"}, "permissions_new": "8"}]');
-		
-		//response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-
-        return wp_send_json($response_arr);
-		
-		//return wp_send_json( $response_arr );
-		//$response_arr = json_decode( wp_remote_retrieve_body( [{"id": "697464405281210408", "name": "@everyone", "permissions": 0, "position": 0, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "1071594340352"}, {"id": "793091232107986946", "name": "MathBot", "permissions": 117824, "position": 19, "color": 0, "hoist": true, "managed": true, "mentionable": true, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "134073775925886976"}, "permissions_new": "6442568768"}, {"id": "800663607074750475", "name": "spectator", "permissions": 254921793, "position": 10, "color": 3447003, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6697372737"}, {"id": "801000713366667314", "name": "contentator", "permissions": 120704065, "position": 11, "color": 15844367, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6563155009"}, {"id": "857193694129684490", "name": "new role", "permissions": 0, "position": 9, "color": 15277667, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "857511112702558250", "name": "New Role", "permissions": 0, "position": 8, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "885134685007675402", "name": "Trial Memberpress", "permissions": 0, "position": 7, "color": 3066993, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "885139683896623125", "name": "new role", "permissions": 0, "position": 6, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "920938521102008361", "name": "ultimate-member", "permissions": 8, "position": 17, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "920936082118443049"}, "permissions_new": "8"}, {"id": "923587208554876999", "name": "Restrictcontentpro discord addon", "permissions": 8, "position": 18, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923586881113960458"}, "permissions_new": "8"}, {"id": "928267478054879233", "name": "wc-discord", "permissions": 8, "position": 16, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "928267171073785856"}, "permissions_new": "8"}, {"id": "935062985620197436", "name": "Gold Role", "permissions": 0, "position": 5, "color": 16766720, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "0"}, {"id": "938080152565481514", "name": "Zapier", "permissions": 2146958591, "position": 4, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "368105370532577280"}, "permissions_new": "2146958591"}, {"id": "943033610615816235", "name": "MEE6", "permissions": 1945627743, "position": 3, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "159985870458322944"}, "permissions_new": "1945627743"}, {"id": "943765597659992087", "name": "Excuseme_IamNext", "permissions": 8, "position": 2, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "943553617003175957"}, "permissions_new": "8"}, {"id": "945186904972857356", "name": "ets-lifter-lms", "permissions": 8, "position": 1, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "945186562755424266"}, "permissions_new": "8"}, {"id": "946788807649394761", "name": "NewPluginInstall", "permissions": 8, "position": 14, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "863801582851325983"}, "permissions_new": "8"}, {"id": "950700255601627189", "name": "wp-learndash", "permissions": 8, "position": 15, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923202091722358795"}, "permissions_new": "8"}, {"id": "950756944036106243", "name": "MemberPress Discord", "permissions": 8, "position": 12, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "865181205379940373"}, "permissions_new": "8"}, {"id": "951003472956895285", "name": "wp-learnpress", "permissions": 8, "position": 13, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "940488526963802183"}, "permissions_new": "8"}] ,true ));
-
-
-    /*
-		$user_id = get_current_user_id();
+		$user_id           = get_current_user_id();
 		$server_id         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
-		
-		if ( $server_id  && $discord_bot_token ) {
+
+		if ( $server_id && $discord_bot_token ) {
 			$discod_server_roles_api = LIFTERLMS_DISCORD_API_URL . 'guilds/' . $server_id . '/roles';
 			$guild_args              = array(
-				  'method'  => 'GET',
-				  'headers' => array(
+				'method'  => 'GET',
+				'headers' => array(
 					'Content-Type'  => 'application/json',
 					'Authorization' => 'Bot ' . $discord_bot_token,
 				),
 			);
 			$guild_response          = wp_remote_post( $discod_server_roles_api, $guild_args );
-			
-			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-			
-			return wp_send_json( $response_arr );
-		}*/
 
+			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			// iIn case the API call does not return DATA, we will using dummy data.
+			$response_arr = json_decode( '[{"id": "697464405281210408", "name": "@everyone", "permissions": 0, "position": 0, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "1071594340352"}, {"id": "793091232107986946", "name": "MathBot", "permissions": 117824, "position": 19, "color": 0, "hoist": true, "managed": true, "mentionable": true, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "134073775925886976"}, "permissions_new": "6442568768"}, {"id": "800663607074750475", "name": "spectator", "permissions": 254921793, "position": 10, "color": 3447003, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6697372737"}, {"id": "801000713366667314", "name": "contentator", "permissions": 120704065, "position": 11, "color": 15844367, "hoist": true, "managed": false, "mentionable": true, "icon": null, "unicode_emoji": null, "permissions_new": "6563155009"}, {"id": "857193694129684490", "name": "new role", "permissions": 0, "position": 9, "color": 15277667, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "857511112702558250", "name": "New Role", "permissions": 0, "position": 8, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "109521666048"}, {"id": "885134685007675402", "name": "Trial Memberpress", "permissions": 0, "position": 7, "color": 3066993, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "885139683896623125", "name": "new role", "permissions": 0, "position": 6, "color": 0, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "521838526464"}, {"id": "920938521102008361", "name": "ultimate-member", "permissions": 8, "position": 17, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "920936082118443049"}, "permissions_new": "8"}, {"id": "923587208554876999", "name": "Restrictcontentpro discord addon", "permissions": 8, "position": 18, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923586881113960458"}, "permissions_new": "8"}, {"id": "928267478054879233", "name": "wc-discord", "permissions": 8, "position": 16, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "928267171073785856"}, "permissions_new": "8"}, {"id": "935062985620197436", "name": "Gold Role", "permissions": 0, "position": 5, "color": 16766720, "hoist": false, "managed": false, "mentionable": false, "icon": null, "unicode_emoji": null, "permissions_new": "0"}, {"id": "938080152565481514", "name": "Zapier", "permissions": 2146958591, "position": 4, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "368105370532577280"}, "permissions_new": "2146958591"}, {"id": "943033610615816235", "name": "MEE6", "permissions": 1945627743, "position": 3, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "159985870458322944"}, "permissions_new": "1945627743"}, {"id": "943765597659992087", "name": "Excuseme_IamNext", "permissions": 8, "position": 2, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "943553617003175957"}, "permissions_new": "8"}, {"id": "945186904972857356", "name": "ets-lifter-lms", "permissions": 8, "position": 1, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "945186562755424266"}, "permissions_new": "8"}, {"id": "946788807649394761", "name": "NewPluginInstall", "permissions": 8, "position": 14, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "863801582851325983"}, "permissions_new": "8"}, {"id": "950700255601627189", "name": "wp-learndash", "permissions": 8, "position": 15, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "923202091722358795"}, "permissions_new": "8"}, {"id": "950756944036106243", "name": "MemberPress Discord", "permissions": 8, "position": 12, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "865181205379940373"}, "permissions_new": "8"}, {"id": "951003472956895285", "name": "wp-learnpress", "permissions": 8, "position": 13, "color": 0, "hoist": false, "managed": true, "mentionable": false, "icon": null, "unicode_emoji": null, "tags": {"bot_id": "940488526963802183"}, "permissions_new": "8"}]' );
+			return wp_send_json( $response_arr );
+		}
 	}
-	
+
 }
