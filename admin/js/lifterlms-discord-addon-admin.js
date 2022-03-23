@@ -4,9 +4,7 @@
 	/* Select2 -Plugin jquery */
 	$('document').ready(function () {
 
-		/*Load all roles from discord server
-		1) Call discord API to get bot status.
-		*/
+		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",
 			dataType: "JSON",
@@ -18,7 +16,7 @@
 			},
 
 			success: function (response) {
-				console.log(response);
+				//console.log(response);
 				if (response != null && response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access')
 				{
 					$(".btn-connect-to-bot").show();
@@ -35,20 +33,56 @@
 						if ($('.ets-tabs button[data-identity="level-mapping"]').length == 0 && activeTab == 'level-mapping') {
 							$('.ets-tabs button[data-identity="lifterlms_application"]').trigger('click');
 						}
+/* fetch all roles from discord server */
 
 					$.each(response, function (key, val) {
-						var isbot = false;
+						var isbot = false; 
 						
 						if (val.hasOwnProperty('tags')) {
 							if (val.tags.hasOwnProperty('bot_id')) {
 								isbot = true;
 							}
 						}
+						if (key != 'previous_mapping' && isbot == false && val.name != '@everyone') {
+							$('.discord-roles').append('<div class="makeMeDraggable" style="background-color:#' + val.color.toString(16) + '" data-role_id="' + val.id + '" >' + val.name + '</div>');
+							$('#defaultRole').append('<option value="' + val.id + '" >' + val.name + '</option>');
+							makeDrag($('.makeMeDraggable'));
+						}
 						
 					});
 
-			}
+					var defaultRole = $('#selected_default_role').val();
+						if (defaultRole) {
+							$('#defaultRole option[value=' + defaultRole + ']').prop('selected', true);
+						}
 
+						if (response.previous_mapping) {
+							var mapjson = response.previous_mapping;
+						} else {
+							var mapjson = localStorage.getItem('LifterlmsMappingjson');
+						}
+
+
+
+					$("#maaping_json_val").html(mapjson);
+						$.each(JSON.parse(mapjson), function (key, val) {
+							var arrayofkey = key.split('id_');
+							var preclone = $('*[data-role_id="' + val + '"]').clone();
+							if(preclone.length>1){
+								preclone.slice(1).hide();
+							}
+							if (jQuery('*[data-course_id="' + arrayofkey[1] + '"]').find('*[data-role_id="' + val + '"]').length == 0) {
+								$('*[data-course_id="' + arrayofkey[1] + '"]').append(preclone).attr('data-drop-role_id', val).find('span').css({ 'order': '2' });
+							}
+							if ($('*[data-course_id="' + arrayofkey[1] + '"]').find('.makeMeDraggable').length >= 1) {
+								$('*[data-course_id="' + arrayofkey[1] + '"]').droppable("destroy");
+							}
+							preclone.css({ 'width': '100%', 'left': '0', 'top': '0', 'margin-bottom': '0px', 'order': '1' }).attr('data-course_id', arrayofkey[1]);
+							makeDrag(preclone);
+							
+						});
+
+				}
 			},
 			error: function (response) {
 				$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
@@ -58,18 +92,151 @@
 				$(".discord-roles .spinner").removeClass("is-active").css({ "float": "right" });
 				$("#skeletabsTab1 .spinner").removeClass("is-active").css({ "float": "right", "display": "none" });
 			}	
-			
 		});
-		
 
+/*Create droppable element*/
 		
+		function init() {
+		
+			$('.makeMeDroppable').droppable({
+				drop: handleDropEvent,
+				hoverClass: 'hoverActive',
+			});
+			$('.discord-roles-col').droppable({
+				drop: handlePreviousDropEvent,
+				hoverClass: 'hoverActive',
+			});
+		}
+
+		$(init);
+
+/*Create draggable element*/
+
+	    function makeDrag(el) {
+		
+		el.draggable({
+			revert: "invalid",
+			helper: 'clone',
+			start: function(e, ui) {
+			ui.helper.css({"width":"45%"});
+			}
+		});
+	}
+
+	
+	function handlePreviousDropEvent(event, ui) {
+		var draggable = ui.draggable;
+		if(draggable.data('course_id')){
+			$(ui.draggable).remove().hide();
+		}
+
+		$(this).append(draggable);
+		$('*[data-drop-role_id="' + draggable.data('role_id') + '"]').droppable({
+			drop: handleDropEvent,
+			hoverClass: 'hoverActive',
+		});
+		$('*[data-drop-role_id="' + draggable.data('role_id') + '"]').attr('data-drop-role_id', '');
+
+		var oldItems = JSON.parse(localStorage.getItem('lifterlmsMapArray')) || [];
+		$.each(oldItems, function (key, val) {
+			if (val) {
+				var arrayofval = val.split(',');
+				if (arrayofval[0] == 'level_id_' + draggable.data('course_id') && arrayofval[1] == draggable.data('role_id')) {
+					delete oldItems[key];
+				}
+			}
+		});
+
+		var jsonStart = "{";
+		$.each(oldItems, function (key, val) {
+			if (val) {
+				var arrayofval = val.split(',');
+				if (arrayofval[0] != 'level_id_' + draggable.data('level_id') || arrayofval[1] != draggable.data('role_id')) {
+					jsonStart = jsonStart + '"' + arrayofval[0] + '":' + '"' + arrayofval[1] + '",';
+				}
+			}
+		});
+		localStorage.setItem('lifterlmsMapArray', JSON.stringify(oldItems));
+		var lastChar = jsonStart.slice(-1);
+		if (lastChar == ',') {
+			jsonStart = jsonStart.slice(0, -1);
+		}
+
+		var LifterlmsMappingjson = jsonStart + '}';
+		$("#maaping_json_val").html(LifterlmsMappingjson);
+		localStorage.setItem('LifterlmsMappingjson', LifterlmsMappingjson);
+		draggable.css({ 'width': '100%', 'left': '0', 'top': '0', 'margin-bottom': '10px' });
+	}
+
+	
+	function handleDropEvent(event, ui) {
+		var draggable = ui.draggable;
+		var newItem = [];
+		
+		var newClone = $(ui.helper).clone();
+		if($(this).find(".makeMeDraggable").length >= 1){
+			return false;
+		}
+		$('*[data-drop-role_id="' + newClone.data('role_id') + '"]').droppable({
+			drop: handleDropEvent,
+			hoverClass: 'hoverActive',
+		});
+		$('*[data-drop-role_id="' + newClone.data('role_id') + '"]').attr('data-drop-role_id', '');
+		if ($(this).data('drop-role_id') != newClone.data('role_id')) {
+			var oldItems = JSON.parse(localStorage.getItem('lifterlmsMapArray')) || [];
+			$(this).attr('data-drop-role_id', newClone.data('role_id'));
+			newClone.attr('data-course_id', $(this).data('course_id'));
+
+			$.each(oldItems, function (key, val) {
+				if (val) {
+					var arrayofval = val.split(',');
+					if (arrayofval[0] == 'level_id_' + $(this).data('course_id') ) {
+						delete oldItems[key];
+					}
+				}
+			});
+
+			var newkey = 'level_id_' + $(this).data('course_id');
+			oldItems.push(newkey + ',' + newClone.data('role_id'));
+			var jsonStart = "{";
+			$.each(oldItems, function (key, val) {
+				if (val) {
+					var arrayofval = val.split(',');
+					if (arrayofval[0] == 'level_id_' + $(this).data('course_id') || arrayofval[1] != newClone.data('role_id') && arrayofval[0] != 'level_id_' + $(this).data('course_id') || arrayofval[1] == newClone.data('role_id')) {
+						jsonStart = jsonStart + '"' + arrayofval[0] + '":' + '"' + arrayofval[1] + '",';
+					}
+				}
+			});
+
+			localStorage.setItem('lifterlmsMapArray', JSON.stringify(oldItems));
+			var lastChar = jsonStart.slice(-1);
+			if (lastChar == ',') {
+				jsonStart = jsonStart.slice(0, -1);
+			}
+
+			var LifterlmsMappingjson = jsonStart + '}';
+			localStorage.setItem('LifterlmsMappingjson', LifterlmsMappingjson);
+			$("#maaping_json_val").html(LifterlmsMappingjson);
+		}
+
+		$(this).append(newClone);
+		$(this).find('span').css({ 'order': '2' });
+		if (jQuery(this).find('.makeMeDraggable').length >= 1) {
+			$(this).droppable("destroy");
+		}
+		makeDrag($('.makeMeDraggable'));
+
+		newClone.css({ 'width': '100%','margin-bottom': '0px', 'left': '0', 'position':'unset', 'order': '1' });
+		
+	}
+
+
+
 		/*Select-tabs plugin options*/
-
 		let select2 = jQuery(".ets_wp_pages_list").select2({
 			placeholder: "Select a Pages",
 			allowClear: true
 		})
-
 
 		/*Tab options*/
 		$.skeletabs.setDefaults({

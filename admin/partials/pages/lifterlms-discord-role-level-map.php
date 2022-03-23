@@ -1,13 +1,16 @@
 <?php
-
+$user_id             = sanitize_text_field( trim( get_current_user_id() ) );
 /* 
 Get All Courses form database
 */
 $get_courses_lifterlms        =     get_posts( 
                                 array(
-                                'post_type' => 'Course', 
+                                'post_type' => 'course', 
                                 'post_status' => 'publish')
                                 );
+
+$default_role        = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+$allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
 
 ?>
  <!-- Drag and Drop the Discord Roles  -->
@@ -31,7 +34,7 @@ $get_courses_lifterlms        =     get_posts(
             </div>
 	</div>
     <div class="ets-column">
-		<h2><?php echo __( 'Lifterlms_Courses ', 'lifterlms-discord-add-on' ); ?></h2>
+		<h2><?php echo __( 'Lifterlms_Courses ', 'lifterlms-discord-addon' ); ?></h2>
 		<hr>
 
 		<?php
@@ -52,6 +55,38 @@ $get_courses_lifterlms        =     get_posts(
 
 	<table class="form-table" role="presentation">
         <tbody>
+        <tr>
+                <th scope="row"><label for="defaultRole"><?php echo __( 'Default Role', 'lifterlms-discord-addon' ); ?></label></th>
+                    <td>
+                                    <?php wp_nonce_field( 'discord_role_mappings_nonce', 'ets_lifterlms_discord_role_mappings_nonce' ); ?>
+                                    
+                                    <input type="hidden" id="selected_default_role" value="<?php echo esc_attr( $default_role ); ?>">
+                                    <select id="defaultRole" name="defaultRole">
+                                        <option value="none"><?php echo __( '-None-', 'lifterlms-discord-addon' ); ?></option>
+                                    </select>
+                                <p class="description"><?php echo __( 'This Role will be assigned to all level members', 'lifterlms-discord-addon' ); ?></p>
+                </td>
+		</tr>
+		<tr>
+                <th scope="row"><label><?php echo __( 'Allow non-members', 'lifterlms-discord-addon' ); ?></label></th>
+                <td>
+                    <fieldset>
+                                    <label><input type="radio" name="allow_none_member" value="yes"  
+                                    <?php
+                                    if ( 'yes' === $allow_none_member ) {
+                                        echo 'checked="checked"'; }
+                                    ?>
+                                    > <span><?php echo __( 'Yes', 'lifterlms-discord-addon' ); ?></span></label><br>
+                                    <label><input type="radio" name="allow_none_member" value="no" 
+                                    <?php
+                                    if ( empty( $allow_none_member ) || 'no' === $allow_none_member ) {
+                                        echo 'checked="checked"'; }
+                                    ?>
+                                    > <span><?php echo __( 'No', 'lifterlms-discord-addon' ); ?></span></label>
+                                    <p></p>
+                                </fieldset>
+                </td>
+		</tr>
             
 
             

@@ -130,4 +130,88 @@ class Lifterlms_Discord_Addon_Public {
 	// 	}
 	// }
 
+
+		/**
+	 * Add discord connection buttons.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ets_lifterlms_discord_add_connect_button() {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+		wp_enqueue_style($this->plugin_name . 'public_css');
+		wp_enqueue_style($this->plugin_name . 'font_awesome_css');
+		wp_enqueue_script($this->plugin_name . 'public_js');
+		$user_id                              = sanitize_text_field( trim( get_current_user_id() ) );
+		$access_token                         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$allow_none_member                    = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
+		$default_role                         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$all_roles                            = json_decode( get_option( 'ets_lifterlms_discord_all_roles' ), true );
+		$mapped_role_names                    = array();
+       
+		
+		
+		//print_r($all_roles);
+
+	}
+
+		/**
+	 * Save plugin general settings.
+	 *
+	 * @since    1.0.0
+	 */
+	/*public function ets_memberpress_discord_role_mapping() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+
+		$ets_discord_roles = isset( $_POST['ets_memberpress_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_memberpress_discord_role_mapping'] ) ) : '';
+
+		$ets_memberpress_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
+
+		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
+
+		$ets_discord_roles   = stripslashes( $ets_discord_roles );
+		$save_mapping_status = update_option( 'ets_memberpress_discord_role_mapping', $ets_discord_roles );
+		
+		if ( isset( $_POST['ets_memberpress_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_memberpress_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+			
+			if ( ( $save_mapping_status || isset( $_POST['ets_memberpress_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
+				
+				if ( $ets_memberpress_discord_default_role_id ) {
+					update_option( 'ets_memberpress_discord_default_role_id', $ets_memberpress_discord_default_role_id );
+				}
+
+				if ( $allow_none_member ) {
+					update_option( 'ets_memberpress_allow_none_member', $allow_none_member );
+				}
+
+				$message = 'Your mappings are saved successfully.';
+				if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+					$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#mepr_role_mapping';
+					wp_safe_redirect( $pre_location );
+				}
+			}
+			if ( isset( $_POST['flush'] ) ) {
+				delete_option( 'ets_memberpress_discord_role_mapping' );
+				delete_option( 'ets_memberpress_discord_default_role_id' );
+				delete_option( 'ets_memberpress_allow_none_member' );
+				$message = ' Your settings flushed successfully.';
+				if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+					$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#mepr_role_mapping';
+					wp_safe_redirect( $pre_location );
+				}
+			}
+		}
+	}
+*/
+
+
+
+	
+
 }
