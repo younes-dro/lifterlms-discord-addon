@@ -39,7 +39,7 @@
 	
 		<div class="ets-input-group">
 			<label><?php echo __( 'Client Secret', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php if ( isset( $ets_lifterlms_discord_client_secret ) ) { echo esc_attr( $ets_lifterlms_discord_client_secret ); } ?>" required placeholder="<?php echo __( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
+			<input type="hidden" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php if ( isset( $ets_lifterlms_discord_client_secret ) ) { echo esc_attr( $ets_lifterlms_discord_client_secret ); } ?>" required placeholder="<?php echo __( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 
 		<div class="ets-input-group">
@@ -64,7 +64,7 @@
 			<?php echo sprintf(" <b>(%s)</b> Bot name, should have the higher priority than the role it has to manage. <a href='https://discord.com/channels/%d'>Open discord server</a>.", $bot_username,$ets_lifterlms_discord_server_id );?><br>	
 		
 			<label><?php echo __( 'Bot Token', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php if ( isset( $ets_lifterlms_discord_bot_token ) ) { echo esc_attr( $ets_lifterlms_discord_bot_token ); } ?>" required placeholder="<?php echo __( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
+			<input type="hidden" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php if ( isset( $ets_lifterlms_discord_bot_token ) ) { echo esc_attr( $ets_lifterlms_discord_bot_token ); } ?>" required placeholder="<?php echo __( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 	
 		<div class="ets-input-group">

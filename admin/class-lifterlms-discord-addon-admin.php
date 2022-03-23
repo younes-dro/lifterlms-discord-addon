@@ -289,7 +289,7 @@ class Lifterlms_Discord_Addon_Admin {
 				
 				$message = 'Your mappings are saved successfully.';
 				if ( isset( $current_url_role ) ) {
-					$pre_location = $current_url_role . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
+					$pre_location = $current_url_role . '&save_settings_msg=' . $message . '#lifterlms_role_level';
 					wp_safe_redirect( $pre_location );
 				}
 			}
