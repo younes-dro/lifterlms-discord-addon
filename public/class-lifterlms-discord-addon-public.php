@@ -110,29 +110,35 @@ class Lifterlms_Discord_Addon_Public {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+		
 		$user_id                              = sanitize_text_field( get_current_user_id() );
-		$access_token                         = sanitize_text_field( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) );
+		$access_token                         = sanitize_text_field( get_user_meta( $user_id, 'ets_lifterlms_discord_access_token', true ) );
 		$allow_none_member                    = sanitize_text_field( get_option( 'ets_lifterlms_allow_none_member' ) );
 		$default_role                         = sanitize_text_field( get_option( 'ets_lifterlms_discord_default_role_id' ) );
-		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$ets_lifterlms_discord_role_mapping   = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
 		$all_roles                            = json_decode( get_option( 'ets_lifterlms_discord_all_roles' ), true );
 		$mapped_role_names                    = array();
         
+		print_r($access_token);
+			if ( $access_token ) {
 				?>
 				<label class="ets-connection-lbl">
 					<?php echo __( 'Discord connection', 'lifterlms-discord-addon' ); ?>
-				</label><br>
-				<a href="lifterlms-discord-connectToBot" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'memberpress-discord-add-on' ); ?><i class='fab fa-discord'></i></a>
-				<br>
+				</label>
+				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'lifterlms-discord-addon' ); ?><i class='fab fa-discord'></i></a>
+				<span class="ets-spinner"></span>
 				<?php
-			
+			} else {
 				?>
-				<label class="ets-connection-lbl">
+				<label class="ets-connection-lbl"><br>
 					<?php echo __( 'Discord connection', 'lifterlms-discord-addon' ); ?>
 				</label><br>
+				
 				<a href="?action=lifterlms-discord-login" class="btn-connect ets-btn" ><?php echo __( 'Connect To Discord', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
 				
 				<?php
+			}
+		
 			
 
 	}

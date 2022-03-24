@@ -233,11 +233,12 @@ class Lifterlms_Discord_Addon_Admin {
 	*/
 	public function ets_lifterlms_discord_action_connect_bot() {
 
-		if ( isset( $_GET['action'] ) && $_GET['action'] == 'lifterlms-discord-connectToBot' ) {
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'lifterlms-discord-connectToBot') {
 			if ( ! current_user_can( 'administrator' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 			}
+			
 			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize';
 			$params                    = array(
 				'client_id'            => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
