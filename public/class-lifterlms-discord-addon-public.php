@@ -106,10 +106,6 @@ class Lifterlms_Discord_Addon_Public {
 	 * @since    1.0.0
 	 */
 	public function ets_lifterlms_discord_add_connect_button() {
-		if ( ! current_user_can( 'administrator' ) ) {
-			wp_send_json_error( 'You do not have sufficient rights', 403 );
-			exit();
-		}
 		
 		$user_id                              = sanitize_text_field( get_current_user_id() );
 		$access_token                         = sanitize_text_field( get_user_meta( $user_id, 'ets_lifterlms_discord_access_token', true ) );
@@ -119,7 +115,7 @@ class Lifterlms_Discord_Addon_Public {
 		$all_roles                            = json_decode( get_option( 'ets_lifterlms_discord_all_roles' ), true );
 		$mapped_role_names                    = array();
         
-		print_r($access_token);
+
 			if ( $access_token ) {
 				?>
 				<label class="ets-connection-lbl">
@@ -139,17 +135,131 @@ class Lifterlms_Discord_Addon_Public {
 				<?php
 			}
 		
-			
-
 	}
 
-	
+	/**
+	 *  initialize discord authentication.
+	 *
+	 */
 
+	public function ets_lifterlms_discord_login() {
+		if(isset($_GET['action']) && $_GET['action']=='lifterlms-discord-login'){
+			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize';
+			$params                    = array(
+				'client_id'            => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
+				'permissions'          => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
+				'scope'                => LIFTERLMS_DISCORD_OAUTH_SCOPES,
+				'guild_id'             => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) ),
+				'disable_guild_select' => 'true',
+				'redirect_uri'         => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_redirect_url' ) ) ),
+				'response_type'        => 'code',
+			);
+
+			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
+			wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+			exit;
+		}
+
+		if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] =='lifterlms-discord' ) {
+
+			$user_id = get_current_user_id();
+			$code    = sanitize_text_field( trim( $_GET['code'] ) );
+			$response = $this->ets_lifterlms_discord_auth_token( $code, $user_id );
+
+			/* Get_responce* */
+
+			if ( ! empty( $response ) ) {	
+				$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
+				$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+				
+				if ( is_array( $res_body ) ) {
+					if ( array_key_exists( 'access_token', $res_body ) ) {
+						$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
+						update_user_meta( $user_id, '_ets_lifterlms_discord_access_token', $access_token );
+						
+						if ( array_key_exists( 'refresh_token', $res_body ) ) {
+							$refresh_token = sanitize_text_field( trim( $res_body['refresh_token'] ) );
+							update_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', $refresh_token );
+						}
+						if ( array_key_exists( 'expires_in', $res_body ) ) {
+							$expires_in = $res_body['expires_in'];
+							$date       = new DateTime();
+							$date->add( DateInterval::createFromDateString( '' . $expires_in . ' seconds' ) );
+							$token_expiry_time = $date->getTimestamp();
+							update_user_meta( $user_id, '_ets_lifterlms_discord_expires_in', $token_expiry_time );
+						}
+        /*  function call   */
+						$user_body = $this->get_discord_current_user_id( $access_token );
+						
+						if ( is_array( $user_body ) && array_key_exists( 'discriminator', $user_body ) ) {
+							$discord_user_number           = $user_body['discriminator'];
+							$discord_user_name             = $user_body['username'];
+							$discord_user_name_with_number = $discord_user_name . '#' . $discord_user_number;
+							update_user_meta( $user_id, '_ets_lifterlms_discord_username', $discord_user_name_with_number );
+						}
+						if ( is_array( $user_body ) && array_key_exists( 'id', $user_body ) ) {
+							$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
+							update_user_meta( $user_id, '_ets_lifterlms_discord_user_id', $_ets_lifterlms_discord_user_id );
+							
+						}
+					}
+				}
+			}
+	  }
+}
+
+     /**
+	 *  Responce/auth_token
+	 *
+	 */
+	public function ets_lifterlms_discord_auth_token( $code, $user_id ) {
+	
+		$response              = '';
+		$refresh_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		$token_expiry_time     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_expires_in', true ) ) );
+		$discord_token_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/token';
+
+			$args     = array(
+				'method'  => 'POST',
+				'headers' => array(
+					'Content-Type' => 'application/x-www-form-urlencoded',
+				),
+				'body'    => array(
+					'client_id'     => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
+					'client_secret' => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_secret' ) ) ),
+					'grant_type'    => 'authorization_code',
+					'code'          => $code,
+					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_redirect_url' ) ) ),
+					'scope'         => LIFTERLMS_DISCORD_OAUTH_SCOPES,
+				),
+			);
+			$response = wp_remote_post( $discord_token_api_url, $args );
+		return $response;
+	}
+
+
+	/**
+	 * Get Discord user details from API
+	 *
+	 */
+	public function get_discord_current_user_id( $access_token ) {
 		
-	
+		$user_id = get_current_user_id();
 
+		$discord_cuser_api_url = LIFTERLMS_DISCORD_API_URL . 'users/@me';
+		$param                 = array(
+			'headers' => array(
+				'Content-Type'  => 'application/x-www-form-urlencoded',
+				'Authorization' => 'Bearer ' . $access_token,
+			),
+		);
+		$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
 
+		$response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
+		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
+		return $user_body;
 
+	}
 	
 
 }

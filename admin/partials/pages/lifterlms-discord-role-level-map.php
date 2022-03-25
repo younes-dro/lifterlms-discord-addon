@@ -84,12 +84,9 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
                                     ?>
                                     > <span><?php echo __( 'No', 'lifterlms-discord-addon' ); ?></span></label>
                                     <p></p>
-                                </fieldset>
+                    </fieldset>
                 </td>
-		</tr>
-            
-
-            
+		    </tr> 
         </tbody>
 	</table>
 	<br>
