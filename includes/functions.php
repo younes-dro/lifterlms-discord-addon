@@ -22,12 +22,6 @@ function ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_
     $options .= '<option data-page-url="' . ets_get_lifterlms_discord_formated_discord_redirect_url ( $page->ID ) .'" value="' . esc_attr( $page->ID ) . '" '. $selected .'> ' . $page->post_title . ' </option>';
 }
 
-    // $options = '<option value="" disabled>-</option>';
-    // foreach($pages as $page){ 
-    //     $selected = ( esc_attr( $page->ID ) === $ets_lifterlms_discord_redirect_url  ) ? ' selected="selected"' : '';
-    //     $options .= '<option value="' . esc_attr( $page->ID ) . '" '. $selected .'> ' . $page->post_title . ' </option>';
-    // }
-    
     return $options;
 }
 
@@ -56,5 +50,53 @@ function ets_lifterlms_discord_get_current_screen_url()
         return $current_uri;
 }
 
+/**
+ * Log API call response
+ *
+ * @param INT          $user_id
+ * @param STRING       $api_url
+ * @param ARRAY        $api_args
+ * @param ARRAY|OBJECT $api_response
+ */
+function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_args = array(), $api_response = '' ) {
+	$log_api_response = get_option( 'ets_memberpress_discord_log_api_response' );
+	if ( $log_api_response == true ) {
+		$log_string  = '==>' . $api_url;
+		$log_string .= '-::-' . serialize( $api_args );
+		$log_string .= '-::-' . serialize( $api_response );
+		ets_lifterlms_write_api_response_logs( $log_string, $user_id );
+	}
+}
+
+/**
+ * Add API error logs into log file
+ *
+ * @param array  $response_arr
+ * @param array  $backtrace_arr
+ * @param string $error_type
+ * @return None
+ */
+function ets_lifterlms_write_api_response_logs( $response_arr, $user_id, $backtrace_arr = array() ) {
+	$error        = current_time( 'mysql' );
+	$user_details = '';
+	if ( $user_id ) {
+		$user_details = '::User Id:' . $user_id;
+	}
+	$log_api_response = get_option( 'ets_lifterlms_discord_log_api_response' );
+	$uuid             = get_option( 'ets_lifterlms_discord_uuid_file_name' );
+	$log_file_name    = $uuid . Lifterlms_Discord_Addon_Admin::$log_file_name;
+
+	if ( is_array( $response_arr ) && array_key_exists( 'code', $response_arr ) ) {
+		$error .= '==>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['code'] . ':' . $response_arr['message'];
+		file_put_contents( WP_CONTENT_DIR . '/' . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+	} elseif ( is_array( $response_arr ) && array_key_exists( 'error', $response_arr ) ) {
+		$error .= '==>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['error'];
+		file_put_contents( WP_CONTENT_DIR . '/' . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+	} elseif ( $log_api_response == true ) {
+		$error .= json_encode( $response_arr ) . '::' . $user_id;
+		file_put_contents( WP_CONTENT_DIR . '/' . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+	}
+
+}
 
 ?>

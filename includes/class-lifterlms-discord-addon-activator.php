@@ -30,7 +30,7 @@ class Lifterlms_Discord_Addon_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
+    update_option( 'ets_lifterlms_discord_uuid_file_name', wp_generate_uuid4() );
 	}
 
 }

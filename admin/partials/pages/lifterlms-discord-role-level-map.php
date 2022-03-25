@@ -18,7 +18,7 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 <div class="notice notice-warning ets-notice">
 	<p>
         <i class='fas fa-info'></i>
-        <?php echo __( 'Drag and Drop the Discord Roles over to the lifterlms Levels', 'lifterlms-discord-addon' ); ?>
+        <?php echo __( 'Drag and Drop the Discord Roles over to the LifterLMS Courses', 'lifterlms-discord-addon' ); ?>
     </p>
 </div>
 
@@ -34,7 +34,7 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
             </div>
 	</div>
     <div class="ets-column">
-		<h2><?php echo __( 'Lifterlms_Courses ', 'lifterlms-discord-addon' ); ?></h2>
+		<h2><?php echo __( 'LifterLMS Courses ', 'lifterlms-discord-addon' ); ?></h2>
 		<hr>
 
 		<?php

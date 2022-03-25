@@ -40,6 +40,14 @@ class Lifterlms_Discord_Addon_Admin {
 	 */
 	private $version;
 
+  /**
+	 * Static property to define log file name
+	 *
+	 * @param None
+	 * @return string $log_file_name
+	 */
+	public static $log_file_name = 'lifterlms_discord_api_logs.txt';
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -344,7 +352,7 @@ class Lifterlms_Discord_Addon_Admin {
 			// response
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-					write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+					ets_lifterlms_write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				} else {
 					$response_arr['previous_mapping'] = get_option( 'ets_lifterlms_discord_role_mapping' );
 
