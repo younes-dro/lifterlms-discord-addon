@@ -141,7 +141,7 @@
 		$.each(oldItems, function (key, val) {
 			if (val) {
 				var arrayofval = val.split(',');
-				if (arrayofval[0] == 'level_id_' + draggable.data('course_id') && arrayofval[1] == draggable.data('role_id')) {
+				if (arrayofval[0] == 'course_id_' + draggable.data('course_id') && arrayofval[1] == draggable.data('role_id')) {
 					delete oldItems[key];
 				}
 			}
@@ -151,7 +151,7 @@
 		$.each(oldItems, function (key, val) {
 			if (val) {
 				var arrayofval = val.split(',');
-				if (arrayofval[0] != 'level_id_' + draggable.data('level_id') || arrayofval[1] != draggable.data('role_id')) {
+				if (arrayofval[0] != 'course_id_' + draggable.data('course_id') || arrayofval[1] != draggable.data('role_id')) {
 					jsonStart = jsonStart + '"' + arrayofval[0] + '":' + '"' + arrayofval[1] + '",';
 				}
 			}
@@ -190,19 +190,19 @@
 			$.each(oldItems, function (key, val) {
 				if (val) {
 					var arrayofval = val.split(',');
-					if (arrayofval[0] == 'level_id_' + $(this).data('course_id') ) {
+					if (arrayofval[0] == 'course_id_' + $(this).data('course_id') ) {
 						delete oldItems[key];
 					}
 				}
 			});
 
-			var newkey = 'level_id_' + $(this).data('course_id');
+			var newkey = 'course_id_' + $(this).data('course_id');
 			oldItems.push(newkey + ',' + newClone.data('role_id'));
 			var jsonStart = "{";
 			$.each(oldItems, function (key, val) {
 				if (val) {
 					var arrayofval = val.split(',');
-					if (arrayofval[0] == 'level_id_' + $(this).data('course_id') || arrayofval[1] != newClone.data('role_id') && arrayofval[0] != 'level_id_' + $(this).data('course_id') || arrayofval[1] == newClone.data('role_id')) {
+					if (arrayofval[0] == 'course_id_' + $(this).data('course_id') || arrayofval[1] != newClone.data('role_id') && arrayofval[0] != 'course_id_' + $(this).data('course_id') || arrayofval[1] == newClone.data('role_id')) {
 						jsonStart = jsonStart + '"' + arrayofval[0] + '":' + '"' + arrayofval[1] + '",';
 					}
 				}

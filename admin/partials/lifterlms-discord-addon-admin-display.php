@@ -13,7 +13,6 @@
  */
 
 ?>
-
 <!-- Save Setting Massage -->
 <?php
 
@@ -25,8 +24,6 @@ if ( isset( $_GET['save_settings_msg'] ) ) {
 	<?php
 }
 ?>
-
-
 <!-- This is Main Page LifterLms-Discord-Addon --->
 
 <h1><?php echo __( 'LifterLMS Discord Add On Settings', 'lifterlms-discord-add-on' ); ?></h1>
@@ -39,12 +36,9 @@ if ( isset( $_GET['save_settings_msg'] ) ) {
 				</li>	
 				<li class="skltbs-tab-item">
 				   <button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mapping', 'lifterlms-discord-addon' ); ?></button>
-					<!--style="display:none"-->
 				</li>
 		</ul>
-
 <!--Creating Tabs-->
-
             <div class="skltbs-panel-group">
 				<div id='lifterlms_general_settings' class="skltbs-panel">
 				   <?php require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/pages/lifterlms-application-details.php'; ?>

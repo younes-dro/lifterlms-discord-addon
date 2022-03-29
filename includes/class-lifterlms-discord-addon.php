@@ -183,6 +183,10 @@ class Lifterlms_Discord_Addon {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action('lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button');
+		$this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
+		$this->loader->add_action('init',$plugin_public,'ets_lifterlms_discord_login');
+		
 		
 	}
 
