@@ -97,7 +97,12 @@ class Lifterlms_Discord_Addon_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-public.js', array( 'jquery' ), $this->version, false );
-		wp_localize_script( $this->plugin_name . 'public_js', 'etsLifterlmspublicParams', $script_params );
+		$script_params = array(
+			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
+			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
+			'ets_lifterlms_discord_nonce' => wp_create_nonce( 'ets-lifterlms-ajax-nonce' ),
+		);
+		wp_localize_script( $this->plugin_name, 'etsLifterlmspublicParams', $script_params );
 	}
 
 		/**
