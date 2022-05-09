@@ -73,6 +73,11 @@ define( 'LIFTERLMS_DISCORD_DONOT_RETRY_HTTP_CODES', array( 400, 401, 403, 404, 4
 define( 'LIFTERLMS_DISCORD_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
+ * Define group name for action scheduler actions
+ */
+define( 'LIFTERLMS_DISCORD_AS_GROUP_NAME', 'ets-lifterlms-discord' );
+
+/**
  * Define plugin directory URL
  */
 define( 'LIFTERLMS_DISCORD_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );

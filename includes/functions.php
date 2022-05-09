@@ -120,4 +120,73 @@ function ets_lifterlms_discord_check_saved_settings_status() {
 		 return $status;
 }
 
+/**
+ * Get the highest available last attempt schedule time
+ */
+
+function ets_lifterlms_discord_get_highest_last_attempt_timestamp() {
+	global $wpdb;
+	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.last_attempt_gmt FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s ORDER BY aa.last_attempt_gmt DESC limit 1', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
+
+	if ( ! empty( $result ) ) {
+		return strtotime( $result['0']['last_attempt_gmt'] );
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Get randon integer between a predefined range.
+ *
+ * @param INT $add_upon
+ */
+function ets_lifterlms_discord_get_random_timestamp( $add_upon = '' ) {
+	if ( $add_upon != '' && $add_upon !== false ) {
+		return $add_upon + random_int( 5, 15 );
+	} else {
+		return strtotime( 'now' ) + random_int( 5, 15 );
+	}
+}
+
+/**
+ * Get Action data from table `actionscheduler_actions`
+ *
+ * @param INT $action_id
+ */
+function ets_lifterlms_discord_as_get_action_data( $action_id ) {
+	global $wpdb;
+	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.hook, aa.status, aa.args, ag.slug AS as_group FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id=ag.group_id WHERE `action_id`=%d AND ag.slug=%s', $action_id, LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
+        
+	if ( ! empty( $result ) ) {
+		return $result[0];
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Get pending jobs 
+ */
+function ets_lifterlms_discord_get_all_pending_actions() {
+	global $wpdb;
+	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.* FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s AND aa.status="pending" ', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
+
+	if ( ! empty( $result ) ) {
+		return $result['0'];
+	} else {
+		return false;
+	}
+}
+
+function ets_lifterlms_discord_get_all_failed_actions(){
+	global $wpdb;
+	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.action_id, aa.hook, ag.slug AS as_group FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id=ag.group_id WHERE  ag.slug=%s AND aa.status = "failed" ' , LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
+
+	if ( ! empty( $result ) ) {
+		return $result ;
+	} else {
+		return false;
+	}        
+}
+
 ?>

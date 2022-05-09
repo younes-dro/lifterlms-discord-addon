@@ -470,7 +470,7 @@ class Lifterlms_Discord_Addon_Admin {
 				}
 
 				$message = 'Your settings are saved successfully.';
-				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#ets_lifterlms_discord_advanced';
+				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_advanced';
 				wp_safe_redirect( $pre_location );
 				
 			}
