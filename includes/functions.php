@@ -98,4 +98,26 @@ function ets_lifterlms_write_api_response_logs( $response_arr, $user_id, $backtr
 
 }
 
+/**
+ * To check settings values saved or not
+ *
+ * @param NONE
+ * @return BOOL $status
+ */
+function ets_lifterlms_discord_check_saved_settings_status() {
+	$ets_lifterlms_discord_client_id     = get_option( 'ets_lifterlms_discord_client_id' );
+	$ets_lifterlms_discord_client_secret = get_option( 'ets_lifterlms_discord_client_secret' );
+	$ets_lifterlms_discord_bot_token     = get_option( 'ets_lifterlms_discord_bot_token' );
+	$ets_lifterlms_discord_redirect_url  = get_option( 'ets_lifterlms_discord_redirect_url' );
+	$ets_lifterlms_discord_server_id      = get_option( 'ets_lifterlms_discord_server_id' );
+
+	if ( $ets_lifterlms_discord_client_id && $ets_lifterlms_discord_client_secret && $ets_lifterlms_discord_bot_token && $ets_lifterlms_discord_redirect_url && $ets_lifterlms_discord_server_id ) {
+			$status = true;
+	} else {
+			 $status = false;
+	}
+
+		 return $status;
+}
+
 ?>
