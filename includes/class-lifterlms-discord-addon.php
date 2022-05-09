@@ -168,6 +168,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'admin_init', $plugin_admin, 'ets_lifterlms_discord_action_connect_bot');
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_load_discord_roles', $plugin_admin, 'ets_lifterlms_load_discord_roles' );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_redirect_url', $plugin_admin, 'ets_lifterlms_discord_update_redirect_url' );                                                                                                                
+		$this->loader->add_action( 'admin_post_lifterlms_discord_save_advance_settings', $plugin_admin, 'ets_lifterlms_discord_save_advance_settings' );                
 		
 	}
                 
