@@ -44,7 +44,7 @@ define( 'LIFTERLMS_DISCORD_ADDON_VERSION', '1.0.0' );
 /**
  * Discord API URL
  */
-define( 'LIFTERLMS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
+define( 'LIFTERLMS_DISCORD_API_URL', 'https://discord.com/api/v10/' );
 
 /**
  * Discord BOT Permissions
