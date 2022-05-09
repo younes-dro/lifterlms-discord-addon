@@ -110,7 +110,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 */
 		wp_enqueue_style( $this->plugin_name . 'skeletabs.css', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . 'select2.css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
+		//wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -368,6 +368,33 @@ class Lifterlms_Discord_Addon_Admin {
 			return wp_send_json( $response_arr );
 		}
 	}
+
+	public function ets_lifterlms_discord_update_redirect_url(  ) {
+           
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+		// Check for nonce security
+		if ( ! wp_verify_nonce( $_POST['ets_lifterlms_discord_nonce'], 'ets-lifterlms-discord-ajax-nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+
+		$page_id = $_POST['ets_lifterlms_page_id'];
+		if( isset( $page_id ) ){
+			$formated_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id );
+			update_option( 'ets_lifterlms_discord_redirect_page_id' ,$page_id );
+			update_option( 'ets_lifterlms_discord_redirect_url' ,$formated_discord_redirect_url );
+			$res = array(
+				'formated_discord_redirect_url' => $formated_discord_redirect_url,
+			);
+			wp_send_json( $res );
+		
+		}
+		exit();
+                
+	} 
 
 
 

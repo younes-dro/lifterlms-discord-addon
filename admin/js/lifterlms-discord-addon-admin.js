@@ -231,22 +231,46 @@
 	}
 
 
-
+	if(jQuery().select2) {
 		/*Select-tabs plugin options*/
 		let select2 = jQuery(".ets_wp_pages_list").select2({
 			placeholder: "Select a Pages",
-			allowClear: true
-		})
+			allowClear: true,
+                        width: "resolve"
+		});              
+		$('.ets_wp_pages_list').on('change', function(){
+
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_update_redirect_url', 'ets_lifterlms_page_id': $(this).val() , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$('p.redirect-url').find('b').html("");
+					$('p.ets-discord-update-message').css('display','none');                                               
+					$(this).siblings('p.description').find('span.spinner').addClass("ets-is-active").show();
+                                       
+				},
+				success: function (data) { 
+					$('p.redirect-url').find('b').html(data.formated_discord_redirect_url);
+					$('p.ets-discord-update-message').css('display','block');                                               
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).siblings('p.description').find('span.spinner').removeClass("ets-is-active").hide();
+				}
+			});
+
+		});                        
+	}                
 
 		/*Tab options*/
 		$.skeletabs.setDefaults({
 			keyboard: false,
 		});
-		$(document.body).on('change', '.ets_wp_pages_list', function (e) {
-			var page_url = $(this).find(':selected').data('page-url');
 
-			$('p.redirect-url').html('<b>' + page_url + '</b>');
-		});
 
 	});
 })(jQuery);
