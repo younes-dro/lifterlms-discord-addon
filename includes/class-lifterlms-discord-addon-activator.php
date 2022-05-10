@@ -38,7 +38,12 @@ class Lifterlms_Discord_Addon_Activator {
 		update_option( 'ets_lifterlms_discord_retry_api_count', 5 );
 		update_option( 'ets_lifterlms_discord_job_queue_concurrency', 1 );
 		update_option( 'ets_lifterlms_discord_job_queue_batch_size', 6 );
-		update_option( 'ets_lifterlms_discord_log_api_response', false );    
+		update_option( 'ets_lifterlms_discord_log_api_response', false );
+		update_option( 'ets_lifterlms_discord_connect_button_bg_color', '#7bbc36' );
+		update_option( 'ets_lifterlms_discord_disconnect_button_bg_color', '#ff0000' );
+		update_option( 'ets_lifterlms_discord_loggedin_button_text', 'Connect With Discord' );
+		update_option( 'ets_lifterlms_discord_non_login_button_text', 'Login With Discord' );
+		update_option( 'ets_lifterlms_discord_disconnect_button_text', 'Disconnect From Discord' );                
 	}
 
 }

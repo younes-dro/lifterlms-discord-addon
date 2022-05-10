@@ -264,7 +264,9 @@
 			});
 
 		});                        
-	}                
+	}
+		$('#ets_lifterlms_discord_connect_button_bg_color').wpColorPicker();
+		$('#ets_lifterlms_discord_disconnect_button_bg_color').wpColorPicker();        
 
 		/*Tab options*/
 		$.skeletabs.setDefaults({

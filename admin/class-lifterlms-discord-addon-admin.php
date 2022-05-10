@@ -85,6 +85,7 @@ class Lifterlms_Discord_Addon_Admin {
 		if ( ! current_user_can( 'administrator' ) ) {
 			return;
 		}
+		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
 		require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/lifterlms-discord-addon-admin-display.php';
@@ -138,7 +139,7 @@ class Lifterlms_Discord_Addon_Admin {
 
 		// /wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-admin.min.js', array( 'jquery' ), $this->version, false );
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, false );
 		$script_params = array(
 			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
 			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
@@ -473,6 +474,63 @@ class Lifterlms_Discord_Addon_Admin {
 				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_advanced';
 				wp_safe_redirect( $pre_location );
 				
+			}
+		}
+
+	}
+	/**
+	 * Save appearance settings
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */        
+	public function ets_lifterlms_discord_save_appearance_settings() {
+
+		if ( ! current_user_can( 'administrator' ) || ! wp_verify_nonce( $_POST['ets_lifterlms_discord_appearance_settings_nonce'], 'lifterlms_discord_appearance_settings_nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}  
+		$ets_lifterlms_discord_connect_button_bg_color = isset( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ) : '';
+		$ets_lifterlms_discord_disconnect_button_bg_color = isset( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ) : '';                
+		$ets_lifterlms_discord_loggedin_button_text = isset( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ) : '';                                
+		$ets_lifterlms_discord_non_login_button_text = isset( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ) : '';                                                
+		$ets_lifterlms_discord_disconnect_button_text = isset( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ) : '';                                                                
+		$ets_current_url = sanitize_text_field( trim( $_POST['current_url'] ) ) ;                                                        
+
+		if ( isset( $_POST['ets_lifterlms_discord_appearance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_appearance_settings_nonce'], 'lifterlms_discord_appearance_settings_nonce' ) ) {
+			if ( isset( $_POST['appearance_submit'] ) ) {
+
+				if ( isset( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ) {
+					update_option( 'ets_lifterlms_discord_connect_button_bg_color', $ets_lifterlms_discord_connect_button_bg_color );
+				} else {
+					update_option( 'ets_lifterlms_discord_connect_button_bg_color', '' );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ) {
+					update_option( 'ets_lifterlms_discord_disconnect_button_bg_color', $ets_lifterlms_discord_disconnect_button_bg_color );
+				} else {
+					update_option( 'ets_lifterlms_discord_disconnect_button_bg_color', '' );
+				}                                
+				if ( isset( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ) {
+					update_option( 'ets_lifterlms_discord_loggedin_button_text', $ets_lifterlms_discord_loggedin_button_text );
+				} else {
+					update_option( 'ets_lifterlms_discord_loggedin_button_text', '' );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ) {
+					update_option( 'ets_lifterlms_discord_non_login_button_text', $ets_lifterlms_discord_non_login_button_text );
+				} else {
+					update_option( 'ets_lifterlms_discord_non_login_button_text', '' );
+				} 
+				if ( isset( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ) {
+					update_option( 'ets_lifterlms_discord_disconnect_button_text', $ets_lifterlms_discord_disconnect_button_text );
+				} else {
+					update_option( 'ets_lifterlms_discord_disconnect_button_text', '' );
+				}                                
+
+				$message = 'Your settings are saved successfully.';
+
+				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_appearance';
+				wp_safe_redirect( $pre_location );
+
 			}
 		}
 

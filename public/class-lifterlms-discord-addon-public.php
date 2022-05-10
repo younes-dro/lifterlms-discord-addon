@@ -494,9 +494,6 @@ class Lifterlms_Discord_Addon_Public {
 		}
 
 		if ( $type == 'welcome' ) {
-			if ( is_array( $courses ) ) {
-				update_user_meta( $user_id, '_ets_lifterlms_discord_welcome_dm_for_' . implode( '_', $courses ), true );
-			}
 			$message = ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $ets_lifterlms_discord_welcome_message );
 		}
 
