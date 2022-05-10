@@ -194,6 +194,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button' );
 		$this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
 		$this->loader->add_action( 'init',$plugin_public,'ets_lifterlms_discord_login' );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_handle_add_member_to_guild', $plugin_public, 'ets_lifterlms_discord_as_handler_add_member_to_guild', 10, 3 );                
 		
 		
 	}
