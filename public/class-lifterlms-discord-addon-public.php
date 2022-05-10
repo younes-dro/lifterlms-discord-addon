@@ -189,7 +189,7 @@ class Lifterlms_Discord_Addon_Public {
 		wp_enqueue_style( $this->plugin_name );
 		wp_enqueue_script( $this->plugin_name );
 
-			return $restrictcontent_discord;
+		return $restrictcontent_discord;
 		
 	}
 
@@ -235,7 +235,7 @@ class Lifterlms_Discord_Addon_Public {
 
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {
 					$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
-
+					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_learndash_discord_user_id', true ) ) );
 					if ( is_array( $res_body ) ) {
 
 						if ( array_key_exists( 'access_token', $res_body ) ) {
@@ -263,17 +263,17 @@ class Lifterlms_Discord_Addon_Public {
 							}
 							if ( is_array( $user_body ) && array_key_exists( 'id', $user_body ) ) {
 								$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
-//								if ( $discord_exist_user_id === $_ets_lifterlms_discord_user_id ) {
-//									$courses = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
-//									if ( is_array( $courses ) ) {
-//										foreach ( $courses as $course_id ) {
-//											$_ets_lifterlms_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, true ) ) );
-//											if ( ! empty( $_ets_lifterlms_discord_role_id ) && $_ets_lifterlms_discord_role_id != 'none' ) {
-//												$this->delete_discord_role( $user_id, $_ets_lifterlms_discord_role_id );
-//											}
-//										}
-//									}
-//								}
+								if ( $discord_exist_user_id === $_ets_lifterlms_discord_user_id ) {
+									$courses = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
+									if ( is_array( $courses ) ) {
+										foreach ( $courses as $course_id ) {
+											$_ets_lifterlms_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, true ) ) );
+											if ( ! empty( $_ets_lifterlms_discord_role_id ) && $_ets_lifterlms_discord_role_id != 'none' ) {
+												$this->delete_discord_role( $user_id, $_ets_lifterlms_discord_role_id );
+											}
+										}
+									}
+								}
 								update_user_meta( $user_id, '_ets_lifterlms_discord_user_id', $_ets_lifterlms_discord_user_id );
 								$this->add_discord_member_in_guild( $_ets_lifterlms_discord_user_id, $user_id, $access_token );
 							}
