@@ -235,7 +235,7 @@ class Lifterlms_Discord_Addon_Public {
 
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {
 					$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
-					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_learndash_discord_user_id', true ) ) );
+					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 					if ( is_array( $res_body ) ) {
 
 						if ( array_key_exists( 'access_token', $res_body ) ) {
@@ -538,12 +538,12 @@ class Lifterlms_Discord_Addon_Public {
 	 * @param
 	 * @param STRING $type (warning|expired)
 	 */
-	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning' ) {
+	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning' , $quiz_attempt = '' ) {
 		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
 
 		$ets_lifterlms_discord_welcome_message             = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
-
+		$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 
 
 
@@ -562,7 +562,10 @@ class Lifterlms_Discord_Addon_Public {
 		if ( $type == 'welcome' ) {
 			$message = ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $ets_lifterlms_discord_welcome_message );
 		}
-
+		if ( $type == 'quiz_complete' ) {
+			update_user_meta( $user_id, '_ets_lifterlms_discord_quiz_complete_dm_for_' . $courses, true );
+			$message = ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $courses, $quiz_attempt, $ets_lifterlms_discord_quiz_complete_message );
+		}
 
 		$creat_dm_url = LIFTERLMS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
 		$dm_args      = array(
@@ -776,6 +779,26 @@ class Lifterlms_Discord_Addon_Public {
 
 		/*Delete all usermeta related to discord connection*/
 		ets_lifterlms_discord_remove_usermeta( $user_id );
+
+	}
+
+	/**
+	 * Check if the student has completed a quiz.
+	 *
+	 * @param int $student_id WP User ID.
+	 * @param int $quiz_id    WP Post ID of the quiz.
+	 * @param obj $attempt    Instance of the LLMS_Quiz_Attempt.
+	 * @return void
+	 */
+	public function ets_lifterlms_quiz_completed( $student_id, $quiz_id, $attempt ) {
+
+
+		$ets_lifterlms_discord_send_quiz_complete_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_quiz_complete_dm' ) ) );
+
+		// Send Quiz Complete message.
+		if ( $ets_lifterlms_discord_send_quiz_complete_dm == true ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $student_id, $quiz_id, 'quiz_complete', $attempt ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		}
 
 	}
 	

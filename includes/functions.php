@@ -288,6 +288,50 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 
 }
 
+/**
+ * Get formatted QUIZ complete message to send in DM
+ *
+ * @param int $user_id WP User ID.
+ * @param int $quiz_id    WP Post ID of the quiz.
+ * @param obj $attempt    Instance of the LLMS_Quiz_Attempt.
+ * Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_QUIZ_NAME], [LLMS_QUIZ_DATE]
+ */
+function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_id , $attempt, $message) {
+        
+	$user_obj    = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL  = get_bloginfo( 'url' );
+	$BLOG_NAME = get_bloginfo( 'name' );        
+        
+	$quiz = get_post( $quiz_id );
+	$QUIZ_NAME = $quiz->post_title;
+        
+	$QUIZ_COMPLETE_DATE = date_i18n( get_option('date_format'), time() ) ;
+        
+       
+
+		$find    = array(
+			'[LLMS_QUIZ_NAME]',
+			'[LLMS_QUIZ_DATE]',                    
+			'[LLMS_STUDENT_NAME]',
+			'[LLMS_STUDENT_EMAIL]',
+			'[SITE_URL]',
+			'[BLOG_NAME]'                    
+		);
+		$replace = array(
+			$QUIZ_NAME,
+			$QUIZ_COMPLETE_DATE,
+			$STUDENT_USERNAME,
+			$STUDENT_EMAIL,
+			$SITE_URL,
+			$BLOG_NAME                     
+		);
+
+		return str_replace( $find, $replace, $message );
+
+}
+
 function ets_lifterlms_discord_get_rich_embed_message ( $message ){
     
 	$blog_logo_full = esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' )[0] );
