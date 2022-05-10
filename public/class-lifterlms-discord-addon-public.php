@@ -367,7 +367,7 @@ class Lifterlms_Discord_Addon_Public {
 
 		if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
 			update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
-			//$this->put_discord_role_api( $user_id, $default_role );
+			$this->put_discord_role_api( $user_id, $default_role );
 		}
 		if ( empty( get_user_meta( $user_id, '_ets_lifterlms_discord_join_date', true ) ) ) {
 			update_user_meta( $user_id, '_ets_lifterlms_discord_join_date', current_time( 'Y-m-d H:i:s' ) );
@@ -407,6 +407,61 @@ class Lifterlms_Discord_Addon_Public {
 		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
 		return $user_body;
 
+	}
+
+	/**
+	 * API call to change discord user role
+	 *
+	 * @param INT  $user_id
+	 * @param INT  $role_id
+	 * @param BOOL $is_schedule
+	 * @return object API response
+	 */
+	public function put_discord_role_api( $user_id, $role_id, $is_schedule = true ) {
+		if ( $is_schedule ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_schedule_member_put_role', array( $user_id, $role_id, $is_schedule ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		} else {
+			$this->ets_lifterlms_discord_as_handler_put_member_role( $user_id, $role_id, $is_schedule );
+		}
+	}
+
+	/**
+	 * Action Schedule handler for mmeber change role discord.
+	 *
+	 * @param INT  $user_id
+	 * @param INT  $role_id
+	 * @param BOOL $is_schedule
+	 * @return object API response
+	 */
+	public function ets_lifterlms_discord_as_handler_put_member_role( $user_id, $role_id, $is_schedule ) {
+		$access_token                   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$guild_id                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) );
+		$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+		$discord_bot_token              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
+		$discord_change_role_api_url    = LIFTERLMS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $_ets_lifterlms_discord_user_id . '/roles/' . $role_id;
+
+		if ( $access_token && $_ets_lifterlms_discord_user_id ) {
+			$param = array(
+				'method'  => 'PUT',
+				'headers' => array(
+					'Content-Type'   => 'application/json',
+					'Authorization'  => 'Bot ' . $discord_bot_token,
+					'Content-Length' => 0,
+				),
+			);
+
+			$response = wp_remote_get( $discord_change_role_api_url, $param );
+
+			//ets_lifterlms_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
+			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
+			//	$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+			//	LearnDash_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				if ( $is_schedule ) {
+					// this exception should be catch by action scheduler.
+					throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_put_member_role' );
+				}
+			}
+		}
 	}
 	
 
