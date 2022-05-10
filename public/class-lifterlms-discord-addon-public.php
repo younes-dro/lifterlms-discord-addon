@@ -119,7 +119,7 @@ class Lifterlms_Discord_Addon_Public {
 		$ets_lifterlms_discord_role_mapping   = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
 		$all_roles                            = json_decode( get_option( 'ets_lifterlms_discord_all_roles' ), true );
 		$mapped_role_names                    = array();
-        
+                
 
 			if ( $access_token ) {
 				?>
@@ -293,11 +293,11 @@ class Lifterlms_Discord_Addon_Public {
 //			wp_send_json_error( 'Unauthorized user', 401 );
 //			exit();
 //		}
-		//$enrolled_courses = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
-		//if ( $enrolled_courses !== null ) {
+//		$enrolled_coures = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
+//		if ( $enrolled_coures !== null ) {
 			// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
 			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_handle_add_member_to_guild', array( $_ets_lifterlms_discord_user_id, $user_id, $access_token ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
-		///}
+//		}
 	}
 
 	/**
@@ -319,19 +319,19 @@ class Lifterlms_Discord_Addon_Public {
 		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
 		$discord_role                       = '';
 		$discord_roles                      = array();
-		//$courses                            = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
+		$courses                            = map_deep(ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
 
 		$ets_lifterlms_discord_send_welcome_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_welcome_dm' ) ) );
-//		if ( is_array( $courses ) ) {
-//			foreach ( $courses as $course_id ) {
-//
-//				if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'lifterlms_course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
-//					$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'lifterlms_course_id_' . $course_id ] ) );
-//					array_push( $discord_roles, $discord_role );
-//					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
-//				}
-//			}
-//		}
+		if ( is_array( $courses ) ) {
+			foreach ( $courses as $course_id ) {
+
+				if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+					$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ] ) );
+					array_push( $discord_roles, $discord_role );
+					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
+				}
+			}
+		}
 
 		$guilds_memeber_api_url = LIFTERLMS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $_ets_lifterlms_discord_user_id;
 		$guild_args             = array(
@@ -357,13 +357,13 @@ class Lifterlms_Discord_Addon_Public {
 			throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_add_member_to_guild' );
 		}
 
-//		foreach ( $discord_roles as $discord_role ) {
-//
-//			if ( $discord_role && $discord_role != 'none' && isset( $user_id ) ) {
-//				$this->put_discord_role_api( $user_id, $discord_role );
-//
-//			}
-//		}
+		foreach ( $discord_roles as $discord_role ) {
+
+			if ( $discord_role && $discord_role != 'none' && isset( $user_id ) ) {
+				$this->put_discord_role_api( $user_id, $discord_role );
+
+			}
+		}
 
 		if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
 			update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );

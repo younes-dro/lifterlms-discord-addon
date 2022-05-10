@@ -333,3 +333,12 @@ function ets_lifterlms_discord_get_rich_embed_message ( $message ){
 
 	return $rich_embed_message ; 
 }
+function ets_lifterlms_discord_get_student_courses_id( $user_id = '') {
+	$student =  llms_get_student( $user_id ); 
+	$user_courses = $student->get_courses()['results'];
+	if ( $user_courses ) {
+		return $user_courses;
+	} else {
+		return null;
+	}     
+}
