@@ -360,7 +360,7 @@ class Lifterlms_Discord_Addon_Admin {
 							$discord_roles[ $value['id'] ] = $value['name'];
 						}
 					}
-					update_option( 'ets_lifterlms_discord_all_roles', wp_json_encode( $discord_roles ) );
+					update_option( 'ets_lifterlms_discord_all_roles', serialize( $discord_roles ) );
 				}
 			}
 			/*

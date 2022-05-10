@@ -73,8 +73,8 @@ class Lifterlms_Discord_Addon_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-public.css', array(), $this->version, 'all' );
-		wp_enqueue_style( $this->plugin_name . 'public_css', plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-public.min.css', array(), $this->version, 'all' );
+		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-public.css', array(), $this->version, 'all' );
+		wp_register_style( $this->plugin_name . 'public_css', plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-public.min.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Lifterlms_Discord_Addon_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-public.js', array( 'jquery' ), $this->version, false );
+		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-public.js', array( 'jquery' ), $this->version, false );
 		$script_params = array(
 			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
 			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
@@ -105,41 +105,107 @@ class Lifterlms_Discord_Addon_Public {
 		wp_localize_script( $this->plugin_name, 'etsLifterlmspublicParams', $script_params );
 	}
 
-		/**
+	/**
 	 * Add discord connection buttons.
 	 *
 	 * @since    1.0.0
 	 */
 	public function ets_lifterlms_discord_add_connect_button() {
 		
-		$user_id                              = sanitize_text_field( get_current_user_id() );
-		$access_token                         = sanitize_text_field( get_user_meta( $user_id, 'ets_lifterlms_discord_access_token', true ) );
-		$allow_none_member                    = sanitize_text_field( get_option( 'ets_lifterlms_allow_none_member' ) );
-		$default_role                         = sanitize_text_field( get_option( 'ets_lifterlms_discord_default_role_id' ) );
-		$ets_lifterlms_discord_role_mapping   = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
-		$all_roles                            = json_decode( get_option( 'ets_lifterlms_discord_all_roles' ), true );
-		$mapped_role_names                    = array();
+
+		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
+
+		$access_token                    = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$_ets_lifterlms_discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_username', true ) ) );
+		$allow_none_student              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_allow_none_student' ) ) );
+		$ets_lifterlms_discord_connect_button_bg_color    = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_connect_button_bg_color' ) ) );
+		$ets_lifterlms_discord_disconnect_button_bg_color = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_disconnect_button_bg_color' ) ) );                
+		$ets_lifterlms_discord_disconnect_button_text = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_disconnect_button_text' ) ) );                
+		$ets_lifterlms_discord_loggedin_button_text = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_loggedin_button_text' ) ) );
+		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$all_roles                          = unserialize( get_option( 'ets_lifterlms_discord_all_roles' ) );
+		$enrolled_courses                   = ets_lifterlms_discord_get_student_courses_id( $user_id );
+		$mapped_role_name                   = '';
+		if ( is_array( $enrolled_courses ) && is_array( $all_roles ) && is_array( $ets_lifterlms_discord_role_mapping ) ) {
+			$lastKey = array_key_last( $enrolled_courses );
+			$spacer  = ', ';
+			foreach ( $enrolled_courses as $key => $enrolled_course_id ) {
+				if ( array_key_exists( 'course_id_' . $enrolled_course_id, $ets_lifterlms_discord_role_mapping ) ) {
+
+					$mapped_role_id = $ets_lifterlms_discord_role_mapping[ 'course_id_' . $enrolled_course_id ];
+
+					if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
+						if ( $lastKey === $key ) {
+							$spacer = '.';
+						}
+						$mapped_role_name .= $all_roles[ $mapped_role_id ] . $spacer;
+					}
+				}
+			}
+		}
+
+		$default_role_name = '';
+		if ( is_array( $all_roles ) ) {
+			if ( $default_role != 'none' && array_key_exists( $default_role, $all_roles ) ) {
+				$default_role_name = $all_roles[ $default_role ];
+			}
+		}
+
+		$restrictcontent_discord = '';
                 
+		if ( ets_lifterlms_discord_check_saved_settings_status() ) {
 
 			if ( $access_token ) {
-				?>
-				<label class="ets-connection-lbl">
-					<?php echo __( 'Discord connection', 'lifterlms-discord-addon' ); ?>
-				</label>
-				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'lifterlms-discord-addon' ); ?><i class='fab fa-discord'></i></a>
-				<span class="ets-spinner"></span>
-				<?php
-			} else {
-				?>
-				<label class="ets-connection-lbl"><br>
-					<?php echo __( 'Discord connection', 'lifterlms-discord-addon' ); ?>
-				</label><br>
-				
-				<a href="?action=lifterlms-discord-login" class="btn-connect ets-btn" ><?php echo __( 'Connect To Discord', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
-				
-				<?php
+				$disconnect_btn_bg_color = 'style="background-color:' . $ets_lifterlms_discord_disconnect_button_bg_color . '"'; 
+				$restrictcontent_discord .= '<div class="">';
+				$restrictcontent_discord .= '<div class="">';
+				$restrictcontent_discord .= '<label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'lifterlms-discord-addon' ) . '</label>';
+				$restrictcontent_discord .= '</div>';
+				$restrictcontent_discord .= '<div class="">';
+				$restrictcontent_discord .= '<a href="#" class="ets-btn lifterlms-discord-addon-btn-disconnect"' . $disconnect_btn_bg_color . ' id="lifterlms-discord-addon-disconnect-discord" data-user-id="' . esc_attr( $user_id ) . '">' . esc_html__( $ets_lifterlms_discord_disconnect_button_text ) . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
+				$restrictcontent_discord .= '<span class="ets-spinner"></span>';
+				$restrictcontent_discord .= '<p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'lifterlms-discord-addon' ) . '</p>';
+				$restrictcontent_discord  = ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord );
+				$restrictcontent_discord .= '</div>';
+				$restrictcontent_discord .= '</div>';
+
+			} elseif ( ( ets_lifterlms_discord_get_student_courses_id( $user_id ) && $mapped_role_name )
+								|| ( ets_lifterlms_discord_get_student_courses_id( $user_id ) && ! $mapped_role_name && $default_role_name )
+								|| ( $allow_none_student == 'yes' ) ) {
+                            
+				$connect_btn_bg_color = 'style="background-color:' . $ets_lifterlms_discord_connect_button_bg_color . '"';
+				$restrictcontent_discord .= '<div class="">';
+				$restrictcontent_discord .= '<h3>' . esc_html__( 'Discord connection', 'lifterlms-discord-addon' ) . '</h3>';
+				$restrictcontent_discord .= '<div class="">';
+				$restrictcontent_discord .= '<a href="?action=lifterlms-discord-login" class="lifterlms-discord-addon-btn-connect ets-btn"' . $connect_btn_bg_color . ' >' . $ets_lifterlms_discord_loggedin_button_text . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
+				$restrictcontent_discord .= '</div>';
+				$restrictcontent_discord  = ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord );
+
+				$restrictcontent_discord .= '</div>';
+
 			}
+		}
+		wp_enqueue_style( $this->plugin_name );
+		wp_enqueue_script( $this->plugin_name );
+
+			return $restrictcontent_discord;
 		
+	}
+
+	/**
+	 * Add connect discord button on student profile page at the end of [lifterlms_my_account] shortcode.
+	 *
+	 * @since    1.0.0
+	 */
+	public function ets_lifterlms_show_discord_button( $output, $tag, $attr ) {
+            
+		if ( 'lifterlms_my_account' != $tag ) {
+			return $output;
+		}
+		$output .= $this->ets_lifterlms_discord_add_connect_button();
+
+		return $output;
 	}
 
 	/**
@@ -558,6 +624,159 @@ class Lifterlms_Discord_Addon_Public {
 			}
 		}
 		return $response_arr;
+	}
+
+	/**
+	 * Disconnect user from discord, and , if the case, kick students on disconnect
+	 *
+	 * @param NONE
+	 * @return OBJECT JSON response
+	 */
+	public function ets_lifterlms_disconnect_from_discord() {
+            
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+
+		// Check for nonce security
+		if ( ! wp_verify_nonce( $_POST['ets_lifterlms_discord_nonce'], 'ets-lifterlms-ajax-nonce' ) ) {
+				wp_send_json_error( 'You do not have sufficient rights', 403 );
+				exit();
+		}
+		$user_id              = sanitize_text_field( trim( $_POST['user_id'] ) );
+		$kick_upon_disconnect = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_kick_upon_disconnect' ) ) );
+		if ( $user_id ) {
+			delete_user_meta( $user_id, '_ets_lifterlms_discord_access_token' );
+			delete_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token' );
+			$user_roles = ets_lifterlms_discord_get_user_roles( $user_id );
+			if ( $kick_upon_disconnect ) {
+
+				if ( is_array( $user_roles ) ) {
+					foreach ( $user_roles as $user_role ) {
+						$this->delete_discord_role( $user_id, $user_role );
+					}
+				}
+			} else {
+				$this->delete_member_from_guild( $user_id, false );
+			}
+		}
+		$event_res = array(
+			'status'  => 1,
+			'message' => 'Successfully disconnected',
+		);
+		wp_send_json( $event_res );
+		exit();
+
+
+	}
+
+	/**
+	 * Schedule delete discord role for a student
+	 *
+	 * @param INT  $user_id
+	 * @param INT  $ets_lifterlms_discord_role_id
+	 * @param BOOL $is_schedule
+	 * @return OBJECT API response
+	 */
+	public function delete_discord_role( $user_id, $ets_lifterlms_discord_role_id, $is_schedule = true ) {
+		if ( $is_schedule ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_schedule_delete_role', array( $user_id, $ets_lifterlms_discord_role_id, $is_schedule ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		} else {
+			$this->ets_lifterlms_discord_as_handler_delete_memberrole( $user_id, $ets_lifterlms_discord_role_id, $is_schedule );
+		}
+	}
+
+	/**
+	 * Action Schedule handler to process delete role of a student.
+	 *
+	 * @param INT  $user_id
+	 * @param INT  $ets_lifterlms_discord_role_id
+	 * @param BOOL $is_schedule
+	 * @return OBJECT API response
+	 */
+	public function ets_lifterlms_discord_as_handler_delete_memberrole( $user_id, $ets_lifterlms_discord_role_id, $is_schedule = true ) {
+
+		$guild_id                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) );
+		$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+		$discord_bot_token              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
+		$discord_delete_role_api_url    = LIFTERLMS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $_ets_lifterlms_discord_user_id . '/roles/' . $ets_lifterlms_discord_role_id;
+		if ( $_ets_lifterlms_discord_user_id ) {
+			$param = array(
+				'method'  => 'DELETE',
+				'headers' => array(
+					'Content-Type'   => 'application/json',
+					'Authorization'  => 'Bot ' . $discord_bot_token,
+					'Content-Length' => 0,
+				),
+			);
+
+			$response = wp_remote_request( $discord_delete_role_api_url, $param );
+			//ets_lifterlms_discord_log_api_response( $user_id, $discord_delete_role_api_url, $param, $response );
+			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+//				lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				if ( $is_schedule ) {
+					// this exception should be catch by action scheduler.
+					throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_delete_memberrole' );
+				}
+			}
+			return $response;
+		}
+	}
+
+	/**
+	 * Schedule delete existing user from guild
+	 *
+	 * @param INT  $user_id
+	 * @param BOOL $is_schedule
+	 * @param NONE
+	 */
+	public function delete_member_from_guild( $user_id, $is_schedule = true ) {
+		if ( $is_schedule && isset( $user_id ) ) {
+
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_schedule_delete_member', array( $user_id, $is_schedule ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		} else {
+			if ( isset( $user_id ) ) {
+				$this->ets_lifterlms_discord_as_handler_delete_member_from_guild( $user_id, $is_schedule );
+			}
+		}
+	}
+
+	/**
+	 * AS Handling member delete from huild
+	 *
+	 * @param INT  $user_id
+	 * @param BOOL $is_schedule
+	 * @return OBJECT API response
+	 */
+	public function ets_lifterlms_discord_as_handler_delete_member_from_guild( $user_id, $is_schedule ) {
+		$guild_id                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) );
+		$discord_bot_token              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
+		$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+		$guilds_delete_memeber_api_url  = LIFTERLMS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $_ets_lifterlms_discord_user_id;
+		$guild_args                     = array(
+			'method'  => 'DELETE',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+		);
+		$guild_response                 = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+
+		//ets_lifterlms_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
+		if ( ets_lifterlms_discord_check_api_errors( $guild_response ) ) {
+			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			//lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+			if ( $is_schedule ) {
+				// this exception should be catch by action scheduler.
+				throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_delete_member_from_guild' );
+			}
+		}
+
+		/*Delete all usermeta related to discord connection*/
+		ets_lifterlms_discord_remove_usermeta( $user_id );
+
 	}
 	
 

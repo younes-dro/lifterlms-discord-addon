@@ -192,12 +192,16 @@ class Lifterlms_Discord_Addon {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-		$this->loader->add_action( 'lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button' );
-		$this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
+//		$this->loader->add_action( 'lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button' );
+		$this->loader->add_filter( 'do_shortcode_tag', $plugin_public, 'ets_lifterlms_show_discord_button' , 10 , 3  );
+		$this->loader->add_shortcode( 'lifterlms_discord', $plugin_public, 'ets_lifterlms_discord_add_connect_button' );		
+                $this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
 		$this->loader->add_action( 'init',$plugin_public,'ets_lifterlms_discord_login' );
 		$this->loader->add_action( 'ets_lifterlms_discord_as_handle_add_member_to_guild', $plugin_public, 'ets_lifterlms_discord_as_handler_add_member_to_guild', 10, 3 );                
 		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_member_put_role', $plugin_public, 'ets_lifterlms_discord_as_handler_put_member_role', 10, 3 );                		
 		$this->loader->add_action( 'ets_lifterlms_discord_as_send_dm', $plugin_public, 'ets_lifterlms_discord_handler_send_dm', 10, 3 );                                
+		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_role',  $plugin_public, 'ets_lifterlms_discord_as_handler_delete_memberrole' , 10, 3 );                
+		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_member', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_member_from_guild', 10, 3 );                
 		
 	}
         
@@ -264,6 +268,13 @@ class Lifterlms_Discord_Addon {
 			return $concurrent_batches;
 		}
 	}
+     
+	public static function get_discord_logo_white(){
+		$img = file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'public/images/discord-logo-white.svg' );
+		$data = base64_encode( $img );
+                
+		return '<img src="data:image/svg+xml;base64,' . $data . '" />';
+        }
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.

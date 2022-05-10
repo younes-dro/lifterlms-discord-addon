@@ -42,3 +42,10 @@
   .ets-connection-lbl{
     font-size: 20px;
   }
+  a.lifterlms-discord-addon-btn-disconnect img ,
+a.lifterlms-discord-addon-btn-connect img{
+    width: 20px;
+    display: inline-block;
+    margin-left: 5px;
+    
+}

@@ -341,4 +341,68 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '') {
 	} else {
 		return null;
 	}     
+}function ets_lifterlms_discord_roles_assigned_message ( $mapped_role_name, $default_role_name, $restrictcontent_discord ) {
+    
+	if ( $mapped_role_name ) {
+		$restrictcontent_discord .= '<p class="ets_assigned_role">';
+					
+		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= esc_html( $mapped_role_name  );
+		if ( $default_role_name ) {
+			$restrictcontent_discord .= ' ' . esc_html( $default_role_name ); 
+                                                
+		}
+					
+		$restrictcontent_discord .= '</p>';
+	} elseif( $default_role_name ) {
+		$restrictcontent_discord .= '<p class="ets_assigned_role">';
+					
+		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= esc_html( $default_role_name ); 
+					
+		$restrictcontent_discord .= '</p>';
+                                         
+	}
+	return $restrictcontent_discord;
+}
+/**
+ * Get student's roles ids
+ *
+ * @param INT $user_id
+ * @return ARRAY|NULL $roles
+ */
+function ets_lifterlms_discord_get_user_roles ( $user_id ){
+	global $wpdb;
+
+	$usermeta_table = $wpdb->prefix . "usermeta";
+	$user_roles_sql = "SELECT * FROM " . $usermeta_table . " WHERE `user_id` = %d AND ( `meta_key` like '_ets_lifterlms_discord_role_id_for_%' OR `meta_key` = 'ets_lifterlms_discord_default_role_id' OR `meta_key` = '_ets_lifterlms_discord_last_default_role' ); ";
+	$user_roles_prepare = $wpdb->prepare( $user_roles_sql, $user_id );
+	
+	$user_roles = $wpdb->get_results( $user_roles_prepare , ARRAY_A );
+        
+	if ( is_array( $user_roles ) && count( $user_roles ) ){
+		$roles = array();
+		foreach ( $user_roles as  $role ) {
+                
+			array_push( $roles, $role['meta_value'] );
+		}
+		
+                return $roles;
+            
+	}else{
+            
+		return null;
+	}
+   
+}
+function ets_lifterlms_discord_remove_usermeta ( $user_id ){
+ 
+	global $wpdb;
+        
+        
+	$usermeta_table = $wpdb->prefix . "usermeta";
+	$usermeta_sql = "DELETE FROM " . $usermeta_table . " WHERE `user_id` = %d AND  `meta_key` LIKE '_ets_lifterlms_discord%'; ";
+	$delete_usermeta_sql = $wpdb->prepare( $usermeta_sql, $user_id );
+	$wpdb->query( $delete_usermeta_sql );
+             
 }
