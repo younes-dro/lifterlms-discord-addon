@@ -325,8 +325,8 @@ class Lifterlms_Discord_Addon_Public {
 //		if ( is_array( $courses ) ) {
 //			foreach ( $courses as $course_id ) {
 //
-//				if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'learndash_course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
-//					$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'learndash_course_id_' . $course_id ] ) );
+//				if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'lifterlms_course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+//					$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'lifterlms_course_id_' . $course_id ] ) );
 //					array_push( $discord_roles, $discord_role );
 //					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
 //				}
@@ -374,9 +374,9 @@ class Lifterlms_Discord_Addon_Public {
 		}
 
 		// Send welcome message.
-//		if ( $ets_lifterlms_discord_send_welcome_dm == true ) {
-//			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $courses, 'welcome' ), LEARNDASH_DISCORD_AS_GROUP_NAME );
-//		}
+		if ( $ets_lifterlms_discord_send_welcome_dm == true ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $courses, 'welcome' ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		}
 	}
 
 	/**
@@ -403,7 +403,7 @@ class Lifterlms_Discord_Addon_Public {
 		//ets_lifterlms_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
 
 		//$response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
-		//LearnDash_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+		//lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
 		return $user_body;
 
@@ -455,13 +455,112 @@ class Lifterlms_Discord_Addon_Public {
 			//ets_lifterlms_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
 			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
 			//	$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-			//	LearnDash_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+			//	lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( $is_schedule ) {
 					// this exception should be catch by action scheduler.
 					throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_put_member_role' );
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * Discord DM a member using bot.
+	 *
+	 * @param INT    $user_id
+	 * @param
+	 * @param STRING $type (warning|expired)
+	 */
+	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning' ) {
+		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
+
+		$ets_lifterlms_discord_welcome_message             = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
+
+
+
+
+
+		// Check if DM channel is already created for the user.
+		$user_dm = get_user_meta( $user_id, '_ets_lifterlms_discord_dm_channel', true );
+
+		if ( ! isset( $user_dm['id'] ) || $user_dm === false || empty( $user_dm ) ) {
+			$this->ets_lifterlms_discord_create_member_dm_channel( $user_id );
+			$user_dm       = get_user_meta( $user_id, '_ets_lifterlms_discord_dm_channel', true );
+			$dm_channel_id = $user_dm['id'];
+		} else {
+			$dm_channel_id = $user_dm['id'];
+		}
+
+		if ( $type == 'welcome' ) {
+			if ( is_array( $courses ) ) {
+				update_user_meta( $user_id, '_ets_lifterlms_discord_welcome_dm_for_' . implode( '_', $courses ), true );
+			}
+			$message = ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $ets_lifterlms_discord_welcome_message );
+		}
+
+
+		$creat_dm_url = LIFTERLMS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
+		$dm_args      = array(
+			'method'  => 'POST',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+			'body'    => ets_lifterlms_discord_get_rich_embed_message( trim ( $message ) ),
+
+		);                    
+		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
+		//ets_lifterlms_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
+		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
+		if ( ets_lifterlms_discord_check_api_errors( $dm_response ) ) {
+			//lifterlms_Discord_Add_On_Logs::write_api_response_logs( $dm_response_body, $user_id, debug_backtrace()[0] );
+			// this should be catch by Action schedule failed action.
+			throw new Exception( 'Failed in function ets_lifterlms_discord_handler_send_dm' );
+		}
+	}
+
+	/**
+	 * Create DM channel for a give user_id
+	 *
+	 * @param INT $user_id
+	 * @return MIXED
+	 */
+	public function ets_lifterlms_discord_create_member_dm_channel( $user_id ) {
+		$discord_user_id       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+		$discord_bot_token     = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
+		$create_channel_dm_url = LIFTERLMS_DISCORD_API_URL . '/users/@me/channels';
+		$dm_channel_args       = array(
+			'method'  => 'POST',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+			'body'    => json_encode(
+				array(
+					'recipient_id' => $discord_user_id,
+				)
+			),
+		);
+
+		$created_dm_response = wp_remote_post( $create_channel_dm_url, $dm_channel_args );
+		//ets_lifterlms_discord_log_api_response( $user_id, $create_channel_dm_url, $dm_channel_args, $created_dm_response );
+		$response_arr = json_decode( wp_remote_retrieve_body( $created_dm_response ), true );
+
+		if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
+			// check if there is error in create dm response
+			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+				//lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				if ( ets_lifterlms_discord_check_api_errors( $created_dm_response ) ) {
+					// this should be catch by Action schedule failed action.
+					throw new Exception( 'Failed in function ets_lifterlms_discord_create_member_dm_channel' );
+				}
+			} else {
+				update_user_meta( $user_id, '_ets_lifterlms_discord_dm_channel', $response_arr );
+			}
+		}
+		return $response_arr;
 	}
 	
 

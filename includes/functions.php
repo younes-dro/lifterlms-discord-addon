@@ -233,3 +233,103 @@ function ets_lifterlms_discord_count_of_hooks_failures( $hook ) {
 		return false;
 	}
 }
+
+/**
+ * Get formatted message to send in DM
+ *
+ * @param INT $user_id
+ * @param ARRAY $courses the student's list of sources
+ * Merge fields: [LLMS_COURSES], [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL]
+ */
+function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) {
+    
+	$user_obj    = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL  = get_bloginfo( 'url' );
+	$BLOG_NAME = get_bloginfo( 'name' );
+
+	$COURSES = '';
+        if( is_array( $courses ) ){
+		$args_courses = array(
+        	'orderby'          => 'title',
+        	'order'            => 'ASC',
+		'numberposts' => count( $courses ),
+		'post_type'   => 'course',
+		'post__in' => $courses
+		);
+		$enrolled_courses = get_posts( $args_courses );
+		$lastKeyCourse = array_key_last( $enrolled_courses );
+		$commas = ', ';        
+		foreach ($enrolled_courses as $key => $course) {
+		if ( $lastKeyCourse === $key )  
+			$commas = ' ' ;
+			$COURSES .= esc_html( $course->post_title ). $commas;
+		}
+	}
+
+
+		$find    = array(
+			'[LLMS_COURSES]',
+			'[LLMS_STUDENT_NAME]',
+			'[LLMS_STUDENT_EMAIL]',
+			'[SITE_URL]',
+			'[BLOG_NAME]'
+		);
+		$replace = array(
+			$COURSES,                    
+			$STUDENT_USERNAME,
+			$STUDENT_EMAIL,
+			$SITE_URL,
+			$BLOG_NAME
+		);
+
+		return str_replace( $find, $replace, $message );
+
+}
+
+function ets_lifterlms_discord_get_rich_embed_message ( $message ){
+    
+	$blog_logo_full = esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' )[0] );
+	$blog_logo_thumbnail =  esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'thumbnail' )[0] );
+	
+	$SITE_URL  = get_bloginfo( 'url' );
+	$BLOG_NAME = get_bloginfo( 'name' );
+	$BLOG_DESCRIPTION = get_bloginfo( 'description' );
+    
+	$timestamp = date( "c", strtotime( "now" ) );
+
+	$rich_embed_message = json_encode( [
+		"content" => '',
+		"username" =>  $BLOG_NAME,
+		"avatar_url" => $blog_logo_thumbnail,
+		"tts" => false,
+		"embeds" => [
+			[
+				"title" => $message,
+				"type" => "rich",
+				"description" => $BLOG_DESCRIPTION,
+				"url" => '',
+				"timestamp" => $timestamp,
+				"color" => hexdec( "3366ff" ),
+				"footer" => [
+					"text" => $BLOG_NAME,
+					"icon_url" => $blog_logo_thumbnail
+				],
+				"image" => [
+					"url" => $blog_logo_full
+				],
+				"thumbnail" => [
+					"url" => $blog_logo_thumbnail
+				],
+				"author" => [
+					"name" => $BLOG_NAME,
+					"url" => $SITE_URL
+				],
+			]
+		]
+
+	], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+	return $rich_embed_message ; 
+}
