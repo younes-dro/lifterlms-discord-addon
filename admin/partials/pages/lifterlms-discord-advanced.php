@@ -2,8 +2,8 @@
 $ets_lifterlms_discord_send_welcome_dm         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_welcome_dm' ) ) );
 $ets_lifterlms_discord_welcome_message         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
 
-$ets_lifterlms_discord_send_assignment_approved_dm   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_assignment_approved_dm' ) ) );
-$ets_lifterlms_discord_assignment_approved_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_assignment_approved_message' ) ) );
+$ets_lifterlms_discord_send_quiz_complete_dm   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_quiz_complete_dm' ) ) );
+$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 
 $retry_failed_api                              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_retry_failed_api' ) ) );
 $kick_upon_disconnect                          = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_kick_upon_disconnect' ) ) );
@@ -46,7 +46,27 @@ $log_api_res                                   = sanitize_text_field( trim( get_
 	<small>Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_COURSES], [SITE_URL], [BLOG_NAME]</small>
 		</fieldset></td>
 	</tr>         
-
+  <tr>
+		<th scope="row"><?php echo __( 'Send Quiz Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<td> <fieldset>
+		<input name="ets_lifterlms_discord_send_quiz_complete_dm" type="checkbox" id="ets_lifterlms_discord_send_quiz_complete_dm" 
+		<?php
+		if ( $ets_lifterlms_discord_send_quiz_complete_dm == true ) {
+			echo 'checked="checked"'; }
+		?>
+		 value="1">
+		</fieldset></td>
+	  </tr>
+	<tr>
+		<th scope="row"><?php echo __( 'Quiz Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<td> <fieldset>
+		<textarea class="ets_lifterlms_discord_quiz_complete_message" name="ets_lifterlms_discord_quiz_complete_message" id="ets_lifterlms_discord_quiz_complete_message" row="25" cols="50"><?php if ( $ets_lifterlms_discord_quiz_complete_message ) { echo wp_unslash( $ets_lifterlms_discord_quiz_complete_message ); } ?></textarea> 
+	<br/>
+	<small>Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_QUIZ_NAME], [LLMS_QUIZ_DATE], [SITE_URL], [BLOG_NAME]</small>
+		</fieldset></td>
+	  </tr>
+          
+  <tr>
 	  <tr>
 		<th scope="row"><?php echo __( 'Retry Failed API calls', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>

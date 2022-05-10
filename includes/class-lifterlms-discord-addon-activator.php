@@ -32,7 +32,9 @@ class Lifterlms_Discord_Addon_Activator {
 	public static function activate() {
 		update_option( 'ets_lifterlms_discord_uuid_file_name', wp_generate_uuid4() );
 		update_option( 'ets_lifterlms_discord_send_welcome_dm', true );
-		update_option( 'ets_lifterlms_discord_welcome_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), Welcome, Your courses [LLMS_COURSES] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );                		
+		update_option( 'ets_lifterlms_discord_welcome_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), Welcome, Your courses [LLMS_COURSES] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );               
+		update_option( 'ets_lifterlms_discord_send_quiz_complete_dm', true );                 
+		update_option( 'ets_lifterlms_discord_quiz_complete_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), You have completed the quiz  [LLMS_QUIZ_NAME] at [LLMS_QUIZ_DATE] on website [SITE_URL], [BLOG_NAME]' );                
 		update_option( 'ets_lifterlms_discord_retry_failed_api', true );
 		update_option( 'ets_lifterlms_discord_kick_upon_disconnect', false ); 
 		update_option( 'ets_lifterlms_discord_retry_api_count', 5 );

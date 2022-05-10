@@ -410,8 +410,8 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-			$ets_lifterlms_discord_send_welcome_dm = isset( $_POST['ets_lifterlms_discord_send_welcome_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_send_welcome_dm'] ) ) : '';
 			$ets_lifterlms_discord_welcome_message = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
+			$ets_lifterlms_discord_quiz_complete_message = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';                        
 			$retry_failed_api                           = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
 			$kick_upon_disconnect                       = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';                        
 			$retry_api_count                            = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
@@ -432,6 +432,16 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_welcome_message', $ets_lifterlms_discord_welcome_message );
 				} else {
 					update_option( 'ets_lifterlms_discord_welcome_message', '' );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_send_quiz_complete_dm'] ) ) {
+					update_option( 'ets_lifterlms_discord_send_quiz_complete_dm', true );
+				} else {
+					update_option( 'ets_lifterlms_discord_send_quiz_complete_dm', false );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) && $_POST['ets_lifterlms_discord_quiz_complete_message'] != '' ) {
+					update_option( 'ets_lifterlms_discord_quiz_complete_message', $ets_lifterlms_discord_quiz_complete_message );
+				} else {
+					update_option( 'ets_lifterlms_discord_quiz_complete_message', '' );
 				}                                
 				if ( isset( $_POST['retry_failed_api'] ) ) {
 					update_option( 'ets_lifterlms_discord_retry_failed_api', true );
