@@ -40,7 +40,16 @@ class Lifterlms_Discord_Addon_Admin {
 	 */
 	private $version;
 
-  /**
+	/**
+	 * Instance of Lifterlms_Discord_Addon_Public class
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      Lifterlms_Discord_Addon_Public
+	 */
+	private $lifterlms_discord_public_instance;
+
+	/**
 	 * Static property to define log file name
 	 *
 	 * @param None
@@ -55,10 +64,11 @@ class Lifterlms_Discord_Addon_Admin {
 	 * @param      string $plugin_name       The name of this plugin.
 	 * @param      string $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct( $plugin_name, $version, $lifterlms_discord_public_instance ) {
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+		$this->lifterlms_discord_public_instance = $lifterlms_discord_public_instance;                
 
 	}
 
@@ -544,9 +554,9 @@ class Lifterlms_Discord_Addon_Admin {
 			}
 		}
 
-	} 
+	}
 
+           
+                
 
-
-
-}
+}  

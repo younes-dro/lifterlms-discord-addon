@@ -165,7 +165,7 @@ class Lifterlms_Discord_Addon {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Lifterlms_Discord_Addon_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Lifterlms_Discord_Addon_Admin( $this->get_plugin_name(), $this->get_version(), Lifterlms_Discord_Addon_Public::get_lifterlms_discord_public_instance( $this->get_plugin_name(), $this->get_version() ) );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ets_lifterlms_add_admin_menu', 11 );
@@ -176,7 +176,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_load_discord_roles', $plugin_admin, 'ets_lifterlms_load_discord_roles' );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_redirect_url', $plugin_admin, 'ets_lifterlms_discord_update_redirect_url' );                                                                                                                
 		$this->loader->add_action( 'admin_post_lifterlms_discord_save_advance_settings', $plugin_admin, 'ets_lifterlms_discord_save_advance_settings' );                
-		
+                                                		
 	}
                 
 	/**
