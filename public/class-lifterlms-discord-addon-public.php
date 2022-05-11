@@ -41,6 +41,15 @@ class Lifterlms_Discord_Addon_Public {
 	private $version;
 
 	/**
+	 * The single object Lifterlms_Discord_Addon_Public
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var Lifterlms_Discord_Addon_Public
+	 */
+	private static $instance;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -52,6 +61,15 @@ class Lifterlms_Discord_Addon_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+	}
+
+	public static function get_lifterlms_discord_public_instance( $plugin_name, $version ) {
+
+		if ( ! self::$instance ) {
+			self::$instance = new Lifterlms_Discord_Addon_Public( $plugin_name, $version );
+
+		}
+		return self::$instance;
 	}
 
 	/**
@@ -283,9 +301,9 @@ class Lifterlms_Discord_Addon_Public {
 			}                    
 		}            
 
-}
+	}
 
-     /**
+	/**
 	 *  Responce/auth_token
 	 *
 	 */
@@ -355,15 +373,15 @@ class Lifterlms_Discord_Addon_Public {
 	 * @return NONE
 	 */
 	public function add_discord_member_in_guild( $_ets_lifterlms_discord_user_id, $user_id, $access_token ) {
-//		if ( ! is_user_logged_in() ) {
-//			wp_send_json_error( 'Unauthorized user', 401 );
-//			exit();
-//		}
-//		$enrolled_coures = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
-//		if ( $enrolled_coures !== null ) {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+		$enrolled_coures = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
+		if ( $enrolled_coures !== null ) {
 			// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
 			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_handle_add_member_to_guild', array( $_ets_lifterlms_discord_user_id, $user_id, $access_token ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
-//		}
+		}
 	}
 
 	/**
