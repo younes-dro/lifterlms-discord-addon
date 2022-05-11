@@ -819,6 +819,47 @@ class Lifterlms_Discord_Addon_Public {
 		}
 
 	}
+
+	/**
+	 * Update student's discord roles when admin assign / unassign course to students.
+	 *
+	 * @param int $user_id WP User ID.
+	 * @param int $course_id WP Post ID of the course or membership.
+	 * @param bool $remove enrollment deleted.
+	 * @return NONE
+	 */ 
+	public function ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id, $remove = false) {
+
+		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+
+		if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+			$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ] ) );
+			if ( $discord_role && $discord_role != 'none' ) {
+				if ( $access_token && $refresh_token ) {
+
+					if ( $remove ) {
+						delete_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
+						$this->delete_discord_role( $user_id, $discord_role );
+					} else {
+						update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
+						$this->put_discord_role_api( $user_id, $discord_role );
+					}
+				}
+			}
+		}
+		if ( $access_token && $refresh_token ) {
+			if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
+				update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
+				$this->put_discord_role_api( $user_id, $default_role );
+			} else {
+				$default_role = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
+				$this->delete_discord_role( $user_id, $default_role );
+			}
+		}
+	}
 	
 
 }

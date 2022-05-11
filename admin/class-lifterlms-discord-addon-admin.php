@@ -556,6 +556,31 @@ class Lifterlms_Discord_Addon_Admin {
 
 	}
 
+	/**
+	 * Admin assigns a course to student
+	 *
+	 * @param int $user_id WP User ID.
+	 * @param int $course_id WP Post ID of the course or membership. 
+	 * @return NONE
+	 */        
+	public function ets_lifterlms_discord_admin_enroll_user_course( $user_id, $course_id ) {
+            
+		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id );           
+        }
+
+	/**
+	 * Enrollment has been deleted
+	 *
+	 * @param int $user_id WP User ID.
+	 * @param int $course_id WP Post ID of the course or membership.
+	 * @param string $enrollment_trigger The enrollment trigger..  
+	 * @return NONE
+	 */        
+	public function ets_lifterlms_discord_admin_delete_user_enrollment_course( $user_id, $course_id, $enrollment_trigger ) {
+            
+		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id , true );           
+        }
+
            
                 
 
