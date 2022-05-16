@@ -1,8 +1,6 @@
 (function ($) {
 	'use strict';
 
-	/* Select2 -Plugin jquery */
-	$('document').ready(function () {
 
 		/*Load all roles from discord server*/
 		$.ajax({
@@ -272,7 +270,4 @@
 		$.skeletabs.setDefaults({
 			keyboard: false,
 		});
-
-
-	});
 })(jQuery);
