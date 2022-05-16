@@ -374,9 +374,11 @@ class Lifterlms_Discord_Addon_Admin {
 						}
 						if ( 'previous_mapping' !== $key && false === $isbot && isset( $value['name'] ) && $value['name'] != '@everyone' ) {
 							$discord_roles[ $value['id'] ] = $value['name'];
+							$discord_roles_color[ $value['id'] ] = $value['color'];                                                        
 						}
 					}
 					update_option( 'ets_lifterlms_discord_all_roles', serialize( $discord_roles ) );
+					update_option( 'ets_lifterlms_discord_roles_color', serialize( $discord_roles_color ) );                                                                                
 				}
 			}
 			/*

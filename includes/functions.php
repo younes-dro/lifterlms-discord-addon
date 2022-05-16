@@ -391,9 +391,9 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '') {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 					
 		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
-		$restrictcontent_discord .= esc_html( $mapped_role_name  );
+		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $mapped_role_name ) ;
 		if ( $default_role_name ) {
-			$restrictcontent_discord .= ' ' . esc_html( $default_role_name ); 
+			$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name ); 
                                                 
 		}
 					
@@ -402,7 +402,7 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '') {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 					
 		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
-		$restrictcontent_discord .= esc_html( $default_role_name ); 
+		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name ); 
 					
 		$restrictcontent_discord .= '</p>';
                                          
@@ -449,4 +449,14 @@ function ets_lifterlms_discord_remove_usermeta ( $user_id ){
 	$delete_usermeta_sql = $wpdb->prepare( $usermeta_sql, $user_id );
 	$wpdb->query( $delete_usermeta_sql );
              
+}
+function ets_lifterlms_discord_allowed_html( $html_message ) {
+	$allowed_html = array(
+		'span' => array(),
+		'i' => array(
+			'style' => array()
+		)
+	);
+
+	return wp_kses( $html_message, $allowed_html );
 }

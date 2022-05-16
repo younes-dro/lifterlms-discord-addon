@@ -143,21 +143,18 @@ class Lifterlms_Discord_Addon_Public {
 		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
 		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
 		$all_roles                          = unserialize( get_option( 'ets_lifterlms_discord_all_roles' ) );
+		$roles_color = unserialize( get_option( 'ets_lifterlms_discord_roles_color' ) );                
 		$enrolled_courses                   = ets_lifterlms_discord_get_student_courses_id( $user_id );
 		$mapped_role_name                   = '';
 		if ( is_array( $enrolled_courses ) && is_array( $all_roles ) && is_array( $ets_lifterlms_discord_role_mapping ) ) {
 			$lastKey = array_key_last( $enrolled_courses );
-			$spacer  = ', ';
 			foreach ( $enrolled_courses as $key => $enrolled_course_id ) {
 				if ( array_key_exists( 'course_id_' . $enrolled_course_id, $ets_lifterlms_discord_role_mapping ) ) {
 
 					$mapped_role_id = $ets_lifterlms_discord_role_mapping[ 'course_id_' . $enrolled_course_id ];
 
 					if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
-						if ( $lastKey === $key ) {
-							$spacer = '.';
-						}
-						$mapped_role_name .= $all_roles[ $mapped_role_id ] . $spacer;
+						$mapped_role_name .= '<span> <i style="background-color:#' . dechex( $roles_color[ $mapped_role_id ] ) . '"></i>' . $all_roles[ $mapped_role_id ] . '</span>';                                            
 					}
 				}
 			}
@@ -166,7 +163,7 @@ class Lifterlms_Discord_Addon_Public {
 		$default_role_name = '';
 		if ( is_array( $all_roles ) ) {
 			if ( $default_role != 'none' && array_key_exists( $default_role, $all_roles ) ) {
-				$default_role_name = $all_roles[ $default_role ];
+				$default_role_name = '<span><i style="background-color:#' . dechex( $roles_color[ $default_role ] ) . '"></i> ' . $all_roles[ $default_role ] . '</span>';                            
 			}
 		}
 
