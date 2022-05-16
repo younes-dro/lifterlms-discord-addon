@@ -135,7 +135,7 @@ class Lifterlms_Discord_Addon_Public {
 
 		$access_token                    = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
 		$_ets_lifterlms_discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_username', true ) ) );
-		$allow_none_student              = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_allow_none_student' ) ) );
+		$allow_none_student              = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
 		$ets_lifterlms_discord_connect_button_bg_color    = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_connect_button_bg_color' ) ) );
 		$ets_lifterlms_discord_disconnect_button_bg_color = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_disconnect_button_bg_color' ) ) );                
 		$ets_lifterlms_discord_disconnect_button_text = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_disconnect_button_text' ) ) );                
