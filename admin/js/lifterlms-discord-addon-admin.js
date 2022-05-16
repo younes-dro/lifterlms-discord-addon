@@ -253,7 +253,7 @@
 				},
 				success: function (data) { 
 					$('p.redirect-url').find('b').html(data.formated_discord_redirect_url);
-					$('p.ets-discord-update-message').css('display','block');                                               
+					$('p.ets-discord-update-message').css('display','block'); 
 				},
 				error: function (response, textStatus, errorThrown ) {
 					console.log( textStatus + " :  " + response.status + " : " + errorThrown );

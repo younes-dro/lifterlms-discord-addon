@@ -53,7 +53,7 @@
     font-size: 20px;
   }
   .ets-submit{
-    padding: 20px 30px;
+    padding: 10px 20px;
     background: #444;
     color: #fff;
     font-size: 14px;
@@ -384,7 +384,7 @@
     margin: 4px 10px 0;
   
   }
-  .ets-is-active{
+  span.spinner.ets-is-active{
     visibility: visible;
   }
   .discord-roles .spinner, .initialtab.spinner{
@@ -454,7 +454,7 @@
     display: inline-block;
   }
   .spinner{
-    display: none;
+    /*display: none;*/
   }
   select#defaultRole{
     border-radius: 0px;
@@ -496,5 +496,10 @@ p.redirect-url > span.spinner{
     float: left;
     display: none;
 }
-div#lifterlms_discord_advanced textarea{height:130px;}
+div#lifterlms_discord_advanced textarea{
+    height:130px;
+}
+p.ets-discord-update-message{
+    display: none;
+}
   
