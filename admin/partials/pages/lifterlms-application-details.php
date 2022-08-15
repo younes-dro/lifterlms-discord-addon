@@ -24,24 +24,15 @@
 <?php wp_nonce_field( 'save_lifterlms_discord_settings', 'ets_lifterlms_discord_save_settings' ); ?>
 	
 		<div class="ets-input-group">
+			<?php $ets_lifterlms_discord_client_id_value = isset( $ets_lifterlms_discord_client_id ) ? $ets_lifterlms_discord_client_id : ''; ?>
 			<label><?php esc_html_e( 'Client ID', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="
-			<?php
-			if ( isset( $ets_lifterlms_discord_client_id ) ) {
-				echo $ets_lifterlms_discord_client_id;
-			}
-			?>
-			" required placeholder="<?php esc_html_e( 'Discord Client ID', 'lifterlms-discord-add-on' ); ?>">
+			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="<?php echo esc_attr( $ets_lifterlms_discord_client_id_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client ID', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 	
 		<div class="ets-input-group">
+		<?php $ets_lifterlms_discord_client_secret_value = isset( $ets_lifterlms_discord_client_secret ) ? $ets_lifterlms_discord_client_secret : ''; ?>
 			<label><?php esc_html_e( 'Client Secret', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="password" class="ets-input" name="ets_lifterlms_discord_client_secret" value="
-			<?php
-			if ( isset( $ets_lifterlms_discord_client_secret ) ) {
-				echo esc_attr( $ets_lifterlms_discord_client_secret ); }
-			?>
-			" required placeholder="<?php esc_html_e( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
+			<input type="password" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php echo esc_attr( $ets_lifterlms_discord_client_secret_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 
 		<div class="ets-input-group">
@@ -64,24 +55,15 @@
 		<div class="ets-input-group">
 			
 			<?php echo sprintf( " <b>(%s)</b> Bot name, should have the higher priority than the role it has to manage. <a href='https://discord.com/channels/%d'>Open discord server</a>.", $bot_username, $ets_lifterlms_discord_server_id ); ?><br>	
-		
+		<?php $ets_lifterlms_discord_bot_token_value = isset( $ets_lifterlms_discord_bot_token ) ? $ets_lifterlms_discord_bot_token : ''; ?>
 			<label><?php esc_html_e( 'Bot Token', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="password" class="ets-input" name="ets_lifterlms_discord_bot_token" value="
-			<?php
-			if ( isset( $ets_lifterlms_discord_bot_token ) ) {
-				echo esc_attr( $ets_lifterlms_discord_bot_token ); }
-			?>
-			" required placeholder="<?php esc_html_e( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
+			<input type="password" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php echo esc_attr( $ets_lifterlms_discord_bot_token_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
 		</div>
 	
 		<div class="ets-input-group">
+			<?php $ets_lifterlms_discord_server_id_value = isset( $ets_lifterlms_discord_server_id ) ? $ets_lifterlms_discord_server_id : ''; ?>
 			<label><?php esc_html_e( 'Server ID', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php esc_html_e( 'Discord Server Id', 'lifterlms-discord-addon' ); ?>" value="
-																												<?php
-																												if ( isset( $ets_lifterlms_discord_server_id ) ) {
-																													echo esc_attr( $ets_lifterlms_discord_server_id ); }
-																												?>
-			" required>
+			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php esc_html_e( 'Discord Server Id', 'lifterlms-discord-addon' ); ?>" value="<?php echo esc_attr( $ets_lifterlms_discord_server_id_value ); ?>" required>
 		</div>
 	
 <!--check field Empty or Not-->
