@@ -246,7 +246,12 @@ class Lifterlms_Discord_Addon_Admin {
 		);
 		$bot_response = wp_remote_get( $discord_cuser_api_url, $param );
 		$response_arr = json_decode( wp_remote_retrieve_body( $bot_response ), true );
-		return $response_arr['username'];
+		if ( is_array( $response_arr ) && array_key_exists( 'username', $response_arr ) ) {
+			return $response_arr['username'];
+		} else {
+			return false;
+		}
+
 	}
 
 	/*
