@@ -51,7 +51,7 @@
 			<label><?php esc_html_e( 'Redirect URL', 'lifterlms-discord-addon' ); ?> :</label>
 			<p class="redirect-url"><b><?php esc_html_e( $redirect_url ); ?></b></p>
 			<select class="form-control ets_wp_pages_list ets-input" name="ets_lifterlms_discord_redirect_page_id" style="max-width: 100%" required >
-				<?php esc_html_e( $pages ); ?>
+				<?php _e( ets_lifterlms_discord_pages_list( wp_kses( $ets_lifterlms_discord_redirect_page_id, array( 'option' => array( 'data-page-url' => array() ) ) ) ) ); ?>
 			  </select>
 		<p class="description"><?php esc_html_e( 'Registered discord app redirect url', 'lifterlms-discord-add-on' ); ?><span class="spinner"></span></p>
 				<p class="description ets-discord-update-message"><?php echo sprintf( __( 'Redirect URL updated, kindly add/update the same in your discord.com application link <a href="https://discord.com/developers/applications/%s/oauth2/general">https://discord.com/developers</a>', 'lifterlms-discord-add-on' ), $ets_lifterlms_discord_client_id ); ?></p>                          
