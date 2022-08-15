@@ -22,13 +22,11 @@
 <input type="hidden" name="action" value="lifterlms_discord_save_application_details">
 <input type="hidden" name="current_url" value="<?php echo esc_url( ets_lifterlms_discord_get_current_screen_url() ); ?>">
 <?php wp_nonce_field( 'save_lifterlms_discord_settings', 'ets_lifterlms_discord_save_settings' ); ?>
-	
 		<div class="ets-input-group">
 			<?php $ets_lifterlms_discord_client_id_value = isset( $ets_lifterlms_discord_client_id ) ? $ets_lifterlms_discord_client_id : ''; ?>
 			<label><?php esc_html_e( 'Client ID', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="<?php echo esc_attr( $ets_lifterlms_discord_client_id_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client ID', 'lifterlms-discord-add-on' ); ?>">
 		</div>
-	
 		<div class="ets-input-group">
 		<?php $ets_lifterlms_discord_client_secret_value = isset( $ets_lifterlms_discord_client_secret ) ? $ets_lifterlms_discord_client_secret : ''; ?>
 			<label><?php esc_html_e( 'Client Secret', 'lifterlms-discord-addon' ); ?> :</label>
@@ -40,7 +38,7 @@
 			<p class="redirect-url"><b><?php esc_html_e( $redirect_url ); ?></b></p>
 			<select class="form-control ets_wp_pages_list ets-input" name="ets_lifterlms_discord_redirect_page_id" style="max-width: 100%" required >
 				<?php _e( ets_lifterlms_discord_pages_list( wp_kses( $ets_lifterlms_discord_redirect_page_id, array( 'option' => array( 'data-page-url' => array() ) ) ) ) ); ?>
-			  </select>
+			</select>
 		<p class="description"><?php esc_html_e( 'Registered discord app redirect url', 'lifterlms-discord-add-on' ); ?><span class="spinner"></span></p>
 				<p class="description ets-discord-update-message"><?php echo sprintf( __( 'Redirect URL updated, kindly add/update the same in your discord.com application link <a href="https://discord.com/developers/applications/%s/oauth2/general">https://discord.com/developers</a>', 'lifterlms-discord-add-on' ), $ets_lifterlms_discord_client_id ); ?></p>                          
 		</div>
@@ -53,19 +51,16 @@
 		</div>
 
 		<div class="ets-input-group">
-			
 			<?php echo sprintf( " <b>(%s)</b> Bot name, should have the higher priority than the role it has to manage. <a href='https://discord.com/channels/%d'>Open discord server</a>.", $bot_username, $ets_lifterlms_discord_server_id ); ?><br>	
 		<?php $ets_lifterlms_discord_bot_token_value = isset( $ets_lifterlms_discord_bot_token ) ? $ets_lifterlms_discord_bot_token : ''; ?>
 			<label><?php esc_html_e( 'Bot Token', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="password" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php echo esc_attr( $ets_lifterlms_discord_bot_token_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
 		</div>
-	
 		<div class="ets-input-group">
 			<?php $ets_lifterlms_discord_server_id_value = isset( $ets_lifterlms_discord_server_id ) ? $ets_lifterlms_discord_server_id : ''; ?>
 			<label><?php esc_html_e( 'Server ID', 'lifterlms-discord-addon' ); ?> :</label>
 			<input type="text" class="ets-input" name="ets_lifterlms_discord_server_id" placeholder="<?php esc_html_e( 'Discord Server Id', 'lifterlms-discord-addon' ); ?>" value="<?php echo esc_attr( $ets_lifterlms_discord_server_id_value ); ?>" required>
 		</div>
-	
 <!--check field Empty or Not-->
 
 	<?php if ( empty( $ets_lifterlms_discord_client_id ) || empty( $ets_lifterlms_discord_client_secret ) || empty( $ets_lifterlms_discord_bot_token ) || empty( $ets_lifterlms_discord_redirect_page_id ) || empty( $ets_lifterlms_discord_server_id ) ) { ?>
@@ -81,7 +76,7 @@
 		</button>
 
 		<?php if ( get_option( 'ets_lifterlms_discord_client_id' ) ) : ?>
-		   <a href="?action=lifterlms-discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php esc_html_e( 'Connect your Bot', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
+			<a href="?action=lifterlms-discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php esc_html_e( 'Connect your Bot', 'lifterlms-discord-addon' ); ?> <i class='fab fa-discord'></i></a>
 		<?php endif; ?>
 	</p>
 
