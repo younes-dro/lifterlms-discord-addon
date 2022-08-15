@@ -66,9 +66,9 @@ class Lifterlms_Discord_Addon_Admin {
 	 */
 	public function __construct( $plugin_name, $version, $lifterlms_discord_public_instance ) {
 
-		$this->plugin_name = $plugin_name;
-		$this->version     = $version;
-		$this->lifterlms_discord_public_instance = $lifterlms_discord_public_instance;                
+		$this->plugin_name                       = $plugin_name;
+		$this->version                           = $version;
+		$this->lifterlms_discord_public_instance = $lifterlms_discord_public_instance;
 
 	}
 
@@ -97,13 +97,13 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 		wp_enqueue_style( $this->plugin_name . 'skeletabs.css' );
 		wp_enqueue_style( $this->plugin_name . 'select2.css' );
-		wp_enqueue_style( $this->plugin_name );                
+		wp_enqueue_style( $this->plugin_name );
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
 		wp_enqueue_script( $this->plugin_name . 'select2.js' );
 		wp_enqueue_script( $this->plugin_name . 'skeletabs.js' );
-		wp_enqueue_script( $this->plugin_name );                
+		wp_enqueue_script( $this->plugin_name );
 		require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/lifterlms-discord-addon-admin-display.php';
 	}
 
@@ -127,7 +127,7 @@ class Lifterlms_Discord_Addon_Admin {
 		 */
 		wp_register_style( $this->plugin_name . 'skeletabs.css', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
 		wp_register_style( $this->plugin_name . 'select2.css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
-		//wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
+		// wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
 		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
 
 	}
@@ -254,12 +254,12 @@ class Lifterlms_Discord_Addon_Admin {
 	*/
 	public function ets_lifterlms_discord_action_connect_bot() {
 
-		if ( isset( $_GET['action'] ) && $_GET['action'] == 'lifterlms-discord-connectToBot') {
+		if ( isset( $_GET['action'] ) && $_GET['action'] == 'lifterlms-discord-connectToBot' ) {
 			if ( ! current_user_can( 'administrator' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 			}
-			
+
 			$discord_authorise_api_url = LIFTERLMS_DISCORD_API_URL . 'oauth2/authorize';
 			$params                    = array(
 				'client_id'            => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_client_id' ) ) ),
@@ -277,7 +277,7 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 	}
 
-	/* 
+	/*
 	  Role-level-screen develop
 	*/
 	public function ets_lifterlms_discord_role_mapping() {
@@ -285,30 +285,29 @@ class Lifterlms_Discord_Addon_Admin {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-		$ets_discord_roles   = isset( $_POST['ets_lifterlms_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_role_mapping'] ) ) : '';
-		
+		$ets_discord_roles = isset( $_POST['ets_lifterlms_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_role_mapping'] ) ) : '';
+
 		$ets_lifterlms_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
 
 		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
 
-		$ets_discord_roles   = stripslashes( $ets_discord_roles );
-		
+		$ets_discord_roles = stripslashes( $ets_discord_roles );
+
 		$current_url_role    = isset( $_POST['current_url_role'] ) ? sanitize_text_field( trim( $_POST['current_url_role'] ) ) : '';
 		$save_mapping_status = update_option( 'ets_lifterlms_discord_role_mapping', $ets_discord_roles );
-			
+
 		if ( isset( $_POST['ets_lifterlms_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
-			
+
 			if ( ( $save_mapping_status || isset( $_POST['ets_lifterlms_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
-				
+
 				if ( $ets_lifterlms_discord_default_role_id ) {
 					update_option( 'ets_lifterlms_discord_default_role_id', $ets_lifterlms_discord_default_role_id );
 				}
-				
+
 				if ( $allow_none_member ) {
 					update_option( 'ets_lifterlms_allow_none_member', $allow_none_member );
 				}
-				
-				
+
 				$message = 'Your mappings are saved successfully.';
 				if ( isset( $current_url_role ) ) {
 					$pre_location = $current_url_role . '&save_settings_msg=' . $message . '#lifterlms_role_level';
@@ -323,7 +322,7 @@ class Lifterlms_Discord_Addon_Admin {
 					wp_safe_redirect( $pre_location );
 				}
 			}
-		}		
+		}
 	}
 	/**
 	 *
@@ -353,8 +352,8 @@ class Lifterlms_Discord_Addon_Admin {
 				),
 			);
 
-			$guild_response          = wp_remote_post( $discod_server_roles_api, $guild_args );
-			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			$guild_response = wp_remote_post( $discod_server_roles_api, $guild_args );
+			$response_arr   = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
@@ -373,12 +372,12 @@ class Lifterlms_Discord_Addon_Admin {
 							}
 						}
 						if ( 'previous_mapping' !== $key && false === $isbot && isset( $value['name'] ) && $value['name'] != '@everyone' ) {
-							$discord_roles[ $value['id'] ] = $value['name'];
-							$discord_roles_color[ $value['id'] ] = $value['color'];                                                        
+							$discord_roles[ $value['id'] ]       = $value['name'];
+							$discord_roles_color[ $value['id'] ] = $value['color'];
 						}
 					}
 					update_option( 'ets_lifterlms_discord_all_roles', serialize( $discord_roles ) );
-					update_option( 'ets_lifterlms_discord_roles_color', serialize( $discord_roles_color ) );                                                                                
+					update_option( 'ets_lifterlms_discord_roles_color', serialize( $discord_roles_color ) );
 				}
 			}
 			/*
@@ -388,8 +387,8 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 	}
 
-	public function ets_lifterlms_discord_update_redirect_url(  ) {
-           
+	public function ets_lifterlms_discord_update_redirect_url() {
+
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -401,26 +400,26 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 
 		$page_id = $_POST['ets_lifterlms_page_id'];
-		if( isset( $page_id ) ){
+		if ( isset( $page_id ) ) {
 			$formated_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id );
-			update_option( 'ets_lifterlms_discord_redirect_page_id' ,$page_id );
-			update_option( 'ets_lifterlms_discord_redirect_url' ,$formated_discord_redirect_url );
+			update_option( 'ets_lifterlms_discord_redirect_page_id', $page_id );
+			update_option( 'ets_lifterlms_discord_redirect_url', $formated_discord_redirect_url );
 			$res = array(
 				'formated_discord_redirect_url' => $formated_discord_redirect_url,
 			);
 			wp_send_json( $res );
-		
+
 		}
 		exit();
-                
+
 	}
-        
+
 	/**
 	 * Save advanced settings
 	 *
 	 * @param NONE
 	 * @return NONE
-	 */        
+	 */
 	public function ets_lifterlms_discord_save_advance_settings() {
 
 		if ( ! current_user_can( 'administrator' ) || ! wp_verify_nonce( $_POST['ets_lifterlms_discord_advance_settings_nonce'], 'lifterlms_discord_advance_settings_nonce' ) ) {
@@ -428,15 +427,15 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-			$ets_lifterlms_discord_welcome_message = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
-			$ets_lifterlms_discord_quiz_complete_message = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';                        
-			$retry_failed_api                           = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
-			$kick_upon_disconnect                       = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';                        
-			$retry_api_count                            = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
-			$set_job_cnrc                               = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
-			$set_job_q_batch_size                       = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
-			$log_api_res                                = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
-			$ets_current_url = sanitize_text_field( trim( $_POST['current_url'] ) ) ;                                                                
+			$ets_lifterlms_discord_welcome_message       = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
+			$ets_lifterlms_discord_quiz_complete_message = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';
+			$retry_failed_api                            = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
+			$kick_upon_disconnect                        = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';
+			$retry_api_count                             = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
+			$set_job_cnrc                                = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
+			$set_job_q_batch_size                        = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
+			$log_api_res                                 = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
+			$ets_current_url                             = sanitize_text_field( trim( $_POST['current_url'] ) );
 
 		if ( isset( $_POST['ets_lifterlms_discord_advance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_advance_settings_nonce'], 'lifterlms_discord_advance_settings_nonce' ) ) {
 			if ( isset( $_POST['adv_submit'] ) ) {
@@ -460,7 +459,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_quiz_complete_message', $ets_lifterlms_discord_quiz_complete_message );
 				} else {
 					update_option( 'ets_lifterlms_discord_quiz_complete_message', '' );
-				}                                
+				}
 				if ( isset( $_POST['retry_failed_api'] ) ) {
 					update_option( 'ets_lifterlms_discord_retry_failed_api', true );
 				} else {
@@ -470,7 +469,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_kick_upon_disconnect', true );
 				} else {
 					update_option( 'ets_lifterlms_discord_kick_upon_disconnect', false );
-				}                                
+				}
 				if ( isset( $_POST['ets_lifterlms_retry_api_count'] ) ) {
 					if ( $retry_api_count < 1 ) {
 						update_option( 'ets_lifterlms_discord_retry_api_count', 1 );
@@ -498,10 +497,10 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_log_api_response', false );
 				}
 
-				$message = 'Your settings are saved successfully.';
+				$message      = 'Your settings are saved successfully.';
 				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_advanced';
 				wp_safe_redirect( $pre_location );
-				
+
 			}
 		}
 
@@ -511,19 +510,19 @@ class Lifterlms_Discord_Addon_Admin {
 	 *
 	 * @param NONE
 	 * @return NONE
-	 */        
+	 */
 	public function ets_lifterlms_discord_save_appearance_settings() {
 
 		if ( ! current_user_can( 'administrator' ) || ! wp_verify_nonce( $_POST['ets_lifterlms_discord_appearance_settings_nonce'], 'lifterlms_discord_appearance_settings_nonce' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
-		}  
-		$ets_lifterlms_discord_connect_button_bg_color = isset( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ) : '';
-		$ets_lifterlms_discord_disconnect_button_bg_color = isset( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ) : '';                
-		$ets_lifterlms_discord_loggedin_button_text = isset( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ) : '';                                
-		$ets_lifterlms_discord_non_login_button_text = isset( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ) : '';                                                
-		$ets_lifterlms_discord_disconnect_button_text = isset( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ) : '';                                                                
-		$ets_current_url = sanitize_text_field( trim( $_POST['current_url'] ) ) ;                                                        
+		}
+		$ets_lifterlms_discord_connect_button_bg_color    = isset( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_connect_button_bg_color'] ) ) : '';
+		$ets_lifterlms_discord_disconnect_button_bg_color = isset( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_bg_color'] ) ) : '';
+		$ets_lifterlms_discord_loggedin_button_text       = isset( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ) : '';
+		$ets_lifterlms_discord_non_login_button_text      = isset( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_non_login_button_text'] ) ) : '';
+		$ets_lifterlms_discord_disconnect_button_text     = isset( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ) : '';
+		$ets_current_url                                  = sanitize_text_field( trim( $_POST['current_url'] ) );
 
 		if ( isset( $_POST['ets_lifterlms_discord_appearance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_appearance_settings_nonce'], 'lifterlms_discord_appearance_settings_nonce' ) ) {
 			if ( isset( $_POST['appearance_submit'] ) ) {
@@ -537,7 +536,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_disconnect_button_bg_color', $ets_lifterlms_discord_disconnect_button_bg_color );
 				} else {
 					update_option( 'ets_lifterlms_discord_disconnect_button_bg_color', '' );
-				}                                
+				}
 				if ( isset( $_POST['ets_lifterlms_discord_loggedin_button_text'] ) ) {
 					update_option( 'ets_lifterlms_discord_loggedin_button_text', $ets_lifterlms_discord_loggedin_button_text );
 				} else {
@@ -547,12 +546,12 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_non_login_button_text', $ets_lifterlms_discord_non_login_button_text );
 				} else {
 					update_option( 'ets_lifterlms_discord_non_login_button_text', '' );
-				} 
+				}
 				if ( isset( $_POST['ets_lifterlms_discord_disconnect_button_text'] ) ) {
 					update_option( 'ets_lifterlms_discord_disconnect_button_text', $ets_lifterlms_discord_disconnect_button_text );
 				} else {
 					update_option( 'ets_lifterlms_discord_disconnect_button_text', '' );
-				}                                
+				}
 
 				$message = 'Your settings are saved successfully.';
 
@@ -568,28 +567,28 @@ class Lifterlms_Discord_Addon_Admin {
 	 * Admin assigns a course to student
 	 *
 	 * @param int $user_id WP User ID.
-	 * @param int $course_id WP Post ID of the course or membership. 
+	 * @param int $course_id WP Post ID of the course or membership.
 	 * @return NONE
-	 */        
+	 */
 	public function ets_lifterlms_discord_admin_enroll_user_course( $user_id, $course_id ) {
-            
-		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id );           
-        }
+
+		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id );
+	}
 
 	/**
 	 * Enrollment has been deleted
 	 *
-	 * @param int $user_id WP User ID.
-	 * @param int $course_id WP Post ID of the course or membership.
-	 * @param string $enrollment_trigger The enrollment trigger..  
+	 * @param int    $user_id WP User ID.
+	 * @param int    $course_id WP Post ID of the course or membership.
+	 * @param string $enrollment_trigger The enrollment trigger..
 	 * @return NONE
-	 */        
+	 */
 	public function ets_lifterlms_discord_admin_delete_user_enrollment_course( $user_id, $course_id, $enrollment_trigger ) {
-            
-		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id , true );           
-        }
 
-           
-                
+		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id, true );
+	}
 
-}  
+
+
+
+}
