@@ -115,7 +115,7 @@ class Lifterlms_Discord_Addon {
 		/**
 		 * Include file function.php
 		 */
-		
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lifterlms-discord-addon-loader.php';
 
 		/**
@@ -171,16 +171,15 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'ets_lifterlms_add_admin_menu', 11 );
 		$this->loader->add_action( 'admin_post_lifterlms_discord_save_application_details', $plugin_admin, 'ets_lifterlms_discord_save_application_details' );
 		$this->loader->add_action( 'admin_post_lifterlms_discord_role_mapping', $plugin_admin, 'ets_lifterlms_discord_role_mapping' );
-		$this->loader->add_action( 'admin_post_lifterlms_discord_save_appearance_settings', $plugin_admin, 'ets_lifterlms_discord_save_appearance_settings' );                                                                
-		$this->loader->add_action( 'admin_init', $plugin_admin, 'ets_lifterlms_discord_action_connect_bot');
+		$this->loader->add_action( 'admin_post_lifterlms_discord_save_appearance_settings', $plugin_admin, 'ets_lifterlms_discord_save_appearance_settings' );
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'ets_lifterlms_discord_action_connect_bot' );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_load_discord_roles', $plugin_admin, 'ets_lifterlms_load_discord_roles' );
-		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_redirect_url', $plugin_admin, 'ets_lifterlms_discord_update_redirect_url' );                                                                                                                
-		$this->loader->add_action( 'admin_post_lifterlms_discord_save_advance_settings', $plugin_admin, 'ets_lifterlms_discord_save_advance_settings' );                
-		$this->loader->add_action( 'llms_user_enrolled_in_course', $plugin_admin, 'ets_lifterlms_discord_admin_enroll_user_course', 99, 2 );                                
-		$this->loader->add_action( 'llms_user_enrollment_deleted', $plugin_admin, 'ets_lifterlms_discord_admin_delete_user_enrollment_course', 99, 3 );                
-                                                		
+		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_redirect_url', $plugin_admin, 'ets_lifterlms_discord_update_redirect_url' );
+		$this->loader->add_action( 'admin_post_lifterlms_discord_save_advance_settings', $plugin_admin, 'ets_lifterlms_discord_save_advance_settings' );
+		$this->loader->add_action( 'llms_user_enrolled_in_course', $plugin_admin, 'ets_lifterlms_discord_admin_enroll_user_course', 99, 2 );
+		$this->loader->add_action( 'llms_user_enrollment_deleted', $plugin_admin, 'ets_lifterlms_discord_admin_delete_user_enrollment_course', 99, 3 );
 	}
-                
+
 	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
@@ -194,20 +193,20 @@ class Lifterlms_Discord_Addon {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-//		$this->loader->add_action( 'lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button' );
-		$this->loader->add_filter( 'do_shortcode_tag', $plugin_public, 'ets_lifterlms_show_discord_button' , 10 , 3  );
-		$this->loader->add_shortcode( 'lifterlms_discord', $plugin_public, 'ets_lifterlms_discord_add_connect_button' );		
-                $this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
-		$this->loader->add_action( 'init',$plugin_public,'ets_lifterlms_discord_login' );
-		$this->loader->add_action( 'ets_lifterlms_discord_as_handle_add_member_to_guild', $plugin_public, 'ets_lifterlms_discord_as_handler_add_member_to_guild', 10, 3 );                
-		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_member_put_role', $plugin_public, 'ets_lifterlms_discord_as_handler_put_member_role', 10, 3 );                		
-		$this->loader->add_action( 'ets_lifterlms_discord_as_send_dm', $plugin_public, 'ets_lifterlms_discord_handler_send_dm', 10, 4 );                                
-		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_role',  $plugin_public, 'ets_lifterlms_discord_as_handler_delete_memberrole' , 10, 3 );                
-		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_member', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_member_from_guild', 10, 3 );                
-		$this->loader->add_action( 'lifterlms_quiz_completed', $plugin_public, 'ets_lifterlms_quiz_completed', 10, 3 );                                                                                                
-		
+		// $this->loader->add_action( 'lifterlms_after_student_dashboard', $plugin_public,'ets_lifterlms_discord_add_connect_button' );
+		$this->loader->add_filter( 'do_shortcode_tag', $plugin_public, 'ets_lifterlms_show_discord_button', 10, 3 );
+		$this->loader->add_shortcode( 'lifterlms_discord', $plugin_public, 'ets_lifterlms_discord_add_connect_button' );
+				$this->loader->add_action( 'wp_ajax_lifterlms_disconnect_from_discord', $plugin_public, 'ets_lifterlms_disconnect_from_discord' );
+		$this->loader->add_action( 'init', $plugin_public, 'ets_lifterlms_discord_login' );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_handle_add_member_to_guild', $plugin_public, 'ets_lifterlms_discord_as_handler_add_member_to_guild', 10, 3 );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_member_put_role', $plugin_public, 'ets_lifterlms_discord_as_handler_put_member_role', 10, 3 );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_send_dm', $plugin_public, 'ets_lifterlms_discord_handler_send_dm', 10, 4 );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_role', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_memberrole', 10, 3 );
+		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_member', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_member_from_guild', 10, 3 );
+		$this->loader->add_action( 'lifterlms_quiz_completed', $plugin_public, 'ets_lifterlms_quiz_completed', 10, 3 );
+
 	}
-        
+
 	/**
 	 * Define actions which are not in admin or not public
 	 *
@@ -215,21 +214,21 @@ class Lifterlms_Discord_Addon {
 	 * @access   private
 	 */
 	private function define_common_hooks() {
-		$this->loader->add_action( 'action_scheduler_failed_execution',  $this, 'ets_lifterlms_discord_reschedule_failed_action' );		     		
-		$this->loader->add_filter( 'action_scheduler_queue_runner_batch_size', $this, 'ets_lifterlms_discord_queue_batch_size' );                
-		$this->loader->add_filter( 'action_scheduler_queue_runner_concurrent_batches', $this, 'ets_lifterlms_discord_concurrent_batches' );            
-		
-        }
+		$this->loader->add_action( 'action_scheduler_failed_execution', $this, 'ets_lifterlms_discord_reschedule_failed_action' );
+		$this->loader->add_filter( 'action_scheduler_queue_runner_batch_size', $this, 'ets_lifterlms_discord_queue_batch_size' );
+		$this->loader->add_filter( 'action_scheduler_queue_runner_concurrent_batches', $this, 'ets_lifterlms_discord_concurrent_batches' );
 
-        /**
-	 * Re-schedule  failed action 
-	 *
-	 * @param INT            $action_id
-	 * @param OBJECT         $e
-	 * @param OBJECT context
-	 * @return NONE
-	 */
-	public function ets_lifterlms_discord_reschedule_failed_action( $action_id  ) {
+	}
+
+		/**
+		 * Re-schedule  failed action
+		 *
+		 * @param INT            $action_id
+		 * @param OBJECT         $e
+		 * @param OBJECT context
+		 * @return NONE
+		 */
+	public function ets_lifterlms_discord_reschedule_failed_action( $action_id ) {
 		// First check if the action is for Lifterlms discord.
 		$action_data = ets_lifterlms_discord_as_get_action_data( $action_id );
 		if ( $action_data !== false ) {
@@ -243,7 +242,7 @@ class Lifterlms_Discord_Addon {
 			}
 		}
 	}
-        
+
 	/**
 	 * Set action scheuduler batch size.
 	 *
@@ -257,7 +256,7 @@ class Lifterlms_Discord_Addon {
 			return $batch_size;
 		}
 	}
-        
+
 	/**
 	 * Set action scheuduler concurrent batches.
 	 *
@@ -271,13 +270,13 @@ class Lifterlms_Discord_Addon {
 			return $concurrent_batches;
 		}
 	}
-     
-	public static function get_discord_logo_white(){
-		$img = file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'public/images/discord-logo-white.svg' );
+
+	public static function get_discord_logo_white() {
+		$img  = file_get_contents( plugin_dir_path( dirname( __FILE__ ) ) . 'public/images/discord-logo-white.svg' );
 		$data = base64_encode( $img );
-                
+
 		return '<img src="data:image/svg+xml;base64,' . $data . '" />';
-        }
+	}
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
