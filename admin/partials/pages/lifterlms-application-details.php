@@ -9,10 +9,7 @@
 	$ets_lifterlms_discord_bot_token        = sanitize_text_field( get_option( 'ets_lifterlms_discord_bot_token' ) );
 	$ets_lifterlms_discord_server_id        = sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ) );
 	$ets_discord_roles                      = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_role_mapping' ) ) );
-	/**
-	 *  Passed Redirect-URL in function ets_lifterlms_discord_pages_list
-	*/
-	$pages = ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_id );
+
 	/**
 	 *  Passed Redirect-URL in function ets_get_lifterlms_discord_formated_discord_redirect_url
 	 */
