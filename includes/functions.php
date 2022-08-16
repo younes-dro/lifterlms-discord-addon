@@ -378,6 +378,9 @@ function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 	return $rich_embed_message;
 }
 function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
+	if ( ! $user_id ) {
+		return null;
+	}
 	$student      = llms_get_student( $user_id );
 	$user_courses = $student->get_courses()['results'];
 	if ( $user_courses ) {
@@ -385,7 +388,8 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 	} else {
 		return null;
 	}
-}function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord ) {
+}
+function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord ) {
 
 	if ( $mapped_role_name ) {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
