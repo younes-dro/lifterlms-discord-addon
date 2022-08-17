@@ -37,7 +37,7 @@ class Lifterlms_Discord_Addon_Activator {
 		update_option( 'ets_lifterlms_discord_lesson_complete_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), You have completed the Lesson  [LLMS_LESSON_NAME] at [LLMS_LESSON_DATE] on website [SITE_URL], [BLOG_NAME]' );
 		update_option( 'ets_lifterlms_discord_send_quiz_complete_dm', true );
 		update_option( 'ets_lifterlms_discord_quiz_complete_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), You have completed the quiz  [LLMS_QUIZ_NAME] at [LLMS_QUIZ_DATE] on website [SITE_URL], [BLOG_NAME]' );
-		update_option( 'ets_lifterlms_discord_send_achievement_earned_complete_dm', true );
+		update_option( 'ets_lifterlms_discord_send_achievement_earned_dm', true );
 		update_option( 'ets_lifterlms_discord_achievement_earned_message', 'Hi [LLMS_STUDENT_NAME] ([LLMS_STUDENT_EMAIL]), You have earned the achievement  [LLMS_ACHIEVEMENT_NAME],  at [LLMS_ACHIEVEMENT_DATE] on website [SITE_URL], [BLOG_NAME]' );
 		update_option( 'ets_lifterlms_discord_retry_failed_api', true );
 		update_option( 'ets_lifterlms_discord_kick_upon_disconnect', false );

@@ -372,6 +372,46 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 }
 
 /**
+ * Send formatted achievement message.
+ * 
+ * @param int $user_id Student's id.
+ * @param int $achievement_id Achievement's id.
+ * @param int $related_post_id Related post id.
+ * @param string $message The message.
+ */
+function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $achievement_id, $related_post_id, $message ) {
+	//return $user_id .'-'. $achievement_id .'-'. $related_post_id .'-'. $message;
+	$user_obj         = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL         = get_bloginfo( 'url' );
+	$BLOG_NAME        = get_bloginfo( 'name' );
+
+	$achievement      = get_post( $achievement_id );
+	$ACHIEVEMENT_NAME = $achievement->post_title;
+
+	$ACHIEVEMENT_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
+
+		$find    = array(
+			'[LLMS_ACHIEVEMENT_NAME]',
+			'[LLMS_ACHIEVEMENT_DATE]',
+			'[LLMS_STUDENT_NAME]',
+			'[LLMS_STUDENT_EMAIL]',
+			'[SITE_URL]',
+			'[BLOG_NAME]',
+		);
+		$replace = array(
+			$ACHIEVEMENT_NAME,
+			$ACHIEVEMENT_COMPLETE_DATE,
+			$STUDENT_USERNAME,
+			$STUDENT_EMAIL,
+			$SITE_URL,
+			$BLOG_NAME,
+		);
+
+		return str_replace( $find, $replace, $message );
+}
+/**
  * Send DM message Rich Embed .
  *
  * @param string $message The message to send.

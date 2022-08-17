@@ -545,17 +545,19 @@ class Lifterlms_Discord_Addon_Public {
 	/**
 	 * Discord DM a member using bot.
 	 *
-	 * @param INT    $user_id
-	 * @param
-	 * @param STRING $type (warning|expired)
+	 * @param INT    $user_id Student's id.
+	 * @param 
+	 * @param STRING $type (warning|expired).
+	 * @param INT $related (quiz_attempt|Realted achievment post)
 	 */
-	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning', $quiz_attempt = '' ) {
+	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning', $related = '' ) {
 		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
 
 		$ets_lifterlms_discord_welcome_message         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
 		$ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
 		$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
+		$ets_lifterlms_discord_achievement_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_achievement_earned_message' ) ) );		
 		$embed_messaging_feature                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
 
 		// Check if DM channel is already created for the user.
@@ -578,7 +580,10 @@ class Lifterlms_Discord_Addon_Public {
 		}
 		if ( $type == 'quiz_complete' ) {
 
-			$message = ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $courses, $quiz_attempt, $ets_lifterlms_discord_quiz_complete_message );
+			$message = ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $courses, $related, $ets_lifterlms_discord_quiz_complete_message );
+		}
+		if ( $type == 'achievement_earned' ) {
+			$message = ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $courses, $related, $ets_lifterlms_discord_achievement_earned_message );
 		}
 
 		$creat_dm_url = LIFTERLMS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
@@ -847,6 +852,17 @@ class Lifterlms_Discord_Addon_Public {
 			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $student_id, $quiz_id, 'quiz_complete', $attempt ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
 		}
 
+	}
+
+	/**
+	 * 
+	 */
+	public function ets_lifterlms_user_earned_achievement( $user_id, $achievement_id, $related_post_id ) {
+		$ets_lifterlms_discord_send_achievement_earned_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_achievement_earned_dm' ) ) );
+		// Send achievement Earned message.
+		if ( $ets_lifterlms_discord_send_achievement_earned_dm == true ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $achievement_id, 'achievement_earned', $related_post_id ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		}
 	}
 
 	/**
