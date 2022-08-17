@@ -8,6 +8,8 @@ $ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_
 $ets_lifterlms_discord_send_quiz_complete_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_quiz_complete_dm' ) ) );
 $ets_lifterlms_discord_quiz_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 
+$embed_messaging_feature                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
+
 $retry_failed_api     = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_retry_failed_api' ) ) );
 $kick_upon_disconnect = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_kick_upon_disconnect' ) ) );
 $retry_api_count      = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_retry_api_count' ) ) );
@@ -29,7 +31,20 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		<br/>
 		<small><?php esc_html_e( 'Use this shortcode [lifterlms_discord] to display connect to discord button on any page.', 'lifterlms-discord-addon' ); ?></small>
 		</fieldset></td>
-	</tr>            
+	</tr> 
+	<tr>
+		<th scope="row"><?php esc_html_e( 'Use rich embed messaging feature?', 'lifterlms-discord-addon' ); ?></th>
+		<td> <fieldset>
+		<input name="embed_messaging_feature" type="checkbox" id="embed_messaging_feature" 
+		<?php
+		if ( $embed_messaging_feature == true ) {
+			echo esc_attr( 'checked="checked"' ); }
+		?>
+		 value="1">
+                <br/>
+                <small>Use [LINEBREAK] to split lines.</small>                
+		</fieldset></td>
+	  </tr> 	           
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Send welcome message', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>
