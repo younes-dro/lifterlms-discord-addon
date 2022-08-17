@@ -288,6 +288,48 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 }
 
 /**
+ * Get formatted LESSON complete message to send in DM
+ *
+ * @param int $user_id WP User ID.
+ * @param int $lesson_id    WP Post ID of the Lesson.
+ * @param string $message The Lesson message to send.
+ *
+ * Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_QUIZ_NAME], [LLMS_QUIZ_DATE]
+ */
+function ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $lesson_id, $message ) {
+
+	$user_obj         = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL         = get_bloginfo( 'url' );
+	$BLOG_NAME        = get_bloginfo( 'name' );
+
+	$lesson      = get_post( $lesson_id );
+	$LESSON_NAME = $lesson->post_title;
+
+	$LESSON_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
+
+		$find    = array(
+			'[LLMS_LESSON_NAME]',
+			'[LLMS_LESSON_DATE]',
+			'[LLMS_STUDENT_NAME]',
+			'[LLMS_STUDENT_EMAIL]',
+			'[SITE_URL]',
+			'[BLOG_NAME]',
+		);
+		$replace = array(
+			$LESSON_NAME,
+			$LESSON_COMPLETE_DATE,
+			$STUDENT_USERNAME,
+			$STUDENT_EMAIL,
+			$SITE_URL,
+			$BLOG_NAME,
+		);
+
+		return str_replace( $find, $replace, $message );
+
+}
+/**
  * Get formatted QUIZ complete message to send in DM
  *
  * @param int $user_id WP User ID.

@@ -553,8 +553,9 @@ class Lifterlms_Discord_Addon_Public {
 		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
 
-		$ets_lifterlms_discord_welcome_message       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
-		$ets_lifterlms_discord_quiz_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
+		$ets_lifterlms_discord_welcome_message         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
+		$ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
+		$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 
 		// Check if DM channel is already created for the user.
 		$user_dm = get_user_meta( $user_id, '_ets_lifterlms_discord_dm_channel', true );
@@ -570,8 +571,12 @@ class Lifterlms_Discord_Addon_Public {
 		if ( $type == 'welcome' ) {
 			$message = ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $ets_lifterlms_discord_welcome_message );
 		}
+		if ( $type == 'lesson_complete' ) {
+
+			$message = ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $courses, $ets_lifterlms_discord_lesson_complete_message );
+		}
 		if ( $type == 'quiz_complete' ) {
-			update_user_meta( $user_id, '_ets_lifterlms_discord_quiz_complete_dm_for_' . $courses, true );
+
 			$message = ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $courses, $quiz_attempt, $ets_lifterlms_discord_quiz_complete_message );
 		}
 
@@ -786,6 +791,26 @@ class Lifterlms_Discord_Addon_Public {
 
 		/*Delete all usermeta related to discord connection*/
 		ets_lifterlms_discord_remove_usermeta( $user_id );
+
+	}
+
+	/**
+	 * Send DM message of the student has completed a lesson
+	 *
+	 * @param int $user_id Student'id.
+	 * @param int $lesson_id Lesson's id.
+	 * @return void
+	 */
+	public function ets_lifterlms_lesson_completed( $user_id, $lesson_id ) {
+
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+		$ets_lifterlms_discord_send_lesson_complete_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_lesson_complete_dm' ) ) );
+		// Send Lesson complete message
+		if ( $ets_lifterlms_discord_send_lesson_complete_dm == true ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $lesson_id, 'lesson_complete' ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		}
 
 	}
 

@@ -203,6 +203,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'ets_lifterlms_discord_as_send_dm', $plugin_public, 'ets_lifterlms_discord_handler_send_dm', 10, 4 );
 		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_role', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_memberrole', 10, 3 );
 		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_member', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_member_from_guild', 10, 3 );
+		$this->loader->add_action( 'lifterlms_lesson_completed', $plugin_public, 'ets_lifterlms_lesson_completed', 10, 2 );
 		$this->loader->add_action( 'lifterlms_quiz_completed', $plugin_public, 'ets_lifterlms_quiz_completed', 10, 3 );
 
 	}
