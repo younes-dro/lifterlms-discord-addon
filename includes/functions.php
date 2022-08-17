@@ -411,6 +411,47 @@ function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $a
 
 		return str_replace( $find, $replace, $message );
 }
+
+/**
+ * Send formatted certificate message.
+ * 
+ * @param int $user_id Student's id.
+ * @param int $certificate_id Achievement's id.
+ * @param int $related_post_id Related post id.
+ * @param string $message The message.
+ */
+function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $certificate_id, $related_post_id, $message ) {
+
+	$user_obj         = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL         = get_bloginfo( 'url' );
+	$BLOG_NAME        = get_bloginfo( 'name' );
+
+	$certificate      = get_post( $certificate_id );
+	$CERTIFICATE_TITLE = $certificate->post_title;
+
+	$CERTIFICATE_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
+
+		$find    = array(
+			'[LLMS_CERTIFICATE_TITLE]',
+			'[LLMS_CERTIFICATE_DATE]',
+			'[LLMS_STUDENT_NAME]',
+			'[LLMS_STUDENT_EMAIL]',
+			'[SITE_URL]',
+			'[BLOG_NAME]',
+		);
+		$replace = array(
+			$CERTIFICATE_TITLE,
+			$CERTIFICATE_COMPLETE_DATE,
+			$STUDENT_USERNAME,
+			$STUDENT_EMAIL,
+			$SITE_URL,
+			$BLOG_NAME,
+		);
+
+		return str_replace( $find, $replace, $message );
+}
 /**
  * Send DM message Rich Embed .
  *
