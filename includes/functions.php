@@ -331,8 +331,8 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 
 function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 
-	$blog_logo_full      = esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' )[0] );
-	$blog_logo_thumbnail = esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'thumbnail' )[0] );
+	$blog_logo_full      = is_array( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' ) ) ? esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'full' )[0] ) : '';
+	$blog_logo_thumbnail = is_array( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'thumbnail' ) ) ? esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'thumbnail' )[0] ) : '';
 
 	$SITE_URL         = get_bloginfo( 'url' );
 	$BLOG_NAME        = get_bloginfo( 'name' );
