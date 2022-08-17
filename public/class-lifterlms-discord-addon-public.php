@@ -558,6 +558,7 @@ class Lifterlms_Discord_Addon_Public {
 		$ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
 		$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 		$ets_lifterlms_discord_achievement_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_achievement_earned_message' ) ) );		
+		$ets_lifterlms_discord_certificate_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_certificate_earned_message' ) ) );				
 		$embed_messaging_feature                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
 
 		// Check if DM channel is already created for the user.
@@ -585,8 +586,16 @@ class Lifterlms_Discord_Addon_Public {
 		if ( $type == 'achievement_earned' ) {
 			$message = ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $courses, $related, $ets_lifterlms_discord_achievement_earned_message );
 		}
-
+		if ( $type == 'certificate_earned' ) {
+			$message = ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $courses, $related, $ets_lifterlms_discord_certificate_earned_message );
+		}
 		$creat_dm_url = LIFTERLMS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
+
+		/**
+		 *
+		 * Send rich embed message for $type == 'achievement_earned' ( support Badge  achievement) 
+		 */
+
 		if ( $embed_messaging_feature ) {
 			$dm_args      = array(
 				'method'  => 'POST',
@@ -862,6 +871,17 @@ class Lifterlms_Discord_Addon_Public {
 		// Send achievement Earned message.
 		if ( $ets_lifterlms_discord_send_achievement_earned_dm == true ) {
 			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $achievement_id, 'achievement_earned', $related_post_id ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public function ets_lifterlms_user_earned_certificate( $user_id, $new_user_certificate_id, $related_post_id ) {
+		$ets_lifterlms_discord_send_certificate_earned_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_certificate_earned_dm' ) ) );
+		// Send achievement Earned message.
+		if ( $ets_lifterlms_discord_send_certificate_earned_dm == true ) {
+			as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $new_user_certificate_id, 'certificate_earned', $related_post_id ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
 		}
 	}
 

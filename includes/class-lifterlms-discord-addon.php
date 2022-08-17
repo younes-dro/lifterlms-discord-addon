@@ -205,7 +205,8 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'ets_lifterlms_discord_as_schedule_delete_member', $plugin_public, 'ets_lifterlms_discord_as_handler_delete_member_from_guild', 10, 3 );
 		$this->loader->add_action( 'lifterlms_lesson_completed', $plugin_public, 'ets_lifterlms_lesson_completed', 10, 2 );
 		$this->loader->add_action( 'lifterlms_quiz_completed', $plugin_public, 'ets_lifterlms_quiz_completed', 10, 3 );
-		$this->loader->add_action( 'llms_user_earned_achievement', $plugin_public, 'ets_lifterlms_user_earned_achievement', 10, 3);
+		$this->loader->add_action( 'llms_user_earned_achievement', $plugin_public, 'ets_lifterlms_user_earned_achievement', 10, 3 );
+		$this->loader->add_action( 'llms_user_earned_certificate', $plugin_public, 'ets_lifterlms_user_earned_certificate', 10, 3 );
 
 	}
 
