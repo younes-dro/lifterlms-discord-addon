@@ -2,6 +2,9 @@
 $ets_lifterlms_discord_send_welcome_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_welcome_dm' ) ) );
 $ets_lifterlms_discord_welcome_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
 
+$ets_lifterlms_discord_send_lesson_complete_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_lesson_complete_dm' ) ) );
+$ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
+
 $ets_lifterlms_discord_send_quiz_complete_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_quiz_complete_dm' ) ) );
 $ets_lifterlms_discord_quiz_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
 
@@ -47,7 +50,27 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	<br/>
 	<small>Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_COURSES], [SITE_URL], [BLOG_NAME]</small>
 		</fieldset></td>
-	</tr>         
+	</tr>  
+	<tr>
+		<th scope="row"><?php echo __( 'Send Lesson Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<td> <fieldset>
+		<input name="ets_lifterlms_discord_send_lesson_complete_dm" type="checkbox" id="ets_lifterlms_discord_send_lesson_complete_dm" 
+		<?php
+		if ( $ets_lifterlms_discord_send_lesson_complete_dm == true ) {
+			echo 'checked="checked"'; }
+		?>
+		 value="1">
+		</fieldset></td>
+	  </tr>
+	<tr>
+		<th scope="row"><?php echo __( 'Lesson Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<td> <fieldset>
+			<?php $ets_lifterlms_discord_lesson_complete_message_value = isset( $ets_lifterlms_discord_lesson_complete_message ) ? wp_unslash( $ets_lifterlms_discord_lesson_complete_message ) : ''; ?>
+		<textarea class="ets_lifterlms_discord_lesson_complete_message" name="ets_lifterlms_discord_lesson_complete_message" id="ets_lifterlms_discord_lesson_complete_message" row="25" cols="50"><?php echo esc_textarea( $ets_lifterlms_discord_lesson_complete_message_value ); ?></textarea> 
+	<br/>
+	<small>Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_LESSON_NAME], [LLMS_LESSON_DATE], [SITE_URL], [BLOG_NAME]</small>
+		</fieldset></td>
+	  </tr>	       
   <tr>
 		<th scope="row"><?php echo __( 'Send Quiz Complete message', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>

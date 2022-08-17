@@ -432,15 +432,16 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-			$ets_lifterlms_discord_welcome_message       = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
-			$ets_lifterlms_discord_quiz_complete_message = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';
-			$retry_failed_api                            = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
-			$kick_upon_disconnect                        = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';
-			$retry_api_count                             = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
-			$set_job_cnrc                                = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
-			$set_job_q_batch_size                        = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
-			$log_api_res                                 = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
-			$ets_current_url                             = sanitize_text_field( trim( $_POST['current_url'] ) );
+			$ets_lifterlms_discord_welcome_message         = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
+			$ets_lifterlms_discord_lesson_complete_message = isset( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ) : '';
+			$ets_lifterlms_discord_quiz_complete_message   = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';
+			$retry_failed_api                              = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
+			$kick_upon_disconnect                          = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';
+			$retry_api_count                               = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
+			$set_job_cnrc                                  = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
+			$set_job_q_batch_size                          = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
+			$log_api_res                                   = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
+			$ets_current_url                               = sanitize_text_field( trim( $_POST['current_url'] ) );
 
 		if ( isset( $_POST['ets_lifterlms_discord_advance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_advance_settings_nonce'], 'lifterlms_discord_advance_settings_nonce' ) ) {
 			if ( isset( $_POST['adv_submit'] ) ) {
@@ -454,6 +455,16 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_welcome_message', $ets_lifterlms_discord_welcome_message );
 				} else {
 					update_option( 'ets_lifterlms_discord_welcome_message', '' );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_send_lesson_complete_dm'] ) ) {
+					update_option( 'ets_lifterlms_discord_send_lesson_complete_dm', true );
+				} else {
+					update_option( 'ets_lifterlms_discord_send_lesson_complete_dm', false );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) && $_POST['ets_lifterlms_discord_lesson_complete_message'] != '' ) {
+					update_option( 'ets_lifterlms_discord_lesson_complete_message', $ets_lifterlms_discord_lesson_complete_message );
+				} else {
+					update_option( 'ets_lifterlms_discord_lesson_complete_message', '' );
 				}
 				if ( isset( $_POST['ets_lifterlms_discord_send_quiz_complete_dm'] ) ) {
 					update_option( 'ets_lifterlms_discord_send_quiz_complete_dm', true );
