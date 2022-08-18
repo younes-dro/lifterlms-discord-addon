@@ -927,7 +927,7 @@ class Lifterlms_Discord_Addon_Public {
 	}
 
 	/**
-	 * Set discord role after a user is enrolled in membership
+	 * Set discord role after a user is enrolled in membership.
 	 *
 	 * @param int $user_id    WP User ID.
 	 * @param int $product_id WP Post ID of the course or membership.
@@ -953,6 +953,27 @@ class Lifterlms_Discord_Addon_Public {
 				$default_role = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
 				$this->delete_discord_role( $user_id, $default_role );
 			}
+		}
+	}
+
+	/**
+	 *
+	 *
+	 * @param int $oder_id The order ID.
+	 */
+	public function ets_lifterlms_order_complete( $order_id ) {
+
+		$order = new LLMS_Order( $order_id );
+
+		/*
+		* 'inactive' If the order is refunded, failed, pending, etc...
+		* 'expired'  If access has expired according to $this->get_access_expiration_date()
+		* 'active'   Otherwise.
+		*/
+
+		$order_status = $order->get_access_status();
+		if ( $order_status == 'active' ) {
+			// <<
 		}
 	}
 

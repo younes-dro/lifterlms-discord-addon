@@ -208,6 +208,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'llms_user_earned_achievement', $plugin_public, 'ets_lifterlms_user_earned_achievement', 10, 3 );
 		$this->loader->add_action( 'llms_user_earned_certificate', $plugin_public, 'ets_lifterlms_user_earned_certificate', 10, 3 );
 		$this->loader->add_action( 'llms_user_added_to_membership_level', $plugin_public, 'ets_lifterlms_user_added_to_membership_level', 10, 2 );
+		$this->loader->add_action( 'lifterlms_order_complete', $plugin_public, 'ets_lifterlms_order_complete', 10, 1 );
 
 	}
 
