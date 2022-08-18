@@ -430,18 +430,18 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-			$ets_lifterlms_discord_welcome_message         = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
-			$ets_lifterlms_discord_lesson_complete_message = isset( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ) : '';
-			$ets_lifterlms_discord_quiz_complete_message   = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';
-			$ets_lifterlms_discord_achievement_earned_message   = isset( $_POST['ets_lifterlms_discord_achievement_earned_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_achievement_earned_message'] ) ) : '';
-			$ets_lifterlms_discord_certificate_earned_message   = isset( $_POST['ets_lifterlms_discord_certificate_earned_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_certificate_earned_message'] ) ) : '';
-			$retry_failed_api                              = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
-			$kick_upon_disconnect                          = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';
-			$retry_api_count                               = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
-			$set_job_cnrc                                  = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
-			$set_job_q_batch_size                          = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
-			$log_api_res                                   = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
-			$ets_current_url                               = sanitize_text_field( trim( $_POST['current_url'] ) );
+			$ets_lifterlms_discord_welcome_message            = isset( $_POST['ets_lifterlms_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_welcome_message'] ) ) : '';
+			$ets_lifterlms_discord_lesson_complete_message    = isset( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_lesson_complete_message'] ) ) : '';
+			$ets_lifterlms_discord_quiz_complete_message      = isset( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_quiz_complete_message'] ) ) : '';
+			$ets_lifterlms_discord_achievement_earned_message = isset( $_POST['ets_lifterlms_discord_achievement_earned_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_achievement_earned_message'] ) ) : '';
+			$ets_lifterlms_discord_certificate_earned_message = isset( $_POST['ets_lifterlms_discord_certificate_earned_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_certificate_earned_message'] ) ) : '';
+			$retry_failed_api                                 = isset( $_POST['retry_failed_api'] ) ? sanitize_textarea_field( trim( $_POST['retry_failed_api'] ) ) : '';
+			$kick_upon_disconnect                             = isset( $_POST['kick_upon_disconnect'] ) ? sanitize_textarea_field( trim( $_POST['kick_upon_disconnect'] ) ) : '';
+			$retry_api_count                                  = isset( $_POST['ets_lifterlms_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_retry_api_count'] ) ) : '';
+			$set_job_cnrc                                     = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
+			$set_job_q_batch_size                             = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
+			$log_api_res                                      = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
+			$ets_current_url                                  = sanitize_text_field( trim( $_POST['current_url'] ) );
 
 		if ( isset( $_POST['ets_lifterlms_discord_advance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_advance_settings_nonce'], 'lifterlms_discord_advance_settings_nonce' ) ) {
 			if ( isset( $_POST['adv_submit'] ) ) {
@@ -495,7 +495,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_certificate_earned_message', $ets_lifterlms_discord_certificate_earned_message );
 				} else {
 					update_option( 'ets_lifterlms_discord_certificate_earned_message', '' );
-				}				
+				}
 
 				if ( isset( $_POST['retry_failed_api'] ) ) {
 					update_option( 'ets_lifterlms_discord_retry_failed_api', true );
@@ -630,6 +630,44 @@ class Lifterlms_Discord_Addon_Admin {
 		$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_user_course_enrollment( $user_id, $course_id, true );
 	}
 
+	/**
+	 * Set discord role if an order is change status to active.
+	 *
+	 * @param int $order_id The order ID.
+	 */
+	public function ets_lifterlms_discord_order_complete( $order_id ) {
+
+		$order        = new LLMS_Order( $order_id );
+		$order_status = $order->get_access_status();
+
+		// We will assign course mapped role and Welcome DB only if order status changed to complete.
+		if ( $order_status == 'active' ) {
+			$allow_none_student = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
+			$user_id            = $order->get( 'user_id' );
+			$product_id         = $order->get( 'product_id' );
+
+			/**
+			 * update_option( 'ets_order_product_id', $product_id );
+			 * update_option( 'ets_order_user_id', $user_id );
+			 * update_option( 'ets_order_order_id', $order_id );
+			*/
+
+			if ( $product_id ) {
+
+				if ( $allow_none_student == 'no' ) {
+					$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
+					$access_token    = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+					$this->lifterlms_discord_public_instance->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
+				}
+				if ( $allow_none_student == 'yes' ) {
+					$course_id = $product_id;
+					as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $course_id, 'welcome' ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+					$this->lifterlms_discord_public_instance->ets_lifterlms_discord_update_course_access( $user_id, $course_id );
+				}
+			}
+		}
+
+	}
 
 
 

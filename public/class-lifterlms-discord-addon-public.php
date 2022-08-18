@@ -958,24 +958,29 @@ class Lifterlms_Discord_Addon_Public {
 
 	/**
 	 *
-	 *
-	 * @param int $oder_id The order ID.
 	 */
-	public function ets_lifterlms_order_complete( $order_id ) {
+	public function ets_lifterlms_discord_update_course_access( $user_id, $course_id ) {
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		if ( $access_token && $refresh_token ) {
+			if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+				$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ] ) );
+				if ( $discord_role && $discord_role != 'none' ) {
+					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $discord_role );
+					$this->put_discord_role_api( $user_id, $discord_role );
+				}
+			}
 
-		$order = new LLMS_Order( $order_id );
-
-		/*
-		* 'inactive' If the order is refunded, failed, pending, etc...
-		* 'expired'  If access has expired according to $this->get_access_expiration_date()
-		* 'active'   Otherwise.
-		*/
-
-		$order_status = $order->get_access_status();
-		if ( $order_status == 'active' ) {
-			// <<
+			if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
+				update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
+				$this->put_discord_role_api( $user_id, $default_role );
+			} else {
+				$default_role = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
+				$this->delete_discord_role( $user_id, $default_role );
+			}
 		}
 	}
-
 
 }
