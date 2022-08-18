@@ -546,20 +546,20 @@ class Lifterlms_Discord_Addon_Public {
 	 * Discord DM a member using bot.
 	 *
 	 * @param INT    $user_id Student's id.
-	 * @param 
+	 * @param
 	 * @param STRING $type (warning|expired).
-	 * @param INT $related (quiz_attempt|Realted achievment post)
+	 * @param INT    $related (quiz_attempt|Realted achievment post)
 	 */
 	public function ets_lifterlms_discord_handler_send_dm( $user_id, $courses, $type = 'warning', $related = '' ) {
 		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_bot_token' ) ) );
 
-		$ets_lifterlms_discord_welcome_message         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
-		$ets_lifterlms_discord_lesson_complete_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
-		$ets_lifterlms_discord_quiz_complete_message   = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
-		$ets_lifterlms_discord_achievement_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_achievement_earned_message' ) ) );		
-		$ets_lifterlms_discord_certificate_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_certificate_earned_message' ) ) );				
-		$embed_messaging_feature                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
+		$ets_lifterlms_discord_welcome_message            = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_welcome_message' ) ) );
+		$ets_lifterlms_discord_lesson_complete_message    = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_lesson_complete_message' ) ) );
+		$ets_lifterlms_discord_quiz_complete_message      = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_quiz_complete_message' ) ) );
+		$ets_lifterlms_discord_achievement_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_achievement_earned_message' ) ) );
+		$ets_lifterlms_discord_certificate_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_certificate_earned_message' ) ) );
+		$embed_messaging_feature                          = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
 
 		// Check if DM channel is already created for the user.
 		$user_dm = get_user_meta( $user_id, '_ets_lifterlms_discord_dm_channel', true );
@@ -593,11 +593,11 @@ class Lifterlms_Discord_Addon_Public {
 
 		/**
 		 *
-		 * Send rich embed message for $type == 'achievement_earned' ( support Badge  achievement) 
+		 * Send rich embed message for $type == 'achievement_earned' ( support Badge  achievement)
 		 */
 
 		if ( $embed_messaging_feature ) {
-			$dm_args      = array(
+			$dm_args = array(
 				'method'  => 'POST',
 				'headers' => array(
 					'Content-Type'  => 'application/json',
@@ -864,7 +864,7 @@ class Lifterlms_Discord_Addon_Public {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function ets_lifterlms_user_earned_achievement( $user_id, $achievement_id, $related_post_id ) {
 		$ets_lifterlms_discord_send_achievement_earned_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_achievement_earned_dm' ) ) );
@@ -875,7 +875,7 @@ class Lifterlms_Discord_Addon_Public {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public function ets_lifterlms_user_earned_certificate( $user_id, $new_user_certificate_id, $related_post_id ) {
 		$ets_lifterlms_discord_send_certificate_earned_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_certificate_earned_dm' ) ) );
@@ -916,6 +916,36 @@ class Lifterlms_Discord_Addon_Public {
 			}
 		}
 		if ( $access_token && $refresh_token ) {
+			if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
+				update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
+				$this->put_discord_role_api( $user_id, $default_role );
+			} else {
+				$default_role = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
+				$this->delete_discord_role( $user_id, $default_role );
+			}
+		}
+	}
+
+	/**
+	 * Set discord role after a user is enrolled in membership
+	 *
+	 * @param int $user_id    WP User ID.
+	 * @param int $product_id WP Post ID of the course or membership.
+	 */
+	public function ets_lifterlms_user_added_to_membership_level( $user_id, $product_id ) {
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		if ( $access_token && $refresh_token ) {
+			if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'course_id_' . $product_id, $ets_lifterlms_discord_role_mapping ) ) {
+				$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'course_id_' . $product_id ] ) );
+				if ( $discord_role && $discord_role != 'none' ) {
+					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $product_id, $discord_role );
+					$this->put_discord_role_api( $user_id, $discord_role );
+				}
+			}
+
 			if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
 				update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
 				$this->put_discord_role_api( $user_id, $default_role );
