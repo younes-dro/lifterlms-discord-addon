@@ -180,7 +180,6 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'llms_user_enrollment_deleted', $plugin_admin, 'ets_lifterlms_discord_admin_delete_user_enrollment_course', 99, 3 );
 		$this->loader->add_action( 'lifterlms_order_complete', $plugin_admin, 'ets_lifterlms_discord_order_complete', 10, 1 );
 		$this->loader->add_action( 'save_post_llms_order', $plugin_admin, 'ets_lifterlms_change_order_status', 99, 3 );
-		$this->loader->add_action( 'save_post_llms_membership', $plugin_admin, 'ets_lifterlms_llms_membership', 99, 3 );
 	}
 
 	/**

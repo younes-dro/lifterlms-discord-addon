@@ -640,17 +640,40 @@ class Lifterlms_Discord_Addon_Admin {
 		$order        = new LLMS_Order( $order_id );
 		$order_status = $order->get_access_status();
 
+		// update_option( 'ets_order_completed_' . $order_id, $order_id );
+
+		// IF it's an membership Order
+		$is_membership_type = get_post( $order->product_id );
+		if ( $is_membership_type == 'llms_membership' && $order_status == 'active' ) {
+
+			$user_id        = $order->get( 'user_id' );
+			$membership     = new LLMS_Membership( $order->product_id );
+			$enroll_courses = $membership->get_auto_enroll_courses();
+			if ( is_array( $enroll_courses ) && count( $enroll_courses ) > 0 ) {
+				$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+				$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+				$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+				if ( $access_token && $refresh_token ) {
+					foreach ( $enroll_courses as $enroll_course ) {
+						if ( is_array( $ets_lifterlms_discord_role_mapping ) && array_key_exists( 'course_id_' . $enroll_course, $ets_lifterlms_discord_role_mapping ) ) {
+							$discord_role = sanitize_text_field( trim( $ets_lifterlms_discord_role_mapping[ 'course_id_' . $enroll_course ] ) );
+							if ( $discord_role && $discord_role != 'none' ) {
+								update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $enroll_course, $discord_role );
+								$this->lifterlms_discord_public_instance->put_discord_role_api( $user_id, $discord_role );
+							}
+						}
+					}
+				}
+			}
+
+			return;
+		}
+
 		// We will assign course mapped role and Welcome DB only if order status changed to complete.
 		if ( $order_status == 'active' ) {
 			$allow_none_student = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
 			$user_id            = $order->get( 'user_id' );
 			$product_id         = $order->get( 'product_id' );
-
-			/**
-			 * update_option( 'ets_order_product_id', $product_id );
-			 * update_option( 'ets_order_user_id', $user_id );
-			 * update_option( 'ets_order_order_id', $order_id );
-			*/
 
 			if ( $product_id ) {
 
