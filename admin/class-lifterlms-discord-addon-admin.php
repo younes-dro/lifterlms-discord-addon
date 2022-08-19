@@ -694,5 +694,15 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 	}
 
+	/**
+	 *
+	 */
+	public function ets_lifterlms_llms_membership( $membership_id, $obj, $update ) {
+
+		$membership = new LLMS_Membership( $membership_id );
+		update_option( 'ets_membership_id', $membership_id );
+
+	}
+
 
 }
