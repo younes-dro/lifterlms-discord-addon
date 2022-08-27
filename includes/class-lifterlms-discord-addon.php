@@ -177,6 +177,7 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_redirect_url', $plugin_admin, 'ets_lifterlms_discord_update_redirect_url' );
 		$this->loader->add_action( 'admin_post_lifterlms_discord_save_advance_settings', $plugin_admin, 'ets_lifterlms_discord_save_advance_settings' );
 		$this->loader->add_filter( 'manage_users_columns', $plugin_admin, 'ets_lifterlms_discord_add_lifterlms_discord_column' );
+		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_run_api', $plugin_admin, 'ets_lifterlms_discord_run_api' );
 		$this->loader->add_filter( 'manage_users_custom_column', $plugin_admin, 'ets_lifterlms_discord_run_lifterlms_discord_api', 99, 3 );
 		$this->loader->add_action( 'llms_user_enrolled_in_course', $plugin_admin, 'ets_lifterlms_discord_admin_enroll_user_course', 99, 2 );
 		$this->loader->add_action( 'llms_user_enrollment_deleted', $plugin_admin, 'ets_lifterlms_discord_admin_delete_user_enrollment_course', 99, 3 );

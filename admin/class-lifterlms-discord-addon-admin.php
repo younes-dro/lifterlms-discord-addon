@@ -759,5 +759,86 @@ class Lifterlms_Discord_Addon_Admin {
 		return $output;
 	}
 
+	/**
+	 * Run API to sync Discord Roles - Courses enrolled.
+	 *
+	 * @return NONE
+	 */
+	public function ets_lifterlms_discord_run_api() {
+
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+		// Check for nonce security
+		if ( ! wp_verify_nonce( $_POST['ets_lifterlms_discord_nonce'], 'ets-lifterlms-discord-ajax-nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+
+		$user_id                            = sanitize_text_field( $_POST['ets_lifterlms_discord_user_id'] );
+		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+		$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+		$last_default_role                  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
+		$student_courses                    = ets_lifterlms_discord_get_student_courses_id( $user_id );
+
+		if ( $access_token && $refresh_token && is_array( $ets_lifterlms_discord_role_mapping ) && is_array( $student_courses ) ) {
+			foreach ( $student_courses as $course_id ) {
+
+				$student_role_for_course = get_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, true );
+
+				if ( $student_role_for_course && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+
+					// Nothing to do;
+
+				}
+				if ( $student_role_for_course && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) && $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ] != $student_role_for_course ) {
+
+					$old_role = $student_role_for_course;
+					delete_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $old_role );
+					$this->lifterlms_discord_public_instance->delete_discord_role( $user_id, $old_role );
+
+					$new_role = $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ];
+					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $new_role );
+					$this->lifterlms_discord_public_instance->put_discord_role_api( $user_id, $new_role );
+
+				}
+
+				if ( ! $student_role_for_course && array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+
+					$new_role = $ets_lifterlms_discord_role_mapping[ 'course_id_' . $course_id ];
+					update_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $new_role );
+					$this->lifterlms_discord_public_instance->put_discord_role_api( $user_id, $new_role );
+				}
+
+				if ( $student_role_for_course && ! array_key_exists( 'course_id_' . $course_id, $ets_lifterlms_discord_role_mapping ) ) {
+
+					$old_role = $student_role_for_course;
+					delete_user_meta( $user_id, '_ets_lifterlms_discord_role_id_for_' . $course_id, $old_role );
+					$this->lifterlms_discord_public_instance->delete_discord_role( $user_id, $old_role );
+				}
+			}
+		}
+		if ( $access_token && $refresh_token ) {
+
+			if ( $default_role && $default_role != 'none' && $default_role === $last_default_role ) {
+
+			} elseif ( $default_role && $default_role != 'none' && $default_role != $last_default_role ) {
+
+				update_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', $default_role );
+				$this->lifterlms_discord_public_instance->delete_discord_role( $user_id, $last_default_role );
+				$this->lifterlms_discord_public_instance->put_discord_role_api( $user_id, $default_role );
+			} else {
+
+				delete_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role' );
+				$this->lifterlms_discord_public_instance->delete_discord_role( $user_id, $last_default_role );
+			}
+		}
+		exit();
+
+	}
+
 
 }

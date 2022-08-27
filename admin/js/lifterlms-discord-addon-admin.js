@@ -264,7 +264,37 @@
 		});                        
 	}
 		$('#ets_lifterlms_discord_connect_button_bg_color').wpColorPicker();
-		$('#ets_lifterlms_discord_disconnect_button_bg_color').wpColorPicker();        
+		$('#ets_lifterlms_discord_disconnect_button_bg_color').wpColorPicker();  
+		
+		/* RUN Discord API */
+		$('.ets-lifterlms-discord-run-api').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_run_api', 'ets_lifterlms_discord_user_id': $(this).data('user-id') , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$(this).siblings("div.run-api-success").html("");
+					$(this).siblings('span.spinner').addClass("is-active").show();
+				},
+				success: function (data) {        
+					if (data.error) {
+						// handle the error
+						alert(data.error.msg);
+					} else {
+                                            
+						$(this).siblings("div.run-api-success").html("Update Discord Roles Sucesssfully !");
+					}
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).siblings('span.spinner').removeClass("is-active").hide();
+				}
+			});
+		});		
 
 		/*Tab options*/
 		$.skeletabs.setDefaults({
