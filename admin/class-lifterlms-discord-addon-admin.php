@@ -727,5 +727,37 @@ class Lifterlms_Discord_Addon_Admin {
 
 	}
 
+	/**
+	 * Add LifterLMS Discord column to WP Users listing .
+	 *
+	 * @param array $columns Colums to add.
+	 * @return NONE
+	 */
+	public function ets_lifterlms_discord_add_lifterlms_discord_column( $columns ) {
+		$columns['ets_lifterlms_discord_api'] = esc_html__( 'LifterLMS Discord', 'lifterlms-discord-addon' );
+		return $columns;
+	}
+
+	/**
+	 * Display Run API button to check the validity of the relationship: Discord Roles - Courses enrolled.
+	 *
+	 * @param string $output Custom column output.
+	 * @param string $column_name Column name.
+	 * @param int    $user_id  ID of the currently-listed user.
+	 * @return string
+	 */
+	public function ets_lifterlms_discord_run_lifterlms_discord_api( $output, $column_name, $user_id ) {
+
+		if ( $column_name === 'ets_lifterlms_discord_api' ) {
+			wp_enqueue_script( $this->plugin_name );
+			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+			if ( $access_token ) {
+				return '<a href="#" data-user-id="' . esc_attr( $user_id ) . '" class="ets-lifterlms-discord-run-api" >' . esc_html__( 'RUN API', 'lifterlms-discord-addon' ) . '</a><span class=" run-api spinner" ></span><div class="run-api-success"></div>';
+			}
+			return esc_html__( 'Not Connected', 'lifterlms-discord-addon' );
+		}
+		return $output;
+	}
+
 
 }
