@@ -95,15 +95,19 @@
 /*Create droppable element*/
 		
 		function init() {
-		
-			$('.makeMeDroppable').droppable({
-				drop: handleDropEvent,
-				hoverClass: 'hoverActive',
-			});
-			$('.discord-roles-col').droppable({
-				drop: handlePreviousDropEvent,
-				hoverClass: 'hoverActive',
-			});
+			if ( $('.makeMeDroppable').length){
+				$('.makeMeDroppable').droppable({
+					drop: handleDropEvent,
+					hoverClass: 'hoverActive',
+				});
+			}
+			if ( $('.discord-roles-col').length){
+				$('.discord-roles-col').droppable({
+					drop: handlePreviousDropEvent,
+					hoverClass: 'hoverActive',
+				});
+			}
+
 		}
 
 		$(init);
@@ -325,7 +329,10 @@
 		}); 			
 
 		/*Tab options*/
+		if ($.skeletabs ) {
 		$.skeletabs.setDefaults({
 			keyboard: false,
 		});
+	}
+
 })(jQuery);
