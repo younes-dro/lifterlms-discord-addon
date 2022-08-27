@@ -728,13 +728,14 @@ class Lifterlms_Discord_Addon_Admin {
 	}
 
 	/**
-	 * Add LifterLMS Discord column to WP Users listing .
+	 * Add LifterLMS Discord columns to WP Users listing .
 	 *
 	 * @param array $columns Colums to add.
 	 * @return NONE
 	 */
 	public function ets_lifterlms_discord_add_lifterlms_discord_column( $columns ) {
-		$columns['ets_lifterlms_discord_api'] = esc_html__( 'LifterLMS Discord', 'lifterlms-discord-addon' );
+		$columns['ets_lifterlms_discord_api']                   = esc_html__( 'LifterLMS Discord', 'lifterlms-discord-addon' );
+		$columns['ets_lifterlms_disconnect_discord_connection'] = esc_html__( 'LD Discord Connection', 'lifterlms-discord-addon' );
 		return $columns;
 	}
 
@@ -838,6 +839,28 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 		exit();
 
+	}
+
+	/**
+	 * Display Discord Disconnect button.
+	 *
+	 * @param string $output Custom column output.
+	 * @param string $column_name Column name.
+	 * @param int    $user_id  ID of the currently-listed user.
+	 * @return string
+	 */
+	public function ets_lifterlms_discord_disconnect_discord_button( $output, $column_name, $user_id ) {
+
+		if ( $column_name === 'ets_lifterlms_disconnect_discord_connection' ) {
+
+			$access_token                    = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+			$_ets_lifterlms_discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_username', true ) ) );
+			if ( $access_token ) {
+				return '<button  data-user-id="' . esc_attr( $user_id ) . '" class="lifterlms-disconnect-discord-user" >' . esc_html__( 'Disconnect from discord ', 'lifterlms-discord-addon' ) . ' <i class="fab fa-discord"></i> <span class="spinner"></span> </button><p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'lifterlms-discord-addon' ) . '</p>';
+			}
+			return esc_html__( 'Not Connected', 'lifterlms-discord-addon' );
+		}
+		return $output;
 	}
 
 
