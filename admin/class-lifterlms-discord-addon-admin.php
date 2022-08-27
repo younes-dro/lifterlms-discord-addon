@@ -863,5 +863,50 @@ class Lifterlms_Discord_Addon_Admin {
 		return $output;
 	}
 
+	/**
+	 * Run disconnect user from discord.
+	 */
+	public function ets_lifterlms_disconnect_user() {
+
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+		// Check for nonce security
+		if ( ! wp_verify_nonce( $_POST['ets_lifterlms_discord_nonce'], 'ets-lifterlms-discord-ajax-nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+		$user_id              = sanitize_text_field( trim( $_POST['ets_lifterlms_discord_user_id'] ) );
+		$kick_upon_disconnect = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_kick_upon_disconnect' ) ) );
+		$access_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token        = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		if ( $user_id && $access_token && $refresh_token ) {
+			delete_user_meta( $user_id, '_ets_lifterlms_discord_access_token' );
+			delete_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token' );
+			$user_roles = ets_lifterlms_discord_get_user_roles( $user_id );
+			if ( $kick_upon_disconnect ) {
+
+				if ( is_array( $user_roles ) ) {
+					foreach ( $user_roles as $user_role ) {
+						$this->lifterlms_discord_public_instance->delete_discord_role( $user_id, $user_role );
+					}
+				}
+			} else {
+				$this->lifterlms_discord_public_instance->delete_member_from_guild( $user_id, false );
+			}
+
+			$event_res = array(
+				'status'  => 1,
+				'message' => 'Successfully disconnected',
+			);
+			wp_send_json( $event_res );
+					exit();
+		}
+
+				exit();
+
+	}
+
 
 }

@@ -294,7 +294,35 @@
 					$(this).siblings('span.spinner').removeClass("is-active").hide();
 				}
 			});
-		});		
+		});
+
+		$('.lifterlms-disconnect-discord-user').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_disconnect_user', 'ets_lifterlms_discord_user_id': $(this).data('user-id') , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$(this).find('span').addClass("is-active").show();
+				},
+				success: function (data) {       
+					if (data.error) {
+						// handle the error
+						alert(data.error.msg);
+					} else {
+						$(this).prop('disabled', true);
+						console.log(data);
+					}
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).find('span').removeClass("is-active").hide();
+				}
+			});
+		}); 			
 
 		/*Tab options*/
 		$.skeletabs.setDefaults({
