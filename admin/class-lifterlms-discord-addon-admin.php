@@ -912,9 +912,9 @@ class Lifterlms_Discord_Addon_Admin {
 	 * Display Disconnect Discord button Profile User Page.
 	 *
 	 */ 
-	public function ets_lifterlms_discord_disconnect_user_button(  ) {
+	public function ets_lifterlms_discord_disconnect_user_button( ) {
 
-		if (  current_user_can( 'administrator' ) ) {
+		if ( current_user_can( 'administrator' ) ) {
 			wp_enqueue_script( $this->plugin_name );
 			$user_id =  ( isset( $_GET['user_id'] ) ) ? sanitize_text_field( $_GET['user_id'] ) : get_current_user_id() ;
 			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
@@ -924,10 +924,37 @@ class Lifterlms_Discord_Addon_Admin {
 				$DisConnect = '<h3>'.  esc_html__( 'LifterLMS Discrod Add-On', 'lifterlms-discord-addon' ).'</h3>';
 				$DisConnect .= '<button data-user-id='. esc_attr( $user_id ) .' type="button" class="button lifterlms-disconnect-discord-user" id="disconnect-discord-user">' . esc_html__ ( 'Disconnect from Discord' , 'lifterlms-discord-addon' ) . ' <i class="fab fa-discord"></i> <span class="spinner"></span> </button>';                    
 				$DisConnect .= '<p>' . esc_html__ ( sprintf( 'Connected account %s', $_ets_lifterlms_discord_username ) ) . '</p>';
-				_e( ets_lifterlms_discord_allowed_html( $DisConnect) ) ;
+				_e( ets_lifterlms_discord_allowed_html( $DisConnect ) );
 			} 
 		}
 	}
 
+	/**
+	 * Display Discord connected account and disconnect button.
+	 *
+	 * @param obj $student LLMS_Student Instance Object.
+	 *
+	 */
+	public function ets_lifterlms_reporting_single_student_overview ( $student ) {
+
+		if ( current_user_can( 'administrator' ) ) {
+			$user_id = $student->get_id();
+			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+			$refresh_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+			$_ets_lifterlms_discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_username', true ) ) );			
+			if ( $access_token && $refresh_token ) {
+				wp_enqueue_script( $this->plugin_name );
+				$DisConnect = '<div class="d-1of2">';
+				$DisConnect .= '<div class="llms-reporting-widget">';
+				$DisConnect .= '<h3>' . esc_html__( 'LifterLMS Discrod Add-On', 'lifterlms-discord-addon' ) . '</h3>';
+				$DisConnect .= '<button data-user-id='. esc_attr( $user_id ) .' type="button" class="button lifterlms-disconnect-discord-user" id="disconnect-discord-user">' . esc_html__ ( 'Disconnect from Discord' , 'lifterlms-discord-addon' ) . ' <i class="fab fa-discord"></i> <span class="spinner"></span> </button>';                    
+				$DisConnect .= '<p>' . esc_html__ ( sprintf( 'Connected account %s', $_ets_lifterlms_discord_username ) ) . '</p>';
+				$DisConnect .= '</div>';
+				$DisConnect .= '</div>';
+				_e( ets_lifterlms_discord_allowed_html( $DisConnect ) );
+			}
+		}
+
+	}
 
 }

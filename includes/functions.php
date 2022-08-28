@@ -589,6 +589,9 @@ function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 }
 function ets_lifterlms_discord_allowed_html( $html_message ) {
 	$allowed_html = array(
+		'div' => array(
+			'class' => array(),
+		),
 		'h3' => array(),
 		'p' => array(),
 		'button' => array(
