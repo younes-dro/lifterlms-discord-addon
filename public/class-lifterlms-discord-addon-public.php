@@ -134,6 +134,7 @@ class Lifterlms_Discord_Addon_Public {
 
 		$access_token                                     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
 		$_ets_lifterlms_discord_username                  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_username', true ) ) );
+		$discord_user_id                                  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_user_id', true ) ) );
 		$allow_none_student                               = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow_none_member' ) ) );
 		$ets_lifterlms_discord_connect_button_bg_color    = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_connect_button_bg_color' ) ) );
 		$ets_lifterlms_discord_disconnect_button_bg_color = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_disconnect_button_bg_color' ) ) );
@@ -171,6 +172,7 @@ class Lifterlms_Discord_Addon_Public {
 		if ( ets_lifterlms_discord_check_saved_settings_status() ) {
 
 			if ( $access_token ) {
+				$discord_user_avatar                   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_avatar', true ) ) );
 				$disconnect_btn_bg_color  = 'style="background-color:' . $ets_lifterlms_discord_disconnect_button_bg_color . '"';
 				$restrictcontent_discord .= '<div class="">';
 				$restrictcontent_discord .= '<div class="">';
@@ -180,6 +182,7 @@ class Lifterlms_Discord_Addon_Public {
 				$restrictcontent_discord .= '<a href="#" class="ets-btn lifterlms-discord-addon-btn-disconnect"' . $disconnect_btn_bg_color . ' id="lifterlms-discord-addon-disconnect-discord" data-user-id="' . esc_attr( $user_id ) . '">' . esc_html__( $ets_lifterlms_discord_disconnect_button_text ) . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
 				$restrictcontent_discord .= '<span class="ets-spinner"></span>';
 				$restrictcontent_discord .= '<p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'lifterlms-discord-addon' ) . '</p>';
+				$restrictcontent_discord = ets_lifterlms_discord_get_user_avatar( $discord_user_id, $discord_user_avatar, $restrictcontent_discord );
 				$restrictcontent_discord  = ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord );
 				$restrictcontent_discord .= '</div>';
 				$restrictcontent_discord .= '</div>';
@@ -271,8 +274,10 @@ class Lifterlms_Discord_Addon_Public {
 							if ( is_array( $user_body ) && array_key_exists( 'discriminator', $user_body ) ) {
 								$discord_user_number           = $user_body['discriminator'];
 								$discord_user_name             = $user_body['username'];
+								$discord_user_avatar = $user_body['avatar'];
 								$discord_user_name_with_number = $discord_user_name . '#' . $discord_user_number;
 								update_user_meta( $user_id, '_ets_lifterlms_discord_username', $discord_user_name_with_number );
+								update_user_meta( $user_id, '_ets_lifterlms_discord_avatar', $discord_user_avatar );                        
 							}
 							if ( is_array( $user_body ) && array_key_exists( 'id', $user_body ) ) {
 								$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
