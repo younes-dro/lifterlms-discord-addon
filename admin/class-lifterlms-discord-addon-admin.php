@@ -125,10 +125,10 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		$min_js = ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) ? '' : '.min';
 		wp_register_style( $this->plugin_name . 'skeletabs.css', plugin_dir_url( __FILE__ ) . 'css/skeletabs.css', array(), $this->version, 'all' );
 		wp_register_style( $this->plugin_name . 'select2.css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), $this->version, 'all' );
-		// wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-admin.min.css', array(), $this->version, 'all' );
-		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin.css', array(), $this->version, 'all' );
+		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-admin'. $min_js . '.css', array(), $this->version, 'all' );
 
 	}
 
@@ -149,13 +149,12 @@ class Lifterlms_Discord_Addon_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		$min_js = ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) ? '' : '.min';
 		wp_register_script( $this->plugin_name . 'select2.js', plugin_dir_url( __FILE__ ) . 'js/select2.min.js', array( 'jquery' ), $this->version, false );
 
 		wp_register_script( $this->plugin_name . 'skeletabs.js', plugin_dir_url( __FILE__ ) . 'js/skeletabs.js', array( 'jquery' ), $this->version, false );
 
-		// /wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-admin.min.js', array( 'jquery' ), $this->version, false );
-
-		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin.js', array( 'jquery', 'wp-color-picker' ), $this->version, false );
+		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-admin'. $min_js . '.js', array( 'jquery', 'wp-color-picker' ), $this->version, false );
 		$script_params = array(
 			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
 			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
@@ -730,12 +729,12 @@ class Lifterlms_Discord_Addon_Admin {
 	/**
 	 *
 	 */
-	public function ets_lifterlms_llms_membership( $membership_id, $obj, $update ) {
+/* 	public function ets_lifterlms_llms_membership( $membership_id, $obj, $update ) {
 
 		$membership = new LLMS_Membership( $membership_id );
 		update_option( 'ets_membership_id', $membership_id );
 
-	}
+	} */
 
 	/**
 	 * Add LifterLMS Discord columns to WP Users listing .

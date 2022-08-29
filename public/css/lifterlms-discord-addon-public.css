@@ -46,7 +46,7 @@
     display: inline-flex;
     flex-direction: row;
     align-items: center; 
-    background-color: #878787;
+    background-color: #292727;
     margin-right: 5px;
  }
  .ets_assigned_role > span > i{
@@ -82,4 +82,11 @@ a.lifterlms-discord-addon-btn-connect img{
 }
 .ets-is-active{
   visibility: visible;
+}
+img.ets-lifterlms-discord-user-avatar{
+  border-radius: 50% !important;
+  width: 45px;
+  height: auto;
+  display: inline-block;
+  margin-left: 10px;
 }

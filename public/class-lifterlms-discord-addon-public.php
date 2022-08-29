@@ -90,9 +90,9 @@ class Lifterlms_Discord_Addon_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		$min_js = ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) ? '' : '.min';
+		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-public' . $min_js . '.css', array(), $this->version, 'all' );
 
-		wp_register_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-addon-public.css', array(), $this->version, 'all' );
-		wp_register_style( $this->plugin_name . 'public_css', plugin_dir_url( __FILE__ ) . 'css/lifterlms-discord-public.min.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -113,8 +113,8 @@ class Lifterlms_Discord_Addon_Public {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-public.js', array( 'jquery' ), $this->version, false );
+		$min_js = ( defined( 'WP_DEBUG' ) && true === WP_DEBUG ) ? '' : '.min';
+		wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/lifterlms-discord-addon-public' . $min_js . '.js', array( 'jquery' ), $this->version, false );
 		$script_params = array(
 			'admin_ajax'                  => admin_url( 'admin-ajax.php' ),
 			'permissions_const'           => LIFTERLMS_DISCORD_BOT_PERMISSIONS,
