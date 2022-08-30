@@ -62,9 +62,9 @@ function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_a
 		$log_string  = '==>' . $api_url;
 		$log_string .= '-::-' . serialize( $api_args );
 		$log_string .= '-::-' . serialize( $api_response );
-		$log = new Lifterlms_Discord_Addon_Logs();
+		$log         = new Lifterlms_Discord_Addon_Logs();
 		$log->write_api_response_logs( $log_string, $user_id );
-		
+
 	}
 }
 
@@ -292,8 +292,8 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 /**
  * Get formatted LESSON complete message to send in DM
  *
- * @param int $user_id WP User ID.
- * @param int $lesson_id    WP Post ID of the Lesson.
+ * @param int    $user_id WP User ID.
+ * @param int    $lesson_id    WP Post ID of the Lesson.
  * @param string $message The Lesson message to send.
  *
  * Merge fields: [LLMS_STUDENT_NAME], [LLMS_STUDENT_EMAIL], [LLMS_QUIZ_NAME], [LLMS_QUIZ_DATE]
@@ -375,14 +375,14 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 
 /**
  * Send formatted achievement message.
- * 
- * @param int $user_id Student's id.
- * @param int $achievement_id Achievement's id.
- * @param int $related_post_id Related post id.
+ *
+ * @param int    $user_id Student's id.
+ * @param int    $achievement_id Achievement's id.
+ * @param int    $related_post_id Related post id.
  * @param string $message The message.
  */
 function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $achievement_id, $related_post_id, $message ) {
-	//return $user_id .'-'. $achievement_id .'-'. $related_post_id .'-'. $message;
+	// return $user_id .'-'. $achievement_id .'-'. $related_post_id .'-'. $message;
 	$user_obj         = get_user_by( 'id', $user_id );
 	$STUDENT_USERNAME = $user_obj->user_login;
 	$STUDENT_EMAIL    = $user_obj->user_email;
@@ -416,10 +416,10 @@ function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $a
 
 /**
  * Send formatted certificate message.
- * 
- * @param int $user_id Student's id.
- * @param int $certificate_id Achievement's id.
- * @param int $related_post_id Related post id.
+ *
+ * @param int    $user_id Student's id.
+ * @param int    $certificate_id Achievement's id.
+ * @param int    $related_post_id Related post id.
  * @param string $message The message.
  */
 function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $certificate_id, $related_post_id, $message ) {
@@ -430,7 +430,7 @@ function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $c
 	$SITE_URL         = get_bloginfo( 'url' );
 	$BLOG_NAME        = get_bloginfo( 'name' );
 
-	$certificate      = get_post( $certificate_id );
+	$certificate       = get_post( $certificate_id );
 	$CERTIFICATE_TITLE = $certificate->post_title;
 
 	$CERTIFICATE_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
@@ -468,48 +468,58 @@ function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 	$BLOG_NAME        = get_bloginfo( 'name' );
 	$BLOG_DESCRIPTION = get_bloginfo( 'description' );
 
-	$timestamp = date( 'c', strtotime( 'now' ) );
+	$timestamp     = date( 'c', strtotime( 'now' ) );
 	$convert_lines = preg_split( '/\[LINEBREAK\]/', $message );
-	$fields = array();
-	if( is_array( $convert_lines ) ) {
+	$fields        = array();
+	if ( is_array( $convert_lines ) ) {
 		for ( $i = 0; $i < count( $convert_lines ); $i++ ) {
-			array_push( $fields, ['name' => '.', 'value' => $convert_lines[$i], 'inline' => false ] );
+			array_push(
+				$fields,
+				array(
+					'name'   => '.',
+					'value'  => $convert_lines[ $i ],
+					'inline' => false,
+				)
+			);
 		}
 	}
 
-	$rich_embed_message = json_encode( [
-		'content' => '',
-		'username' =>  $BLOG_NAME,
-		'avatar_url' => $blog_logo_thumbnail,
-		'tts' => false,
-		'embeds' => [
-			[
-				'title' => '',
-				'type' => 'rich',
-				'description' => $BLOG_DESCRIPTION,
-				'url' => '',
-				'timestamp' => $timestamp,
-				'color' => hexdec( '3366ff' ),
-				'footer' => [
-					'text' => $BLOG_NAME,
-					'icon_url' => $blog_logo_thumbnail
-				],
-				'image' => [
-					'url' => $blog_logo_full
-				],
-				'thumbnail' => [
-					'url' => $blog_logo_thumbnail
-				],
-				'author' => [
-					'name' => $BLOG_NAME,
-					'url' => $SITE_URL
-				],
-				'fields' => $fields
+	$rich_embed_message = json_encode(
+		array(
+			'content'    => '',
+			'username'   => $BLOG_NAME,
+			'avatar_url' => $blog_logo_thumbnail,
+			'tts'        => false,
+			'embeds'     => array(
+				array(
+					'title'       => '',
+					'type'        => 'rich',
+					'description' => $BLOG_DESCRIPTION,
+					'url'         => '',
+					'timestamp'   => $timestamp,
+					'color'       => hexdec( '3366ff' ),
+					'footer'      => array(
+						'text'     => $BLOG_NAME,
+						'icon_url' => $blog_logo_thumbnail,
+					),
+					'image'       => array(
+						'url' => $blog_logo_full,
+					),
+					'thumbnail'   => array(
+						'url' => $blog_logo_thumbnail,
+					),
+					'author'      => array(
+						'name' => $BLOG_NAME,
+						'url'  => $SITE_URL,
+					),
+					'fields'      => $fields,
 
-			]
-		]
+				),
+			),
 
-	], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		),
+		JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+	);
 
 	return $rich_embed_message;
 }
@@ -591,22 +601,22 @@ function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 }
 function ets_lifterlms_discord_allowed_html( $html_message ) {
 	$allowed_html = array(
-		'div' => array(
+		'div'    => array(
 			'class' => array(),
 		),
-		'h3' => array(),
-		'p' => array(),
+		'h3'     => array(),
+		'p'      => array(),
 		'button' => array(
-			'id' => array(),
+			'id'           => array(),
 			'data-user-id' => array(),
-			'class' => array(),
+			'class'        => array(),
 		),
-		'span' => array(),
-		'i'    => array(
+		'span'   => array(),
+		'i'      => array(
 			'style' => array(),
 		),
-		'img' => array(
-			'src' => array(),
+		'img'    => array(
+			'src'   => array(),
 			'class' => array(),
 		),
 	);
@@ -617,7 +627,7 @@ function ets_lifterlms_discord_allowed_html( $html_message ) {
 
 function ets_lifterlms_discord_get_user_avatar( $discord_user_id, $user_avatar, $restrictcontent_discord ) {
 	if ( $user_avatar ) {
-		$avatar_url                            = '<img class="ets-lifterlms-discord-user-avatar" src="https://cdn.discordapp.com/avatars/' . $discord_user_id . '/' . $user_avatar . '.png" />';
+		$avatar_url               = '<img class="ets-lifterlms-discord-user-avatar" src="https://cdn.discordapp.com/avatars/' . $discord_user_id . '/' . $user_avatar . '.png" />';
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $avatar_url );
 	}
 	return $restrictcontent_discord;
