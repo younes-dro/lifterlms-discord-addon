@@ -62,7 +62,9 @@ function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_a
 		$log_string  = '==>' . $api_url;
 		$log_string .= '-::-' . serialize( $api_args );
 		$log_string .= '-::-' . serialize( $api_response );
-		ets_lifterlms_write_api_response_logs( $log_string, $user_id );
+		$log = new Lifterlms_Discord_Addon_Logs();
+		$log->write_api_response_logs( $log_string, $user_id );
+		
 	}
 }
 

@@ -326,7 +326,35 @@
 					$(this).find('span').removeClass("is-active").hide();
 				}
 			});
-		}); 			
+		});
+		/*Clear log log call-back*/
+		$('#ets-lifterlms-clrbtn').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+					type: "POST",
+					data: { 'action': 'ets_lifterlms_discord_clear_logs', 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+					beforeSend: function () {
+						$(".clr-log.spinner").addClass("is-active").show();
+					},
+					success: function (data) {
+			 
+						if (data.error) {
+							// handle the error
+							alert(data.error.msg);
+						} else {
+													
+							$('.error-log').html("Clear logs Sucesssfully !");
+						}
+					},
+					error: function (response, textStatus, errorThrown ) {
+						console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+					},
+					complete: function () {
+						$(".clr-log.spinner").removeClass("is-active").hide();
+					}
+				});
+			});			
 
 		/*Tab options*/
 		if ($.skeletabs ) {

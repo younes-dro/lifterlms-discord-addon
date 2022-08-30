@@ -172,7 +172,7 @@ class Lifterlms_Discord_Addon_Public {
 		if ( ets_lifterlms_discord_check_saved_settings_status() ) {
 
 			if ( $access_token ) {
-				$discord_user_avatar                   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_avatar', true ) ) );
+				$discord_user_avatar      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_avatar', true ) ) );
 				$disconnect_btn_bg_color  = 'style="background-color:' . $ets_lifterlms_discord_disconnect_button_bg_color . '"';
 				$restrictcontent_discord .= '<div class="">';
 				$restrictcontent_discord .= '<div class="">';
@@ -182,7 +182,7 @@ class Lifterlms_Discord_Addon_Public {
 				$restrictcontent_discord .= '<a href="#" class="ets-btn lifterlms-discord-addon-btn-disconnect"' . $disconnect_btn_bg_color . ' id="lifterlms-discord-addon-disconnect-discord" data-user-id="' . esc_attr( $user_id ) . '">' . esc_html__( $ets_lifterlms_discord_disconnect_button_text ) . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
 				$restrictcontent_discord .= '<span class="ets-spinner"></span>';
 				$restrictcontent_discord .= '<p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'lifterlms-discord-addon' ) . '</p>';
-				$restrictcontent_discord = ets_lifterlms_discord_get_user_avatar( $discord_user_id, $discord_user_avatar, $restrictcontent_discord );
+				$restrictcontent_discord  = ets_lifterlms_discord_get_user_avatar( $discord_user_id, $discord_user_avatar, $restrictcontent_discord );
 				$restrictcontent_discord  = ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord );
 				$restrictcontent_discord .= '</div>';
 				$restrictcontent_discord .= '</div>';
@@ -274,10 +274,10 @@ class Lifterlms_Discord_Addon_Public {
 							if ( is_array( $user_body ) && array_key_exists( 'discriminator', $user_body ) ) {
 								$discord_user_number           = $user_body['discriminator'];
 								$discord_user_name             = $user_body['username'];
-								$discord_user_avatar = $user_body['avatar'];
+								$discord_user_avatar           = $user_body['avatar'];
 								$discord_user_name_with_number = $discord_user_name . '#' . $discord_user_number;
 								update_user_meta( $user_id, '_ets_lifterlms_discord_username', $discord_user_name_with_number );
-								update_user_meta( $user_id, '_ets_lifterlms_discord_avatar', $discord_user_avatar );                        
+								update_user_meta( $user_id, '_ets_lifterlms_discord_avatar', $discord_user_avatar );
 							}
 							if ( is_array( $user_body ) && array_key_exists( 'id', $user_body ) ) {
 								$_ets_lifterlms_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
@@ -331,11 +331,11 @@ class Lifterlms_Discord_Addon_Public {
 					),
 				);
 				$response = wp_remote_post( $discord_token_api_url, $args );
-				// ets_lifterlms_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
-				// if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
-				// $response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-				// LIFTERLMS_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
-				// }
+				ets_lifterlms_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
+				if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
+					$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+					Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				}
 			}
 		} else {
 			$args     = array(
@@ -353,11 +353,11 @@ class Lifterlms_Discord_Addon_Public {
 				),
 			);
 			$response = wp_remote_post( $discord_token_api_url, $args );
-			// ets_lifterlms_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
-			// if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
-			// $response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-			// LIFTERLMS_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
-			// }
+			ets_lifterlms_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
+			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+				Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+			}
 		}
 		return $response;
 	}
@@ -430,11 +430,11 @@ class Lifterlms_Discord_Addon_Public {
 		);
 		$guild_response         = wp_remote_post( $guilds_memeber_api_url, $guild_args );
 
-		// ets_lifterlms_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
+		ets_lifterlms_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_lifterlms_discord_check_api_errors( $guild_response ) ) {
 
-			// $response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-			// L_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 			// this should be catch by Action schedule failed action.
 			throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_add_member_to_guild' );
 		}
@@ -482,10 +482,10 @@ class Lifterlms_Discord_Addon_Public {
 			),
 		);
 		$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
-		// ets_lifterlms_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
+		ets_lifterlms_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
 
-		// $response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
-		// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+		$response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
+		Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
 		return $user_body;
 
@@ -534,10 +534,10 @@ class Lifterlms_Discord_Addon_Public {
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param );
 
-			// ets_lifterlms_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
+			ets_lifterlms_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
 			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
-				// $response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-				// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+				Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( $is_schedule ) {
 					// this exception should be catch by action scheduler.
 					throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_put_member_role' );
@@ -626,10 +626,10 @@ class Lifterlms_Discord_Addon_Public {
 		}
 
 		$dm_response = wp_remote_post( $creat_dm_url, $dm_args );
-		// ets_lifterlms_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
+		ets_lifterlms_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
 		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
 		if ( ets_lifterlms_discord_check_api_errors( $dm_response ) ) {
-			// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $dm_response_body, $user_id, debug_backtrace()[0] );
+			Lifterlms_Discord_Addon_Logs::write_api_response_logs( $dm_response_body, $user_id, debug_backtrace()[0] );
 			// this should be catch by Action schedule failed action.
 			throw new Exception( 'Failed in function ets_lifterlms_discord_handler_send_dm' );
 		}
@@ -659,13 +659,13 @@ class Lifterlms_Discord_Addon_Public {
 		);
 
 		$created_dm_response = wp_remote_post( $create_channel_dm_url, $dm_channel_args );
-		// ets_lifterlms_discord_log_api_response( $user_id, $create_channel_dm_url, $dm_channel_args, $created_dm_response );
+		ets_lifterlms_discord_log_api_response( $user_id, $create_channel_dm_url, $dm_channel_args, $created_dm_response );
 		$response_arr = json_decode( wp_remote_retrieve_body( $created_dm_response ), true );
 
 		if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 			// check if there is error in create dm response
 			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-				// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( ets_lifterlms_discord_check_api_errors( $created_dm_response ) ) {
 					// this should be catch by Action schedule failed action.
 					throw new Exception( 'Failed in function ets_lifterlms_discord_create_member_dm_channel' );
@@ -762,10 +762,10 @@ class Lifterlms_Discord_Addon_Public {
 			);
 
 			$response = wp_remote_request( $discord_delete_role_api_url, $param );
-			// ets_lifterlms_discord_log_api_response( $user_id, $discord_delete_role_api_url, $param, $response );
+			ets_lifterlms_discord_log_api_response( $user_id, $discord_delete_role_api_url, $param, $response );
 			if ( ets_lifterlms_discord_check_api_errors( $response ) ) {
 				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-				// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( $is_schedule ) {
 					// this exception should be catch by action scheduler.
 					throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_delete_memberrole' );
@@ -814,10 +814,10 @@ class Lifterlms_Discord_Addon_Public {
 		);
 		$guild_response                 = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 
-		// ets_lifterlms_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
+		ets_lifterlms_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_lifterlms_discord_check_api_errors( $guild_response ) ) {
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-			// lifterlms_Discord_Add_On_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+			Lifterlms_Discord_Addon_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 			if ( $is_schedule ) {
 				// this exception should be catch by action scheduler.
 				throw new Exception( 'Failed in function ets_lifterlms_discord_as_handler_delete_member_from_guild' );

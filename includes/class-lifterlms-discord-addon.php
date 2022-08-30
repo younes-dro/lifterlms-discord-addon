@@ -106,6 +106,12 @@ class Lifterlms_Discord_Addon {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/libraries/action-scheduler/action-scheduler.php';
 
 		/**
+		 * The class responsible for Logs
+		 * core plugin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-lifterlms-discord-addon-logs.php';
+
+		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
@@ -179,16 +185,16 @@ class Lifterlms_Discord_Addon {
 		$this->loader->add_filter( 'manage_users_columns', $plugin_admin, 'ets_lifterlms_discord_add_lifterlms_discord_column' );
 		$this->loader->add_filter( 'manage_users_custom_column', $plugin_admin, 'ets_lifterlms_discord_run_lifterlms_discord_api', 99, 3 );
 		$this->loader->add_filter( 'manage_users_custom_column', $plugin_admin, 'ets_lifterlms_discord_disconnect_discord_button', 99, 3 );
-		$this->loader->add_action( 'show_user_profile', $plugin_admin, 'ets_lifterlms_discord_disconnect_user_button' , 99 );
-		$this->loader->add_action( 'edit_user_profile', $plugin_admin, 'ets_lifterlms_discord_disconnect_user_button' , 99 );
+		$this->loader->add_action( 'show_user_profile', $plugin_admin, 'ets_lifterlms_discord_disconnect_user_button', 99 );
+		$this->loader->add_action( 'edit_user_profile', $plugin_admin, 'ets_lifterlms_discord_disconnect_user_button', 99 );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_run_api', $plugin_admin, 'ets_lifterlms_discord_run_api' );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_disconnect_user', $plugin_admin, 'ets_lifterlms_disconnect_user' );
 		$this->loader->add_action( 'llms_user_enrolled_in_course', $plugin_admin, 'ets_lifterlms_discord_admin_enroll_user_course', 99, 2 );
 		$this->loader->add_action( 'llms_user_enrollment_deleted', $plugin_admin, 'ets_lifterlms_discord_admin_delete_user_enrollment_course', 99, 3 );
 		$this->loader->add_action( 'lifterlms_order_complete', $plugin_admin, 'ets_lifterlms_discord_order_complete', 10, 1 );
 		$this->loader->add_action( 'save_post_llms_order', $plugin_admin, 'ets_lifterlms_change_order_status', 99, 3 );
-		//$this->loader->add_action( 'lifterlms_after_template_part', $plugin_admin, 'ets_lifterlms_after_template_part', 10, 4);
-		$this->loader->add_action( 'llms_reporting_single_student_overview_after_widgets', $plugin_admin, 'ets_lifterlms_reporting_single_student_overview', 99, 1);
+		// $this->loader->add_action( 'lifterlms_after_template_part', $plugin_admin, 'ets_lifterlms_after_template_part', 10, 4);
+		$this->loader->add_action( 'llms_reporting_single_student_overview_after_widgets', $plugin_admin, 'ets_lifterlms_reporting_single_student_overview', 99, 1 );
 	}
 
 	/**

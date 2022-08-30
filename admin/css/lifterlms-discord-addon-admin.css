@@ -118,6 +118,7 @@
   }
   .clrbtndiv .form-group .spinner{
     margin: 10px 10px 0;
+    display: none;
   }
   .ets-bg-red{
     background-color: #FF0000 !important;
