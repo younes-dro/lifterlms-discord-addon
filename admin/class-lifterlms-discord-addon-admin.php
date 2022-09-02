@@ -628,8 +628,6 @@ class Lifterlms_Discord_Addon_Admin {
 			$message      = isset( $_POST['ets_support_msg'] ) ? sanitize_text_field( trim( $_POST['ets_support_msg'] ) ) : '';
 			$sub          = isset( $_POST['ets_support_subject'] ) ? sanitize_text_field( trim( $_POST['ets_support_subject'] ) ) : '';
 
-			update_option( 'lifterlms_mails_fileds', $etsUserName . ':' . $etsUserEmail . ':' . $message . ':' . $sub);
-
 			if ( $etsUserName && $etsUserEmail && $message && $sub ) {
 
 				$subject   = $sub;
