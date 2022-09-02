@@ -38,34 +38,22 @@ $ets_lifterlms_discord_disconnect_button_text     = sanitize_text_field( trim( g
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Text on the Button for logged-in users', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>
-		<input name="ets_lifterlms_discord_loggedin_button_text" type="text" id="ets_lifterlms_discord_loggedin_button_text" value="
-		<?php
-		if ( isset( $ets_lifterlms_discord_loggedin_button_text ) ) {
-			echo esc_attr( $ets_lifterlms_discord_loggedin_button_text ); }
-		?>
-		">
+			<?php $ets_lifterlms_discord_loggedin_button_text_value = isset( $ets_lifterlms_discord_loggedin_button_text) ? $ets_lifterlms_discord_loggedin_button_text: ''; ?>
+		<input name="ets_lifterlms_discord_loggedin_button_text" type="text" id="ets_lifterlms_discord_loggedin_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_loggedin_button_text_value ); ?>">
 		</fieldset></td> 
 	</tr>         
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Text on the Button for non-login users', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>
-		<input name="ets_lifterlms_discord_non_login_button_text" type="text" id="ets_lifterlms_discord_non_login_button_text" value="
-		<?php
-		if ( isset( $ets_lifterlms_discord_non_login_button_text ) ) {
-			echo esc_attr( $ets_lifterlms_discord_non_login_button_text ); }
-		?>
-		">
+			<?php $ets_lifterlms_discord_non_login_button_text_value = isset( $ets_lifterlms_discord_non_login_button_text ) ? $ets_lifterlms_discord_non_login_button_text : ''; ?>
+		<input name="ets_lifterlms_discord_non_login_button_text" type="text" id="ets_lifterlms_discord_non_login_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_non_login_button_text_value ); ?>">
 		</fieldset></td> 
 	</tr>	
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Text on the Disconnect Button', 'lifterlms-discord-addon' ); ?></th>
 		<td> <fieldset>
-		<input name="ets_lifterlms_discord_disconnect_button_text" type="text" id="ets_lifterlms_discord_disconnect_button_text" value="
-		<?php
-		if ( isset( $ets_lifterlms_discord_disconnect_button_text ) ) {
-			echo esc_attr( $ets_lifterlms_discord_disconnect_button_text ); }
-		?>
-		">
+			<?php $ets_lifterlms_discord_disconnect_button_text_value = isset( $ets_lifterlms_discord_disconnect_button_text ) ? $ets_lifterlms_discord_disconnect_button_text : '' ?>
+		<input name="ets_lifterlms_discord_disconnect_button_text" type="text" id="ets_lifterlms_discord_disconnect_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_disconnect_button_text_value ); ?>">
 		</fieldset></td> 
 	</tr>	
 	</tbody>
