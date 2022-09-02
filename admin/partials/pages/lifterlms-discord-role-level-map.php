@@ -54,7 +54,7 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 
 </div>
 
-<form method="post" action="<?php echo esc_url( get_site_url() ) . '/wp-admin/admin-post.php'; ?>">
+<form method="post" action="<?php echo esc_url( get_site_url() . '/wp-admin/admin-post.php' ); ?>">
 	<input type="hidden" name="action" value="lifterlms_discord_role_mapping">
 	<input type="hidden" name="current_url_role" value="<?php echo esc_url( ets_lifterlms_discord_get_current_screen_url() ); ?>">
 
