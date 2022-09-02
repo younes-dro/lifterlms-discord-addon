@@ -46,7 +46,7 @@
 		<div class="ets-input-group">
 
 			<label><?php esc_html_e( 'Admin Redirect URL', 'lifterlms-discord-addon' ); ?> :</label>
-			<input type="text" readonly="true" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo get_admin_url( '', 'admin.php' ) . '?page=lifterlms-discord-addon'; ?>" />
+			<input type="text" readonly="true" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo esc_attr( get_admin_url( '', 'admin.php' ) . '?page=lifterlms-discord-addon' ); ?>" />
 
 		</div>
 
