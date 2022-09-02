@@ -49,7 +49,10 @@ if ( isset( $_GET['save_settings_msg'] ) ) {
 				<li class="skltbs-tab-item">
 				<button class="skltbs-tab" data-identity="logs" ><?php esc_html_e( 'Logs', 'lifterlms-discord-addon' ); ?>	
 				</button>
-				</li>				                                 
+				</li>
+				<li class="skltbs-tab-item">
+				<button class="skltbs-tab" data-identity="support" ><?php esc_html_e( 'Support', 'lifterlms-discord-addon' ); ?>	
+				</button>								                                 
 		</ul>
 <!--Creating Tabs-->
 			<div class="skltbs-panel-group">
@@ -69,6 +72,9 @@ if ( isset( $_GET['save_settings_msg'] ) ) {
 				</div> 
 				<div id='lifterlms_discord_logs' class="skltbs-panel">
 				<?php require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/pages/lifterlms-discord-error-log.php'; ?>
-				</div>				                
+				</div>
+				<div id='lifterlms_discord_support' class="skltbs-panel">
+				<?php require_once LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/partials/pages/lifterlms-discord-get-support.php'; ?>
+				</div>								                
 			</div>
 	</div>
