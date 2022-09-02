@@ -231,7 +231,12 @@
 		newClone.css({ 'width': '100%','margin-bottom': '0px', 'left': '0', 'position':'unset', 'order': '1' });
 		
 	}
-
+		/*Flush settings from local storage*/
+		$("#lifterlmsRevertMapping").on('click', function () {
+			localStorage.removeItem('lifterlmsMapArray');
+			localStorage.removeItem('LifterlmsMappingjson');
+			window.location.href = window.location.href;
+		}); 
 
 	if(jQuery().select2) {
 		/*Select-tabs plugin options*/
