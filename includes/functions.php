@@ -347,7 +347,11 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 	$SITE_URL         = get_bloginfo( 'url' );
 	$BLOG_NAME        = get_bloginfo( 'name' );
 
-	$quiz      = get_post( $quiz_id );
+	//$quiz      = get_post( $quiz_id );
+
+	$quiz = llms_get_post(  $quiz_id );
+
+	$passing_percent = $quiz->get( 'passing_percent' );
 	$QUIZ_NAME = $quiz->post_title;
 
 	$QUIZ_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
@@ -453,6 +457,30 @@ function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $c
 		);
 
 		return str_replace( $find, $replace, $message );
+}
+
+/**
+ * Send Quiz Attempt details.
+ * 
+ * @param int $user_id
+ * @param object $attempt
+ */
+function ets_lifterlms_discord_get_formatted_quiz_attempt_dm ( $user_id, $attempt ) {
+
+	$user_obj         = get_user_by( 'id', $user_id );
+	$STUDENT_USERNAME = $user_obj->user_login;
+	$STUDENT_EMAIL    = $user_obj->user_email;
+	$SITE_URL         = get_bloginfo( 'url' );
+	$BLOG_NAME        = get_bloginfo( 'name' );
+
+	$message = sprintf( esc_html__ ( 'Hi %1$s , Your Attempt : ', 'lifterlms-discord-addon' ) , $STUDENT_USERNAME  );
+
+	 $message .= sprintf( esc_html__( 'Correct Answers: %1$d / %2$d', 'lifterlms-discord-addon' ), $attempt->get_count( 'correct_answers' ), $attempt->get_count( 'gradeable_questions' ) );
+	 $message .= sprintf( esc_html__( 'Completed: %s', 'lifterlms-discord-addon' ), $attempt->get_date( 'start' ) );
+	 $message .= sprintf( esc_html__( 'Total time: %s', 'lifterlms-discord-addon' ), $attempt->get_time() );
+
+	 return 'Attempt';
+
 }
 /**
  * Send DM message Rich Embed .

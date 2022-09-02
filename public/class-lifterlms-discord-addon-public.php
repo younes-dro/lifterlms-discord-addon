@@ -551,7 +551,7 @@ class Lifterlms_Discord_Addon_Public {
 	 * Discord DM a member using bot.
 	 *
 	 * @param INT    $user_id Student's id.
-	 * @param
+	 * @param MIXED $course
 	 * @param STRING $type (warning|expired).
 	 * @param INT    $related (quiz_attempt|Realted achievment post)
 	 */
@@ -593,6 +593,10 @@ class Lifterlms_Discord_Addon_Public {
 		}
 		if ( $type == 'certificate_earned' ) {
 			$message = ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $courses, $related, $ets_lifterlms_discord_certificate_earned_message );
+		}
+
+		if ( $type == 'quiz_attempt' ) {
+			$message = ets_lifterlms_discord_get_formatted_quiz_attempt_dm( $user_id, $courses );
 		}
 		$creat_dm_url = LIFTERLMS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
 
@@ -985,6 +989,34 @@ class Lifterlms_Discord_Addon_Public {
 				$default_role = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_last_default_role', true ) ) );
 				$this->delete_discord_role( $user_id, $default_role );
 			}
+		}
+	}
+
+
+	public function ets_lifterlms_quiz_attempt_results( $attempt ) {
+
+		$student = $attempt->get_student();
+		$user_id = $student->get( 'id' );
+		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		if ( $access_token && $refresh_token && is_object( $attempt) &&  $attempt->get_count( 'gradeable_questions' )  ) {
+			$user_attempt_dm_send  = 	sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_atttempt_' . $attempt->get_key(), true ) ) );
+			if ( $user_attempt_dm_send ){
+				/**
+				 * Attempt DM already sent.
+				 * Stop here to avoid re-send mesage when user refresh the attempt page.
+				 */
+				return;
+
+			} else {
+				if ( $attempt->get_count( 'gradeable_questions' ) ) {
+					update_user_meta( $user_id, '_ets_lifterlms_discord_atttempt_' . $attempt->get_key(), true );
+					as_schedule_single_action( ets_lifterlms_discord_get_random_timestamp( ets_lifterlms_discord_get_highest_last_attempt_timestamp() ), 'ets_lifterlms_discord_as_send_dm', array( $user_id, $attempt, 'quiz_attempt' ), LIFTERLMS_DISCORD_AS_GROUP_NAME );
+				} else {
+					return;
+				}
+			}
+
 		}
 	}
 
