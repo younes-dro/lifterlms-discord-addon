@@ -798,7 +798,7 @@ class Lifterlms_Discord_Addon_Admin {
 	 */
 	public function ets_lifterlms_discord_add_lifterlms_discord_column( $columns ) {
 		$columns['ets_lifterlms_discord_api']                   = esc_html__( 'LifterLMS Discord', 'lifterlms-discord-addon' );
-		$columns['ets_lifterlms_disconnect_discord_connection'] = esc_html__( 'LD Discord Connection', 'lifterlms-discord-addon' );
+		$columns['ets_lifterlms_disconnect_discord_connection'] = esc_html__( 'LifterLMS Connection', 'lifterlms-discord-addon' );
 		return $columns;
 	}
 
