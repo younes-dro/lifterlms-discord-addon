@@ -109,11 +109,11 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 
   <div class="bottom-btn">
 		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
-			<?php esc_html_e( 'Save Settings', 'lifterlms-discord-add-on' ); ?>
+			<?php esc_html_e( 'Save Settings', 'connect-lifterlms-discord' ); ?>
 		</button>
 
 		<button id="lifterlmsRevertMapping" name="flush" class="ets-submit ets-bg-red">
-			<?php esc_html_e( 'Flush Mappings', 'lifterlms-discord-add-on' ); ?>
+			<?php esc_html_e( 'Flush Mappings', 'connect-lifterlms-discord' ); ?>
 		</button>
   </div>
 </form>
