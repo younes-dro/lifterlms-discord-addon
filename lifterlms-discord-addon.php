@@ -13,7 +13,7 @@
  * @package           Lifterlms_Discord_Addon
  *
  * @wordpress-plugin
- * Plugin Name:       LifterLMS Discord AddOn
+ * Plugin Name:       Connect LifterLMS to Discord
  * Plugin URI:        https://www.expresstechsoftwares.com/?page_id=18295&preview=true
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0
