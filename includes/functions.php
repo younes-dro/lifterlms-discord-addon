@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * List of pages to define as url redirect.
+ *
+ * @param INT $ets_lifterlms_discord_redirect_page_id Page ID.
+ * @return STRING html options.
+ */
 function ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_id ) {
 	$args  = array(
 		'sort_order'   => 'asc',
@@ -25,7 +32,11 @@ function ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_
 }
 
 /**
- *  Get-URL
+ *  Get-URL.
+ *
+ *  @param INT $page_id The ID of the page.
+ *
+ * @return STRING URL.
  */
 function ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id ) {
 
@@ -42,6 +53,11 @@ function ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id ) {
 	}
 }
 
+/**
+ * Get the current screen url.
+ *
+ * @return STRING The url.
+ */
 function ets_lifterlms_discord_get_current_screen_url() {
 	$parts       = parse_url( home_url() );
 	$current_uri = "{$parts['scheme']}://{$parts['host']}" . ( isset( $parts['port'] ) ? ':' . $parts['port'] : '' ) . add_query_arg( null, null );
@@ -71,9 +87,11 @@ function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_a
 /**
  * Add API error logs into log file
  *
- * @param array  $response_arr
- * @param array  $backtrace_arr
+ * @param ARRAY  $response_arr
+ * @param INT $user_id
+ * @param ARRAY  $backtrace_arr
  * @param string $error_type
+ *
  * @return None
  */
 function ets_lifterlms_write_api_response_logs( $response_arr, $user_id, $backtrace_arr = array() ) {
@@ -122,9 +140,10 @@ function ets_lifterlms_discord_check_saved_settings_status() {
 }
 
 /**
- * Get the highest available last attempt schedule time
+ * Get the highest available last attempt schedule time.
+ *
+ * @return BOOL
  */
-
 function ets_lifterlms_discord_get_highest_last_attempt_timestamp() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.last_attempt_gmt FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s ORDER BY aa.last_attempt_gmt DESC limit 1', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
@@ -166,7 +185,7 @@ function ets_lifterlms_discord_as_get_action_data( $action_id ) {
 }
 
 /**
- * Get pending jobs
+ * Get pending jobs.
  */
 function ets_lifterlms_discord_get_all_pending_actions() {
 	global $wpdb;
@@ -179,6 +198,9 @@ function ets_lifterlms_discord_get_all_pending_actions() {
 	}
 }
 
+/**
+ * Get failed actions.
+ */
 function ets_lifterlms_discord_get_all_failed_actions() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.action_id, aa.hook, ag.slug AS as_group FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id=ag.group_id WHERE  ag.slug=%s AND aa.status = "failed" ', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
@@ -554,6 +576,14 @@ function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 
 	return $rich_embed_message;
 }
+
+/**
+ * Get student's course.
+ *
+ * @param INT $user_id
+ *
+ * @return ARRAY|NULL
+ */
 function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 	if ( ! $user_id ) {
 		return null;
@@ -566,6 +596,16 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 		return null;
 	}
 }
+
+/**
+ * The roles assigned message displayed under Connect / Disconnect to discord button.
+ * 
+ * @param STRING $mapped_role_name
+ * @param STRING $default_role_name
+ * @param STRING $restrictcontent_discord
+ *
+ * @return STRING Escaped message.
+ */
 function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord ) {
 
 	if ( $mapped_role_name ) {
@@ -620,6 +660,12 @@ function ets_lifterlms_discord_get_user_roles( $user_id ) {
 	}
 
 }
+
+/**
+ * Remove user meta.
+ * 
+ * @param INT $user_id
+ */
 function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 
 	global $wpdb;
@@ -630,6 +676,14 @@ function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 	$wpdb->query( $delete_usermeta_sql );
 
 }
+
+/**
+ * Allowed html.
+ *
+ * @param STRING $html_message
+ *
+ * @return STRING $html_message
+ */
 function ets_lifterlms_discord_allowed_html( $html_message ) {
 	$allowed_html = array(
 		'div'    => array(
@@ -655,7 +709,15 @@ function ets_lifterlms_discord_allowed_html( $html_message ) {
 	return wp_kses( $html_message, $allowed_html );
 }
 
-
+/**
+ * Get discord user avatar.
+ * 
+ * @param INT $discord_user_id
+ * @param STRING $user_avatar
+ * @param STRING $restrictcontent_discord
+ *
+ * @return STRING
+ */
 function ets_lifterlms_discord_get_user_avatar( $discord_user_id, $user_avatar, $restrictcontent_discord ) {
 	if ( $user_avatar ) {
 		$avatar_url               = '<img class="ets-lifterlms-discord-user-avatar" src="https://cdn.discordapp.com/avatars/' . $discord_user_id . '/' . $user_avatar . '.png" />';
