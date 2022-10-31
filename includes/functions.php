@@ -476,11 +476,11 @@ function ets_lifterlms_discord_get_formatted_quiz_attempt_dm( $user_id, $attempt
 	$SITE_URL         = get_bloginfo( 'url' );
 	$BLOG_NAME        = get_bloginfo( 'name' );
 
-	$message = sprintf( esc_html__( 'Hi %1$s , Your Attempt : ', 'lifterlms-discord-addon' ), $STUDENT_USERNAME );
+	$message = sprintf( esc_html__( 'Hi %1$s , Your Attempt : ', 'connect-lifterlms-discord' ), $STUDENT_USERNAME );
 
-	 $message .= sprintf( esc_html__( 'Correct Answers: %1$d / %2$d', 'lifterlms-discord-addon' ), $attempt->get_count( 'correct_answers' ), $attempt->get_count( 'gradeable_questions' ) );
-	 $message .= sprintf( esc_html__( 'Completed: %s', 'lifterlms-discord-addon' ), $attempt->get_date( 'start' ) );
-	 $message .= sprintf( esc_html__( 'Total time: %s', 'lifterlms-discord-addon' ), $attempt->get_time() );
+	 $message .= sprintf( esc_html__( 'Correct Answers: %1$d / %2$d', 'connect-lifterlms-discord' ), $attempt->get_count( 'correct_answers' ), $attempt->get_count( 'gradeable_questions' ) );
+	 $message .= sprintf( esc_html__( 'Completed: %s', 'connect-lifterlms-discord' ), $attempt->get_date( 'start' ) );
+	 $message .= sprintf( esc_html__( 'Total time: %s', 'connect-lifterlms-discord' ), $attempt->get_time() );
 
 	 return 'Attempt';
 
@@ -571,7 +571,7 @@ function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $defau
 	if ( $mapped_role_name ) {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 
-		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'connect-lifterlms-discord' );
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $mapped_role_name );
 		if ( $default_role_name ) {
 			$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name );
@@ -582,7 +582,7 @@ function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $defau
 	} elseif ( $default_role_name ) {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 
-		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'connect-lifterlms-discord' );
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name );
 
 		$restrictcontent_discord .= '</p>';

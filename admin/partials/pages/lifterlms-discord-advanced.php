@@ -31,15 +31,15 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
   <table class="form-table" role="presentation">
 	<tbody>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Shortcode:', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Shortcode:', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		[lifterlms_discord]
 		<br/>
-		<small><?php esc_html_e( 'Use this shortcode [lifterlms_discord] to display connect to discord button on any page.', 'lifterlms-discord-addon' ); ?></small>
+		<small><?php esc_html_e( 'Use this shortcode [lifterlms_discord] to display connect to discord button on any page.', 'connect-lifterlms-discord' ); ?></small>
 		</fieldset></td>
 	</tr> 
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Use rich embed messaging feature?', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Use rich embed messaging feature?', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="embed_messaging_feature" type="checkbox" id="embed_messaging_feature" 
 		<?php
@@ -52,7 +52,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr> 	           
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Send welcome message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Send welcome message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_send_welcome_dm" type="checkbox" id="ets_lifterlms_discord_send_welcome_dm" 
 		<?php
@@ -63,7 +63,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	</tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Welcome message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Welcome message', 'connect-lifterlms-discord' ); ?></th>
 		<td> 
 			<fieldset>
 				<?php $ets_lifterlms_discord_welcome_message_value = isset( $ets_lifterlms_discord_welcome_message ) ? wp_unslash( $ets_lifterlms_discord_welcome_message ) : ''; ?>
@@ -73,7 +73,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	</tr>  
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Send Lesson Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Send Lesson Complete message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_send_lesson_complete_dm" type="checkbox" id="ets_lifterlms_discord_send_lesson_complete_dm" 
 		<?php
@@ -84,7 +84,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Lesson Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Lesson Complete message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_lesson_complete_message_value = isset( $ets_lifterlms_discord_lesson_complete_message ) ? wp_unslash( $ets_lifterlms_discord_lesson_complete_message ) : ''; ?>
 		<textarea class="ets_lifterlms_discord_lesson_complete_message" name="ets_lifterlms_discord_lesson_complete_message" id="ets_lifterlms_discord_lesson_complete_message" row="25" cols="50"><?php echo esc_textarea( $ets_lifterlms_discord_lesson_complete_message_value ); ?></textarea> 
@@ -93,7 +93,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>	       
   <tr>
-		<th scope="row"><?php esc_html_e( 'Send Quiz Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Send Quiz Complete message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_send_quiz_complete_dm" type="checkbox" id="ets_lifterlms_discord_send_quiz_complete_dm" 
 		<?php
@@ -104,7 +104,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Quiz Complete message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Quiz Complete message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_quiz_complete_message_value = isset( $ets_lifterlms_discord_quiz_complete_message ) ? wp_unslash( $ets_lifterlms_discord_quiz_complete_message ) : ''; ?>
 		<textarea class="ets_lifterlms_discord_quiz_complete_message" name="ets_lifterlms_discord_quiz_complete_message" id="ets_lifterlms_discord_quiz_complete_message" row="25" cols="50"><?php echo esc_textarea( $ets_lifterlms_discord_quiz_complete_message_value ); ?></textarea> 
@@ -113,7 +113,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
  </tr>
  <tr>
-		<th scope="row"><?php esc_html_e( 'Send Achievement Earned message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Send Achievement Earned message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_send_achievement_earned_dm" type="checkbox" id="ets_lifterlms_discord_send_achievement_earned_dm" 
 		<?php
@@ -124,7 +124,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Achievement Earned message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Achievement Earned message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_achievement_earned_message_value = isset( $ets_lifterlms_discord_achievement_earned_message ) ? wp_unslash( $ets_lifterlms_discord_achievement_earned_message ) : ''; ?>
 		<textarea class="ets_lifterlms_discord_achievement_earned_message" name="ets_lifterlms_discord_achievement_earned_message" id="ets_lifterlms_discord_achievement_earned_message" row="25" cols="50"><?php echo esc_textarea( $ets_lifterlms_discord_achievement_earned_message_value ); ?></textarea> 
@@ -134,7 +134,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	  </tr>
   <tr>
   <tr>
-		<th scope="row"><?php esc_html_e( 'Send certificate Earned message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Send certificate Earned message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_send_certificate_earned_dm" type="checkbox" id="ets_lifterlms_discord_send_certificate_earned_dm" 
 		<?php
@@ -145,7 +145,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'certificate Earned message', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'certificate Earned message', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_certificate_earned_message_value = isset( $ets_lifterlms_discord_achievement_earned_message ) ? wp_unslash( $ets_lifterlms_discord_certificate_earned_message ) : ''; ?>
 		<textarea class="ets_lifterlms_discord_certificate_earned_message" name="ets_lifterlms_discord_certificate_earned_message" id="ets_lifterlms_discord_certificate_earned_message" row="25" cols="50"><?php echo esc_textarea( $ets_lifterlms_discord_certificate_earned_message_value ); ?></textarea> 
@@ -155,7 +155,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	  </tr>
   <tr>	
 	  <tr>
-		<th scope="row"><?php esc_html_e( 'Retry Failed API calls', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Retry Failed API calls', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="retry_failed_api" type="checkbox" id="retry_failed_api" 
 		<?php
@@ -166,7 +166,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	  <tr>
-		<th scope="row"><?php esc_html_e( 'Don\'t kick students upon disconnect', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Don\'t kick students upon disconnect', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="kick_upon_disconnect" type="checkbox" id="kick_upon_disconnect" 
 		<?php
@@ -177,7 +177,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		</fieldset></td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'How many times a failed API call should get re-try', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'How many times a failed API call should get re-try', 'connect-lifterlms-discord' ); ?></th>
 		<td> 
 			<fieldset>
 				<?php $retry_api_count_value = isset( $retry_api_count ) ? intval( $retry_api_count ) : 1; ?>
@@ -186,7 +186,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	</td>
 	  </tr> 
 	  <tr>
-		<th scope="row"><?php esc_html_e( 'Set job queue concurrency', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Set job queue concurrency', 'connect-lifterlms-discord' ); ?></th>
 		<td> 
 			<fieldset>
 				<?php $set_job_cnrc_value = isset( $set_job_cnrc ) ? intval( $set_job_cnrc ) : 1; ?>
@@ -195,7 +195,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	</td>
 	  </tr>
 	  <tr>
-		<th scope="row"><?php esc_html_e( 'Set job queue batch size', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Set job queue batch size', 'connect-lifterlms-discord' ); ?></th>
 		<td> 
 			<fieldset>
 				<?php $set_job_q_batch_size_value = isset( $set_job_q_batch_size ) ? intval( $set_job_q_batch_size ) : 10; ?>
@@ -204,7 +204,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 	</td>
 	  </tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Log API calls response (For debugging purpose)', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Log API calls response (For debugging purpose)', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="log_api_res" type="checkbox" id="log_api_res" 
 		<?php
@@ -219,7 +219,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
   </table>
   <div class="bottom-btn">
 	<button type="submit" name="adv_submit" value="ets_submit" class="ets-submit ets-bg-green">
-	  <?php esc_html_e( 'Save Settings', 'lifterlms-discord-addon' ); ?>
+	  <?php esc_html_e( 'Save Settings', 'connect-lifterlms-discord' ); ?>
 	</button>
   </div>
 </form>

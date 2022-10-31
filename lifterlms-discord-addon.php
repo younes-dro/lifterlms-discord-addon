@@ -21,7 +21,7 @@
  * Author URI:        https://www.expresstechsoftwares.com
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       lifterlms-discord-addon
+ * Text Domain:       connect-lifterlms-discord
  * Domain Path:       /languages
  */
 

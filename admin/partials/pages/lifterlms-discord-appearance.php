@@ -12,7 +12,7 @@ $ets_lifterlms_discord_disconnect_button_text     = sanitize_text_field( trim( g
   <table class="form-table" role="presentation">
 	<tbody>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Connect/Login Button background color', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Connect/Login Button background color', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 				<input name="ets_lifterlms_discord_connect_button_bg_color" type="text" id="ets_lifterlms_discord_connect_button_bg_color"  class="wp-color-picker-field" value="
 				<?php
@@ -25,7 +25,7 @@ $ets_lifterlms_discord_disconnect_button_text     = sanitize_text_field( trim( g
 		</fieldset></td> 
 	</tr>
 	<tr>        
-		<th scope="row"><?php esc_html_e( 'Disconnect Button background color', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Disconnect Button background color', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_lifterlms_discord_disconnect_button_bg_color" type="text" id="ets_lifterlms_discord_disconnect_button_bg_color" value="
 		<?php
@@ -36,21 +36,21 @@ $ets_lifterlms_discord_disconnect_button_text     = sanitize_text_field( trim( g
 		</fieldset></td> 
 	</tr>
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Text on the Button for logged-in users', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Text on the Button for logged-in users', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_loggedin_button_text_value = isset( $ets_lifterlms_discord_loggedin_button_text) ? $ets_lifterlms_discord_loggedin_button_text: ''; ?>
 		<input name="ets_lifterlms_discord_loggedin_button_text" type="text" id="ets_lifterlms_discord_loggedin_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_loggedin_button_text_value ); ?>">
 		</fieldset></td> 
 	</tr>         
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Text on the Button for non-login users', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Text on the Button for non-login users', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_non_login_button_text_value = isset( $ets_lifterlms_discord_non_login_button_text ) ? $ets_lifterlms_discord_non_login_button_text : ''; ?>
 		<input name="ets_lifterlms_discord_non_login_button_text" type="text" id="ets_lifterlms_discord_non_login_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_non_login_button_text_value ); ?>">
 		</fieldset></td> 
 	</tr>	
 	<tr>
-		<th scope="row"><?php esc_html_e( 'Text on the Disconnect Button', 'lifterlms-discord-addon' ); ?></th>
+		<th scope="row"><?php esc_html_e( 'Text on the Disconnect Button', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
 			<?php $ets_lifterlms_discord_disconnect_button_text_value = isset( $ets_lifterlms_discord_disconnect_button_text ) ? $ets_lifterlms_discord_disconnect_button_text : '' ?>
 		<input name="ets_lifterlms_discord_disconnect_button_text" type="text" id="ets_lifterlms_discord_disconnect_button_text" value="<?php echo esc_attr( $ets_lifterlms_discord_disconnect_button_text_value ); ?>">
@@ -60,7 +60,7 @@ $ets_lifterlms_discord_disconnect_button_text     = sanitize_text_field( trim( g
   </table>
   <div class="bottom-btn">
 	<button type="submit" name="appearance_submit" value="ets_submit" class="ets-submit ets-bg-green">
-	  <?php esc_html_e( 'Save Settings', 'lifterlms-discord-addon' ); ?>
+	  <?php esc_html_e( 'Save Settings', 'connect-lifterlms-discord' ); ?>
 	</button>
   </div>
 </form>
