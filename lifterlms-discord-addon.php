@@ -44,7 +44,7 @@ define( 'LIFTERLMS_DISCORD_ADDON_VERSION', '1.0.0' );
 /**
  * Discord API URL
  */
-define( 'LIFTERLMS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
+define( 'LIFTERLMS_DISCORD_API_URL', 'https://discord.com/api/v10/' );
 
 /**
  * Discord BOT Permissions
@@ -56,13 +56,26 @@ define( 'LIFTERLMS_DISCORD_BOT_PERMISSIONS', 8 );
 /**
  * Discord API call scopes
  */
-define( 'LIFTERLMS_DISCORD_OAUTH_SCOPES', 'identify email guilds' );
+define( 'LIFTERLMS_DISCORD_OAUTH_SCOPES', 'identify email guilds guilds.join' );
 
+/**
+ * Follwing response codes not cosider for re-try API calls.
+ */
+define( 'LIFTERLMS_DISCORD_DONOT_RETRY_THESE_API_CODES', array( 0, 10003, 50033, 10004, 50025, 10013, 10011 ) );
 
+/**
+ * Define plugin directory url
+ */
+define( 'LIFTERLMS_DISCORD_DONOT_RETRY_HTTP_CODES', array( 400, 401, 403, 404, 405, 502 ) );
 /**
  * LIFTERLMS_DISCORD_PLUGIN_DIR_PATH
  */
 define( 'LIFTERLMS_DISCORD_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
+
+/**
+ * Define group name for action scheduler actions
+ */
+define( 'LIFTERLMS_DISCORD_AS_GROUP_NAME', 'ets-lifterlms-discord' );
 
 /**
  * Define plugin directory URL

@@ -1,8 +1,6 @@
 (function ($) {
 	'use strict';
 
-	/* Select2 -Plugin jquery */
-	$('document').ready(function () {
 
 		/*Load all roles from discord server*/
 		$.ajax({
@@ -97,15 +95,19 @@
 /*Create droppable element*/
 		
 		function init() {
-		
-			$('.makeMeDroppable').droppable({
-				drop: handleDropEvent,
-				hoverClass: 'hoverActive',
-			});
-			$('.discord-roles-col').droppable({
-				drop: handlePreviousDropEvent,
-				hoverClass: 'hoverActive',
-			});
+			if ( $('.makeMeDroppable').length){
+				$('.makeMeDroppable').droppable({
+					drop: handleDropEvent,
+					hoverClass: 'hoverActive',
+				});
+			}
+			if ( $('.discord-roles-col').length){
+				$('.discord-roles-col').droppable({
+					drop: handlePreviousDropEvent,
+					hoverClass: 'hoverActive',
+				});
+			}
+
 		}
 
 		$(init);
@@ -229,24 +231,141 @@
 		newClone.css({ 'width': '100%','margin-bottom': '0px', 'left': '0', 'position':'unset', 'order': '1' });
 		
 	}
+		/*Flush settings from local storage*/
+		$("#lifterlmsRevertMapping").on('click', function () {
+			localStorage.removeItem('lifterlmsMapArray');
+			localStorage.removeItem('LifterlmsMappingjson');
+			window.location.href = window.location.href;
+		}); 
 
-
-
+	if(jQuery().select2) {
 		/*Select-tabs plugin options*/
 		let select2 = jQuery(".ets_wp_pages_list").select2({
 			placeholder: "Select a Pages",
-			allowClear: true
-		})
+			allowClear: true,
+                        width: "resolve"
+		});              
+		$('.ets_wp_pages_list').on('change', function(){
+
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_update_redirect_url', 'ets_lifterlms_page_id': $(this).val() , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$('p.redirect-url').find('b').html("");
+					$('p.ets-discord-update-message').css('display','none');                                               
+					$(this).siblings('p.description').find('span.spinner').addClass("ets-is-active").show();
+                                       
+				},
+				success: function (data) { 
+					$('p.redirect-url').find('b').html(data.formated_discord_redirect_url);
+					$('p.ets-discord-update-message').css('display','block'); 
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).siblings('p.description').find('span.spinner').removeClass("ets-is-active").hide();
+				}
+			});
+
+		});                        
+	}
+		$('#ets_lifterlms_discord_connect_button_bg_color').wpColorPicker();
+		$('#ets_lifterlms_discord_disconnect_button_bg_color').wpColorPicker();  
+		
+		/* RUN Discord API */
+		$('.ets-lifterlms-discord-run-api').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_run_api', 'ets_lifterlms_discord_user_id': $(this).data('user-id') , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$(this).siblings("div.run-api-success").html("");
+					$(this).siblings('span.spinner').addClass("is-active").show();
+				},
+				success: function (data) {        
+					if (data.error) {
+						// handle the error
+						alert(data.error.msg);
+					} else {
+                                            
+						$(this).siblings("div.run-api-success").html("Update Discord Roles Sucesssfully !");
+					}
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).siblings('span.spinner').removeClass("is-active").hide();
+				}
+			});
+		});
+
+		$('.lifterlms-disconnect-discord-user').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+				type: "POST",
+				context: this,
+				data: { 'action': 'ets_lifterlms_discord_disconnect_user', 'ets_lifterlms_discord_user_id': $(this).data('user-id') , 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+				beforeSend: function () {
+					$(this).find('span').addClass("is-active").show();
+				},
+				success: function (data) {       
+					if (data.error) {
+						// handle the error
+						alert(data.error.msg);
+					} else {
+						$(this).prop('disabled', true);
+						console.log(data);
+					}
+				},
+				error: function (response, textStatus, errorThrown ) {
+					console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+				},
+				complete: function () {
+					$(this).find('span').removeClass("is-active").hide();
+				}
+			});
+		});
+		/*Clear log log call-back*/
+		$('#ets-lifterlms-clrbtn').click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				url: ets_lifterlms_js_params.admin_ajax,
+					type: "POST",
+					data: { 'action': 'ets_lifterlms_discord_clear_logs', 'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce },
+					beforeSend: function () {
+						$(".clr-log.spinner").addClass("is-active").show();
+					},
+					success: function (data) {
+			 
+						if (data.error) {
+							// handle the error
+							alert(data.error.msg);
+						} else {
+													
+							$('.error-log').html("Clear logs Sucesssfully !");
+						}
+					},
+					error: function (response, textStatus, errorThrown ) {
+						console.log( textStatus + " :  " + response.status + " : " + errorThrown );
+					},
+					complete: function () {
+						$(".clr-log.spinner").removeClass("is-active").hide();
+					}
+				});
+			});			
 
 		/*Tab options*/
+		if ($.skeletabs ) {
 		$.skeletabs.setDefaults({
 			keyboard: false,
 		});
-		$(document.body).on('change', '.ets_wp_pages_list', function (e) {
-			var page_url = $(this).find(':selected').data('page-url');
+	}
 
-			$('p.redirect-url').html('<b>' + page_url + '</b>');
-		});
-
-	});
 })(jQuery);
