@@ -25,12 +25,12 @@
 		<div class="ets-input-group">
 			<?php $ets_lifterlms_discord_client_id_value = isset( $ets_lifterlms_discord_client_id ) ? $ets_lifterlms_discord_client_id : ''; ?>
 			<label><?php esc_html_e( 'Client ID', 'connect-lifterlms-discord' ); ?> :</label>
-			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="<?php echo esc_attr( $ets_lifterlms_discord_client_id_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client ID', 'lifterlms-discord-add-on' ); ?>">
+			<input type="text" class="ets-input" name="ets_lifterlms_discord_client_id" value="<?php echo esc_attr( $ets_lifterlms_discord_client_id_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client ID', 'connect-lifterlms-discord' ); ?>">
 		</div>
 		<div class="ets-input-group">
 		<?php $ets_lifterlms_discord_client_secret_value = isset( $ets_lifterlms_discord_client_secret ) ? $ets_lifterlms_discord_client_secret : ''; ?>
 			<label><?php esc_html_e( 'Client Secret', 'connect-lifterlms-discord' ); ?> :</label>
-			<input type="password" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php echo esc_attr( $ets_lifterlms_discord_client_secret_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client Secret', 'lifterlms-discord-add-on' ); ?>">
+			<input type="password" class="ets-input" name="ets_lifterlms_discord_client_secret" value="<?php echo esc_attr( $ets_lifterlms_discord_client_secret_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Client Secret', 'connect-lifterlms-discord' ); ?>">
 		</div>
 
 		<div class="ets-input-group">
@@ -39,8 +39,8 @@
 			<select class="form-control ets_wp_pages_list ets-input" name="ets_lifterlms_discord_redirect_page_id" style="max-width: 100%" required >
 				<?php _e( ets_lifterlms_discord_pages_list( wp_kses( $ets_lifterlms_discord_redirect_page_id, array( 'option' => array( 'data-page-url' => array() ) ) ) ) ); ?>
 			</select>
-		<p class="description"><?php esc_html_e( 'Registered discord app redirect url', 'lifterlms-discord-add-on' ); ?><span class="spinner"></span></p>
-				<p class="description ets-discord-update-message"><?php echo sprintf( __( 'Redirect URL updated, kindly add/update the same in your discord.com application link <a href="https://discord.com/developers/applications/%s/oauth2/general">https://discord.com/developers</a>', 'lifterlms-discord-add-on' ), $ets_lifterlms_discord_client_id ); ?></p>                          
+		<p class="description"><?php esc_html_e( 'Registered discord app redirect url', 'connect-lifterlms-discord' ); ?><span class="spinner"></span></p>
+				<p class="description ets-discord-update-message"><?php echo sprintf( __( 'Redirect URL updated, kindly add/update the same in your discord.com application link <a href="https://discord.com/developers/applications/%s/oauth2/general">https://discord.com/developers</a>', 'connect-lifterlms-discord' ), $ets_lifterlms_discord_client_id ); ?></p>                          
 		</div>
 
 		<div class="ets-input-group">
@@ -54,7 +54,7 @@
 			<?php echo sprintf( " <b>(%s)</b> Bot name, should have the higher priority than the role it has to manage. <a href='https://discord.com/channels/%d'>Open discord server</a>.", $bot_username, $ets_lifterlms_discord_server_id ); ?><br>	
 		<?php $ets_lifterlms_discord_bot_token_value = isset( $ets_lifterlms_discord_bot_token ) ? $ets_lifterlms_discord_bot_token : ''; ?>
 			<label><?php esc_html_e( 'Bot Token', 'connect-lifterlms-discord' ); ?> :</label>
-			<input type="password" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php echo esc_attr( $ets_lifterlms_discord_bot_token_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Bot Token', 'lifterlms-discord-add-on' ); ?>">
+			<input type="password" class="ets-input" name="ets_lifterlms_discord_bot_token" value="<?php echo esc_attr( $ets_lifterlms_discord_bot_token_value ); ?>" required placeholder="<?php esc_html_e( 'Discord Bot Token', 'connect-lifterlms-discord' ); ?>">
 		</div>
 		<div class="ets-input-group">
 			<?php $ets_lifterlms_discord_server_id_value = isset( $ets_lifterlms_discord_server_id ) ? $ets_lifterlms_discord_server_id : ''; ?>
