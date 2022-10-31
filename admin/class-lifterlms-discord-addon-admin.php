@@ -77,7 +77,7 @@ class Lifterlms_Discord_Addon_Admin {
 	*/
 
 	public function ets_lifterlms_add_admin_menu() {
-		add_submenu_page( 'lifterlms', esc_html__( 'Discord Settings', 'connect-lifterlms-discord' ), esc_html__( 'Discord Settings', 'connect-lifterlms-discord' ), 'manage_options', 'lifterlms-discord-addon', array( $this, 'ets_lifterlms_discord_view' ), 999 );
+		add_submenu_page( 'lifterlms', esc_html__( 'Discord Settings', 'connect-lifterlms-discord' ), esc_html__( 'Discord Settings', 'connect-lifterlms-discord' ), 'manage_options', 'connect-lifterlms-discord', array( $this, 'ets_lifterlms_discord_view' ), 999 );
 	}
 	/*
 		Details of page
