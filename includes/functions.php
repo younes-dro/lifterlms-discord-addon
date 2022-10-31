@@ -88,7 +88,7 @@ function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_a
  * Add API error logs into log file
  *
  * @param ARRAY  $response_arr
- * @param INT $user_id
+ * @param INT    $user_id
  * @param ARRAY  $backtrace_arr
  * @param string $error_type
  *
@@ -292,7 +292,7 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 		}
 	} else {
 		$enrolled_course = get_post( $courses );
-		$COURSES        .= esc_html( $enrolled_course->post_title );
+		$COURSES        .= ( ! empty( ( $enrolled_course->post_title ) ) ) ? esc_html( $enrolled_course->post_title ) : '';
 	}
 
 		$find    = array(
@@ -599,7 +599,7 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 
 /**
  * The roles assigned message displayed under Connect / Disconnect to discord button.
- * 
+ *
  * @param STRING $mapped_role_name
  * @param STRING $default_role_name
  * @param STRING $restrictcontent_discord
@@ -663,7 +663,7 @@ function ets_lifterlms_discord_get_user_roles( $user_id ) {
 
 /**
  * Remove user meta.
- * 
+ *
  * @param INT $user_id
  */
 function ets_lifterlms_discord_remove_usermeta( $user_id ) {
@@ -711,8 +711,8 @@ function ets_lifterlms_discord_allowed_html( $html_message ) {
 
 /**
  * Get discord user avatar.
- * 
- * @param INT $discord_user_id
+ *
+ * @param INT    $discord_user_id
  * @param STRING $user_avatar
  * @param STRING $restrictcontent_discord
  *
