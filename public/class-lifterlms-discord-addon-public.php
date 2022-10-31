@@ -245,7 +245,7 @@ class Lifterlms_Discord_Addon_Public {
 				exit;
 			}
 
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'lifterlms-discord' ) {
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'connect-lifterlms-discord' ) {
 				$code     = sanitize_text_field( trim( $_GET['code'] ) );
 				$response = $this->ets_lifterlms_discord_auth_token( $code, $user_id );
 

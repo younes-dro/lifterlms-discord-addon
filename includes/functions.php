@@ -32,12 +32,12 @@ function ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id ) {
 	$url    = esc_url( get_permalink( $page_id ) );
 	$parsed = parse_url( $url, PHP_URL_QUERY );
 	if ( $parsed === null ) {
-		return $url .= '?via=lifterlms-discord';
+		return $url .= '?via=connect-lifterlms-discord';
 	} else {
-		if ( stristr( $url, 'via=lifterlms-discord' ) !== false ) {
+		if ( stristr( $url, 'via=connect-lifterlms-discord' ) !== false ) {
 			return $url;
 		} else {
-			return $url .= '&via=lifterlms-discord';
+			return $url .= '&via=connect-lifterlms-discord';
 		}
 	}
 }
