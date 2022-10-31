@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Connect LifterLMS to Discord
  * Plugin URI:        https://www.expresstechsoftwares.com/?page_id=18295&preview=true
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Create an engaging community/forum of your LifterLMS online courses, sell private content. Discord is the #1 tool for students to learn in groups, chat and video.
  * Version:           1.0.0
  * Author:            ExpressTech Softwares Solutions Pvt Ltd
  * Author URI:        https://www.expresstechsoftwares.com
