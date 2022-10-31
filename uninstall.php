@@ -31,9 +31,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 if ( defined( 'WP_UNINSTALL_PLUGIN' )
 		&& $_REQUEST['plugin'] == 'lifterlms-discord-addon/lifterlms-discord-addon.php'
-		&& $_REQUEST['slug'] == 'connect-lifterlms-discord'
+		&& $_REQUEST['slug'] == 'connect-lifterlms-to-discord'
 	&& wp_verify_nonce( $_REQUEST['_ajax_nonce'], 'updates' )
   ) {
+
 	global $wpdb;
 	  $wpdb->query( 'DELETE FROM ' . $wpdb->prefix . "usermeta WHERE `meta_key` LIKE '_ets_lifterlms_%'" );
 	  $wpdb->query( 'DELETE FROM ' . $wpdb->prefix . "options WHERE `option_name` LIKE 'ets_lifterlms_%'" );
