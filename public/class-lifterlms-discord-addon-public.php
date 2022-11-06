@@ -226,9 +226,8 @@ class Lifterlms_Discord_Addon_Public {
 	}
 
 	/**
-	 *  initialize discord authentication.
+	 *  Initialize discord authentication.
 	 */
-
 	public function ets_lifterlms_discord_login() {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
@@ -246,7 +245,7 @@ class Lifterlms_Discord_Addon_Public {
 			}
 
 			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'connect-lifterlms-discord' ) {
-				$code     = sanitize_text_field( trim( $_GET['code'] ) );
+				$code     = sanitize_text_field( wp_unslash( trim( $_GET['code'] ) ) );
 				$response = $this->ets_lifterlms_discord_auth_token( $code, $user_id );
 
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {

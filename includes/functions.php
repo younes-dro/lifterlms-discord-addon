@@ -267,10 +267,10 @@ function ets_lifterlms_discord_count_of_hooks_failures( $hook ) {
 function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$COURSES = '';
 	if ( is_array( $courses ) ) {
@@ -326,13 +326,13 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 function ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $lesson_id, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$lesson      = get_post( $lesson_id );
-	$LESSON_NAME = $lesson->post_title;
+	$LESSON_NAME = sanitize_text_field( $lesson->post_title );
 
 	$LESSON_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -367,17 +367,17 @@ function ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $less
 function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_id, $attempt, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	// $quiz      = get_post( $quiz_id );
 
 	$quiz = llms_get_post( $quiz_id );
 
 	$passing_percent = $quiz->get( 'passing_percent' );
-	$QUIZ_NAME       = $quiz->post_title;
+	$QUIZ_NAME       = sanitize_text_field( $quiz->post_title );
 
 	$QUIZ_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -413,13 +413,13 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $achievement_id, $related_post_id, $message ) {
 	// return $user_id .'-'. $achievement_id .'-'. $related_post_id .'-'. $message;
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$achievement      = get_post( $achievement_id );
-	$ACHIEVEMENT_NAME = $achievement->post_title;
+	$ACHIEVEMENT_NAME = sanitize_text_field( $achievement->post_title );
 
 	$ACHIEVEMENT_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -454,13 +454,13 @@ function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $a
 function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $certificate_id, $related_post_id, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$certificate       = get_post( $certificate_id );
-	$CERTIFICATE_TITLE = $certificate->post_title;
+	$CERTIFICATE_TITLE = sanitize_text_field( $certificate->post_title );
 
 	$CERTIFICATE_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -493,10 +493,10 @@ function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $c
 function ets_lifterlms_discord_get_formatted_quiz_attempt_dm( $user_id, $attempt ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$message = sprintf( esc_html__( 'Hi %1$s , Your Attempt : ', 'connect-lifterlms-discord' ), $STUDENT_USERNAME );
 

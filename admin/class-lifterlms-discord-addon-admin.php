@@ -174,7 +174,7 @@ class Lifterlms_Discord_Addon_Admin {
 			$ets_lifterlms_discord_bot_token        = isset( $_POST['ets_lifterlms_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_bot_token'] ) ) : '';
 			$ets_lifterlms_discord_server_id        = isset( $_POST['ets_lifterlms_discord_server_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_server_id'] ) ) : '';
 			$ets_lifterlms_discord_redirect_url     = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
-			$current_url                            = isset( $_POST['current_url'] ) ? sanitize_text_field( trim( $_POST['current_url'] ) ) : '';
+			$current_url                            = isset( $_POST['current_url'] ) ? sanitize_text_field( wp_unslash( $_POST['current_url'] ) ) : '';
 			$ets_lifterlms_admin_redirect_url       = isset( $_POST['ets_lifterlms_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_admin_redirect_url'] ) ) : '';
 
 			if ( $ets_lifterlms_admin_redirect_url ) {
@@ -214,7 +214,7 @@ class Lifterlms_Discord_Addon_Admin {
 				update_option( 'ets_lifterlms_discord_bot_username', $bot_username );
 			}
 
-			$message = 'Your settings are saved successfully.';
+			$message = esc_html__( 'Your settings are saved successfully.', 'connect-lifterlms-discord' );
 			if ( isset( $current_url ) ) {
 				$pre_location = $current_url . '&save_settings_msg=' . $message . '#lifterlms_general_settings';
 				wp_safe_redirect( $pre_location );
@@ -273,9 +273,10 @@ class Lifterlms_Discord_Addon_Admin {
 		}
 	}
 
-	/*
-	  Role-level-screen develop
-	*/
+
+	/**
+	 * Save Discord Roles Courses mapping.
+	 */
 	public function ets_lifterlms_discord_role_mapping() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
@@ -304,7 +305,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_allow_none_member', $allow_none_member );
 				}
 
-				$message = 'Your mappings are saved successfully.';
+				$message = esc_html__( 'Your mappings are saved successfully.', 'connect-lifterlms-discord' );
 				if ( isset( $current_url_role ) ) {
 					$pre_location = $current_url_role . '&save_settings_msg=' . $message . '#lifterlms_role_level';
 					wp_safe_redirect( $pre_location );
@@ -313,9 +314,9 @@ class Lifterlms_Discord_Addon_Admin {
 			if ( isset( $_POST['flush'] ) ) {
 				delete_option( 'ets_lifterlms_discord_role_mapping' );
 				delete_option( 'ets_lifterlms_discord_default_role_id' );
-				$message = ' Your settings are flushed successfully.';
+				$message = esc_html__( 'Your settings are flushed successfully.', 'connect-lifterlms-discord' );
 				if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
-					$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#lifterlms_role_level';
+					$pre_location = sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) . '&save_settings_msg=' . $message . '#lifterlms_role_level';
 					wp_safe_redirect( $pre_location );
 				}
 			}
@@ -394,7 +395,7 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-		$page_id = $_POST['ets_lifterlms_page_id'];
+		$page_id = sanitize_text_field( trim ( $_POST['ets_lifterlms_page_id'] ) );
 		if ( isset( $page_id ) ) {
 			$formated_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id );
 			update_option( 'ets_lifterlms_discord_redirect_page_id', $page_id );
@@ -531,7 +532,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_embed_messaging_feature', false );
 				}
 
-				$message      = 'Your settings are saved successfully.';
+				$message      = esc_html__( 'Your settings are saved successfully.', 'connect-lifterlms-discord' );
 				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_advanced';
 				wp_safe_redirect( $pre_location );
 
@@ -587,7 +588,7 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_disconnect_button_text', '' );
 				}
 
-				$message = 'Your settings are saved successfully.';
+				$message = esc_html__( 'Your settings are saved successfully.', 'connect-lifterlms-discord' );
 
 				$pre_location = $ets_current_url . '&save_settings_msg=' . $message . '#lifterlms_discord_appearance';
 				wp_safe_redirect( $pre_location );
@@ -616,8 +617,8 @@ class Lifterlms_Discord_Addon_Admin {
 				exit();
 			}
 			$etsUserName  = isset( $_POST['ets_user_name'] ) ? sanitize_text_field( trim( $_POST['ets_user_name'] ) ) : '';
-			$etsUserEmail = isset( $_POST['ets_user_email'] ) ? sanitize_text_field( trim( $_POST['ets_user_email'] ) ) : '';
-			$message      = isset( $_POST['ets_support_msg'] ) ? sanitize_text_field( trim( $_POST['ets_support_msg'] ) ) : '';
+			$etsUserEmail = isset( $_POST['ets_user_email'] ) ? sanitize_email( trim( $_POST['ets_user_email'] ) ) : '';
+			$message      = isset( $_POST['ets_support_msg'] ) ? sanitize_textarea_field( trim( $_POST['ets_support_msg'] ) ) : '';
 			$sub          = isset( $_POST['ets_support_subject'] ) ? sanitize_text_field( trim( $_POST['ets_support_subject'] ) ) : '';
 
 			if ( $etsUserName && $etsUserEmail && $message && $sub ) {
@@ -628,20 +629,20 @@ class Lifterlms_Discord_Addon_Admin {
 				$content  .= 'Contact Email: ' . $etsUserEmail . '<br>';
 				$content  .= 'MemberPress Support Message: ' . $message;
 				$headers   = array();
-				$blogemail = get_bloginfo( 'admin_email' );
+				$blogemail = sanitize_email( get_bloginfo( 'admin_email' ) );
 				$headers[] = 'From: ' . get_bloginfo( 'name' ) . ' <' . $blogemail . '>' . "\r\n";
 				$mail      = wp_mail( $to, $subject, $content, $headers );
 
 				if ( $mail ) {
-					$message = 'Your request have been successfully submitted!';
+					$message = esc_html__( 'Your request have been successfully submitted!', 'connect-lifterlms-discord' );
 					if ( isset( $_POST['current_url'] ) ) {
-						$pre_location = sanitize_text_field( $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
+						$pre_location = sanitize_url(  $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
 						wp_safe_redirect( $pre_location );
 					}
 				} else {
-					$message = 'E-mail not sent!';
+					$message = esc_html__( 'E-mail not sent!', 'connect-lifterlms-discord' );
 					if ( isset( $_POST['current_url'] ) ) {
-						$pre_location = sanitize_text_field( $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
+						$pre_location = sanitize_url( $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
 						wp_safe_redirect( $pre_location );
 					}
 				}
