@@ -69,11 +69,11 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 									<select id="defaultRole" name="defaultRole">
 										<option value="none"><?php esc_html_e( '-None-', 'connect-lifterlms-discord' ); ?></option>
 									</select>
-								<p class="description"><?php esc_html_e( 'This Role will be assigned to all level members', 'connect-lifterlms-discord' ); ?></p>
+								<p class="description"><?php esc_html_e( 'This Role will be assigned to all level students', 'connect-lifterlms-discord' ); ?></p>
 				</td>
 		</tr>
 		<tr>
-				<th scope="row"><label><?php esc_html_e( 'Allow non-members', 'connect-lifterlms-discord' ); ?></label></th>
+				<th scope="row"><label><?php esc_html_e( 'Allow non-students', 'connect-lifterlms-discord' ); ?></label></th>
 				<td>
 					<fieldset>
 									<label><input type="radio" name="allow_none_member" value="yes"  

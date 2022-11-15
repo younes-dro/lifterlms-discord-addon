@@ -65,9 +65,9 @@ Please make sure your bot role has the high priority among all other roles your 
 3. Try Disabling other plugins, there may be any conflict with another plugin.
 = Members are not being added spontaneously.
 1. Due to the nature of Discord API, we have to use schedules to precisely control API calls, This is the reason actions are delayed. 
-= Member roles are not being assigned spontaneously.
+= Student roles are not being assigned spontaneously.
 1. Due to the nature of Discord API, we have to use schedules to precisely control API calls, This is the reason actions are delayed. 
-= Some members are not getting their role and there is no error in the log.
+= Some Sutudents are not getting their role and there is no error in the log.
 1. Sometimes discord API behaves weirdly, It is suggested to TRY again OR use another discord account.
 
 
