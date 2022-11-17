@@ -627,7 +627,7 @@ class Lifterlms_Discord_Addon_Admin {
 				$to        = array( 'contact@expresstechsoftwares.com', 'vinod.tiwari@expresstechsoftwares.com' );
 				$content   = 'Name: ' . $etsUserName . '<br>';
 				$content  .= 'Contact Email: ' . $etsUserEmail . '<br>';
-				$content  .= 'MemberPress Support Message: ' . $message;
+				$content  .= 'LifterLMS Support Message: ' . $message;
 				$headers   = array();
 				$blogemail = sanitize_email( get_bloginfo( 'admin_email' ) );
 				$headers[] = 'From: ' . get_bloginfo( 'name' ) . ' <' . $blogemail . '>' . "\r\n";
