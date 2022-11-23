@@ -58,6 +58,8 @@ Connect LifterLMS to Discord Plugin Features:
 5. [Inspect HTTP Requests](https://wordpress.org/plugins/inspect-http-requests/)
 6. [Product Questions & Answers for WooCommerce](https://wordpress.org/plugins/product-questions-answers-for-woocommerce/)
 7. [Webhook For WCFM Vendors](https://wordpress.org/plugins/webhook-for-wcfm-vendors/)
+8. [Connect GamiPress and Discord](https://wordpress.org/plugins/connect-gamipress-and-discord/)
+9. [Connect Ultimate Member and Discord](https://wordpress.org/plugins/ultimate-member-discord-add-on/)
 
 == Frequently Asked Questions ==
 = I'm getting an error in error Log 'Missing Access'

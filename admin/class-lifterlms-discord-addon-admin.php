@@ -395,7 +395,7 @@ class Lifterlms_Discord_Addon_Admin {
 			exit();
 		}
 
-		$page_id = sanitize_text_field( trim ( $_POST['ets_lifterlms_page_id'] ) );
+		$page_id = sanitize_text_field( trim( $_POST['ets_lifterlms_page_id'] ) );
 		if ( isset( $page_id ) ) {
 			$formated_discord_redirect_url = ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id );
 			update_option( 'ets_lifterlms_discord_redirect_page_id', $page_id );
@@ -636,7 +636,7 @@ class Lifterlms_Discord_Addon_Admin {
 				if ( $mail ) {
 					$message = esc_html__( 'Your request have been successfully submitted!', 'connect-lifterlms-discord' );
 					if ( isset( $_POST['current_url'] ) ) {
-						$pre_location = sanitize_url(  $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
+						$pre_location = sanitize_url( $_POST['current_url'] ) . '&save_settings_msg=' . $message . '#lifterlms_discord_support';
 						wp_safe_redirect( $pre_location );
 					}
 				} else {
