@@ -175,10 +175,10 @@ class Lifterlms_Discord_Addon_Admin {
 			$ets_lifterlms_discord_server_id        = isset( $_POST['ets_lifterlms_discord_server_id'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_server_id'] ) ) : '';
 			$ets_lifterlms_discord_redirect_url     = ets_get_lifterlms_discord_formated_discord_redirect_url( $ets_lifterlms_discord_redirect_page_id );
 			$current_url                            = isset( $_POST['current_url'] ) ? sanitize_text_field( wp_unslash( $_POST['current_url'] ) ) : '';
-			$ets_lifterlms_admin_redirect_url       = isset( $_POST['ets_lifterlms_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_admin_redirect_url'] ) ) : '';
+			$ets_lifterlms_discord_admin_redirect_url       = isset( $_POST['ets_lifterlms_discord_admin_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_lifterlms_discord_admin_redirect_url'] ) ) : '';
 
-			if ( $ets_lifterlms_admin_redirect_url ) {
-				update_option( 'ets_lifterlms_admin_redirect_url', $ets_lifterlms_admin_redirect_url );
+			if ( $ets_lifterlms_discord_admin_redirect_url ) {
+				update_option( 'ets_lifterlms_discord_admin_redirect_url', $ets_lifterlms_discord_admin_redirect_url );
 			}
 
 			if ( $ets_lifterlms_discord_client_id ) {
@@ -263,7 +263,7 @@ class Lifterlms_Discord_Addon_Admin {
 				'scope'                => 'bot',
 				'guild_id'             => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_server_id' ) ) ),
 				'disable_guild_select' => 'true',
-				'redirect_uri'         => sanitize_text_field( trim( get_option( 'ets_lifterlms_admin_redirect_url' ) ) ),
+				'redirect_uri'         => sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_admin_redirect_url' ) ) ),
 				'response_type'        => 'code',
 			);
 

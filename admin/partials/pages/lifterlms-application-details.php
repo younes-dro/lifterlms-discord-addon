@@ -5,7 +5,7 @@
 	$ets_lifterlms_discord_client_id        = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_id' ) );
 	$ets_lifterlms_discord_client_secret    = sanitize_text_field( get_option( 'ets_lifterlms_discord_client_secret' ) );
 	$ets_lifterlms_discord_redirect_page_id = sanitize_text_field( get_option( 'ets_lifterlms_discord_redirect_page_id' ) );
-	$ets_lifterlms_admin_redirect_url       = sanitize_text_field( get_option( 'ets_lifterlms_admin_redirect_url' ) );
+	$ets_lifterlms_discord_admin_redirect_url       = sanitize_text_field( get_option( 'ets_lifterlms_discord_admin_redirect_url' ) );
 	$ets_lifterlms_discord_bot_token        = sanitize_text_field( get_option( 'ets_lifterlms_discord_bot_token' ) );
 	$ets_lifterlms_discord_server_id        = sanitize_text_field( get_option( 'ets_lifterlms_discord_server_id' ) );
 	$ets_discord_roles                      = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_role_mapping' ) ) );
@@ -45,9 +45,9 @@
 
 		<div class="ets-input-group">
 
-			<label><?php esc_html_e( 'Admin Redirect URL', 'connect-lifterlms-discord' ); ?> :</label>
-			<input type="text" readonly="true" class="ets-input" name="ets_lifterlms_admin_redirect_url" value="<?php echo esc_attr( get_admin_url( '', 'admin.php' ) . '?page=lifterlms-discord-addon' ); ?>" />
-
+			<label><?php esc_html_e( 'Bot Auth Redirect URL', 'connect-lifterlms-discord' ); ?> :</label>
+			<input required type="text" readonly="true" class="ets-input" name="ets_lifterlms_discord_admin_redirect_url" value="<?php echo esc_url( get_admin_url( '', 'admin.php' ) . '?page=connect-lifterlms-discord&via=lifterlms-discord-connectToBot' ); ?>" />
+			<p class="description msg-green"><b><?php esc_html_e( 'Copy this URL and paste inside your https://discord.com/developers/applications -> 0Auth2 -> Redirects', 'connect-lifterlms-discord' ); ?></b></p>
 		</div>
 
 		<div class="ets-input-group">
@@ -76,7 +76,7 @@
 		</button>
 
 		<?php if ( get_option( 'ets_lifterlms_discord_client_id' ) ) : ?>
-			<a href="?action=lifterlms-discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php esc_html_e( 'Connect your Bot', 'connect-lifterlms-discord' ); ?> <i class='fab fa-discord'></i></a>
+			<a href="?page=connect-lifterlms-discord&action=lifterlms-discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php esc_html_e( 'Connect your Bot', 'connect-lifterlms-discord' ); ?> <i class='fab fa-discord'></i></a>
 		<?php endif; ?>
 	</p>
 
