@@ -82,5 +82,6 @@ Please make sure your bot role has the high priority among all other roles your 
 1. Install and activate the plugin and view the "Discord Settings" menu inside LifterLMS LMS.
 2. Map Discord roles and LifterLMS Course.
 3. Advanced settings.
-4. Connect Button Appearance.
-5. Spot the "Connect to Discord" on Dashboard profile page.
+4. Spot the "Connect to Discord" on Dashboard profile page.
+5. Connect Button Appearance.
+6. Reporting single student overview widget
