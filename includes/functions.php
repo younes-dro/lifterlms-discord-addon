@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * List of pages to define as url redirect.
+ *
+ * @param INT $ets_lifterlms_discord_redirect_page_id Page ID.
+ * @return STRING html options.
+ */
 function ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_id ) {
 	$args  = array(
 		'sort_order'   => 'asc',
@@ -25,23 +32,32 @@ function ets_lifterlms_discord_pages_list( $ets_lifterlms_discord_redirect_page_
 }
 
 /**
- *  Get-URL
+ *  Get-URL.
+ *
+ *  @param INT $page_id The ID of the page.
+ *
+ * @return STRING URL.
  */
 function ets_get_lifterlms_discord_formated_discord_redirect_url( $page_id ) {
 
 	$url    = esc_url( get_permalink( $page_id ) );
 	$parsed = parse_url( $url, PHP_URL_QUERY );
 	if ( $parsed === null ) {
-		return $url .= '?via=lifterlms-discord';
+		return $url .= '?via=connect-lifterlms-discord';
 	} else {
-		if ( stristr( $url, 'via=lifterlms-discord' ) !== false ) {
+		if ( stristr( $url, 'via=connect-lifterlms-discord' ) !== false ) {
 			return $url;
 		} else {
-			return $url .= '&via=lifterlms-discord';
+			return $url .= '&via=connect-lifterlms-discord';
 		}
 	}
 }
 
+/**
+ * Get the current screen url.
+ *
+ * @return STRING The url.
+ */
 function ets_lifterlms_discord_get_current_screen_url() {
 	$parts       = parse_url( home_url() );
 	$current_uri = "{$parts['scheme']}://{$parts['host']}" . ( isset( $parts['port'] ) ? ':' . $parts['port'] : '' ) . add_query_arg( null, null );
@@ -71,9 +87,11 @@ function ets_lifterlms_discord_log_api_response( $user_id, $api_url = '', $api_a
 /**
  * Add API error logs into log file
  *
- * @param array  $response_arr
- * @param array  $backtrace_arr
+ * @param ARRAY  $response_arr
+ * @param INT    $user_id
+ * @param ARRAY  $backtrace_arr
  * @param string $error_type
+ *
  * @return None
  */
 function ets_lifterlms_write_api_response_logs( $response_arr, $user_id, $backtrace_arr = array() ) {
@@ -122,9 +140,10 @@ function ets_lifterlms_discord_check_saved_settings_status() {
 }
 
 /**
- * Get the highest available last attempt schedule time
+ * Get the highest available last attempt schedule time.
+ *
+ * @return BOOL
  */
-
 function ets_lifterlms_discord_get_highest_last_attempt_timestamp() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.last_attempt_gmt FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s ORDER BY aa.last_attempt_gmt DESC limit 1', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
@@ -166,7 +185,7 @@ function ets_lifterlms_discord_as_get_action_data( $action_id ) {
 }
 
 /**
- * Get pending jobs
+ * Get pending jobs.
  */
 function ets_lifterlms_discord_get_all_pending_actions() {
 	global $wpdb;
@@ -179,6 +198,9 @@ function ets_lifterlms_discord_get_all_pending_actions() {
 	}
 }
 
+/**
+ * Get failed actions.
+ */
 function ets_lifterlms_discord_get_all_failed_actions() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.action_id, aa.hook, ag.slug AS as_group FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id=ag.group_id WHERE  ag.slug=%s AND aa.status = "failed" ', LIFTERLMS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
@@ -245,10 +267,10 @@ function ets_lifterlms_discord_count_of_hooks_failures( $hook ) {
 function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$COURSES = '';
 	if ( is_array( $courses ) ) {
@@ -270,7 +292,7 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 		}
 	} else {
 		$enrolled_course = get_post( $courses );
-		$COURSES        .= esc_html( $enrolled_course->post_title );
+		$COURSES        .= ( ! empty( ( $enrolled_course->post_title ) ) ) ? esc_html( $enrolled_course->post_title ) : '';
 	}
 
 		$find    = array(
@@ -304,13 +326,13 @@ function ets_lifterlms_discord_get_formatted_dm( $user_id, $courses, $message ) 
 function ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $lesson_id, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$lesson      = get_post( $lesson_id );
-	$LESSON_NAME = $lesson->post_title;
+	$LESSON_NAME = sanitize_text_field( $lesson->post_title );
 
 	$LESSON_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -345,17 +367,17 @@ function ets_lifterlms_discord_get_formatted_lesson_complete_dm( $user_id, $less
 function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_id, $attempt, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	// $quiz      = get_post( $quiz_id );
 
 	$quiz = llms_get_post( $quiz_id );
 
 	$passing_percent = $quiz->get( 'passing_percent' );
-	$QUIZ_NAME       = $quiz->post_title;
+	$QUIZ_NAME       = sanitize_text_field( $quiz->post_title );
 
 	$QUIZ_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -391,13 +413,13 @@ function ets_lifterlms_discord_get_formatted_quiz_complete_dm( $user_id, $quiz_i
 function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $achievement_id, $related_post_id, $message ) {
 	// return $user_id .'-'. $achievement_id .'-'. $related_post_id .'-'. $message;
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$achievement      = get_post( $achievement_id );
-	$ACHIEVEMENT_NAME = $achievement->post_title;
+	$ACHIEVEMENT_NAME = sanitize_text_field( $achievement->post_title );
 
 	$ACHIEVEMENT_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -432,13 +454,13 @@ function ets_lifterlms_discord_get_formatted_achievement_earned_dm( $user_id, $a
 function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $certificate_id, $related_post_id, $message ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
 	$certificate       = get_post( $certificate_id );
-	$CERTIFICATE_TITLE = $certificate->post_title;
+	$CERTIFICATE_TITLE = sanitize_text_field( $certificate->post_title );
 
 	$CERTIFICATE_COMPLETE_DATE = date_i18n( get_option( 'date_format' ), time() );
 
@@ -471,16 +493,16 @@ function ets_lifterlms_discord_get_formatted_certificate_earned_dm( $user_id, $c
 function ets_lifterlms_discord_get_formatted_quiz_attempt_dm( $user_id, $attempt ) {
 
 	$user_obj         = get_user_by( 'id', $user_id );
-	$STUDENT_USERNAME = $user_obj->user_login;
-	$STUDENT_EMAIL    = $user_obj->user_email;
-	$SITE_URL         = get_bloginfo( 'url' );
-	$BLOG_NAME        = get_bloginfo( 'name' );
+	$STUDENT_USERNAME = sanitize_text_field( $user_obj->user_login );
+	$STUDENT_EMAIL    = sanitize_email( $user_obj->user_email );
+	$SITE_URL         = esc_url( get_bloginfo( 'url' ) );
+	$BLOG_NAME        = sanitize_text_field( get_bloginfo( 'name' ) );
 
-	$message = sprintf( esc_html__( 'Hi %1$s , Your Attempt : ', 'lifterlms-discord-addon' ), $STUDENT_USERNAME );
+	$message = sprintf( esc_html__( 'Hi %1$s , Your Attempt : ', 'connect-lifterlms-discord' ), $STUDENT_USERNAME );
 
-	 $message .= sprintf( esc_html__( 'Correct Answers: %1$d / %2$d', 'lifterlms-discord-addon' ), $attempt->get_count( 'correct_answers' ), $attempt->get_count( 'gradeable_questions' ) );
-	 $message .= sprintf( esc_html__( 'Completed: %s', 'lifterlms-discord-addon' ), $attempt->get_date( 'start' ) );
-	 $message .= sprintf( esc_html__( 'Total time: %s', 'lifterlms-discord-addon' ), $attempt->get_time() );
+	 $message .= sprintf( esc_html__( 'Correct Answers: %1$d / %2$d', 'connect-lifterlms-discord' ), $attempt->get_count( 'correct_answers' ), $attempt->get_count( 'gradeable_questions' ) );
+	 $message .= sprintf( esc_html__( 'Completed: %s', 'connect-lifterlms-discord' ), $attempt->get_date( 'start' ) );
+	 $message .= sprintf( esc_html__( 'Total time: %s', 'connect-lifterlms-discord' ), $attempt->get_time() );
 
 	 return 'Attempt';
 
@@ -554,6 +576,14 @@ function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 
 	return $rich_embed_message;
 }
+
+/**
+ * Get student's course.
+ *
+ * @param INT $user_id
+ *
+ * @return ARRAY|NULL
+ */
 function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 	if ( ! $user_id ) {
 		return null;
@@ -566,12 +596,22 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 		return null;
 	}
 }
+
+/**
+ * The roles assigned message displayed under Connect / Disconnect to discord button.
+ *
+ * @param STRING $mapped_role_name
+ * @param STRING $default_role_name
+ * @param STRING $restrictcontent_discord
+ *
+ * @return STRING Escaped message.
+ */
 function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord ) {
 
 	if ( $mapped_role_name ) {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 
-		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= __( 'Following Roles will be assigned to you in Discord: ', 'connect-lifterlms-discord' );
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $mapped_role_name );
 		if ( $default_role_name ) {
 			$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name );
@@ -582,7 +622,7 @@ function ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $defau
 	} elseif ( $default_role_name ) {
 		$restrictcontent_discord .= '<p class="ets_assigned_role">';
 
-		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'lifterlms-discord-addon' );
+		$restrictcontent_discord .= esc_html__( 'Following Role will be assigned to you in Discord: ', 'connect-lifterlms-discord' );
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $default_role_name );
 
 		$restrictcontent_discord .= '</p>';
@@ -620,6 +660,12 @@ function ets_lifterlms_discord_get_user_roles( $user_id ) {
 	}
 
 }
+
+/**
+ * Remove user meta.
+ *
+ * @param INT $user_id
+ */
 function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 
 	global $wpdb;
@@ -630,6 +676,14 @@ function ets_lifterlms_discord_remove_usermeta( $user_id ) {
 	$wpdb->query( $delete_usermeta_sql );
 
 }
+
+/**
+ * Allowed html.
+ *
+ * @param STRING $html_message
+ *
+ * @return STRING $html_message
+ */
 function ets_lifterlms_discord_allowed_html( $html_message ) {
 	$allowed_html = array(
 		'div'    => array(
@@ -655,7 +709,15 @@ function ets_lifterlms_discord_allowed_html( $html_message ) {
 	return wp_kses( $html_message, $allowed_html );
 }
 
-
+/**
+ * Get discord user avatar.
+ *
+ * @param INT    $discord_user_id
+ * @param STRING $user_avatar
+ * @param STRING $restrictcontent_discord
+ *
+ * @return STRING
+ */
 function ets_lifterlms_discord_get_user_avatar( $discord_user_id, $user_avatar, $restrictcontent_discord ) {
 	if ( $user_avatar ) {
 		$avatar_url               = '<img class="ets-lifterlms-discord-user-avatar" src="https://cdn.discordapp.com/avatars/' . $discord_user_id . '/' . $user_avatar . '.png" />';

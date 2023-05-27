@@ -12,34 +12,34 @@ if ( $currentUser ) {
 	  <div class="ets-container">
 		<div class="top-logo-title">
 		  <img src="<?php echo esc_attr( LIFTERLMS_DISCORD_PLUGIN_DIR_PATH . 'admin/images/ets-logo.png' ); ?>" class="img-fluid company-logo" alt="">
-		  <h1><?php esc_html_e( 'ExpressTech Softwares Solutions Pvt. Ltd.', 'lifterlms-discord-addon' ); ?></h1>
-		  <p><?php esc_html_e( 'ExpressTech Software Solution Pvt. Ltd. is the leading Enterprise WordPress development company.', 'lifterlms-discord-addon' ); ?><br>
-		  <?php esc_html_e( 'Contact us for any WordPress Related development projects.', 'lifterlms-discord-addon' ); ?></p>
+		  <h1><?php esc_html_e( 'ExpressTech Softwares Solutions Pvt. Ltd.', 'connect-lifterlms-discord' ); ?></h1>
+		  <p><?php esc_html_e( 'ExpressTech Software Solution Pvt. Ltd. is the leading Enterprise WordPress development company.', 'connect-lifterlms-discord' ); ?><br>
+		  <?php esc_html_e( 'Contact us for any WordPress Related development projects.', 'connect-lifterlms-discord' ); ?></p>
 		</div>
 		<div class="form-fields-box ">
 		  <div class="ets-row ets-mt-5 ets-align-items-center">
 			<div class="ets-col-7 ets-offset-md-1">
 			  <div class="contact-fields pr-100">
 				<div class="ets-form-group">
-				  <label><?php esc_html_e( 'Full Name', 'lifterlms-discord-addon' ); ?></label>
-				  <input type="text" name="ets_user_name" value="<?php echo esc_html( $currUserName ); ?>" class="form-control contact-input" placeholder="<?php esc_html_e( 'Write Your Full Name', 'lifterlms-discord-addon' ); ?>">
+				  <label><?php esc_html_e( 'Full Name', 'connect-lifterlms-discord' ); ?></label>
+				  <input type="text" name="ets_user_name" value="<?php echo esc_html( $currUserName ); ?>" class="form-control contact-input" placeholder="<?php esc_html_e( 'Write Your Full Name', 'connect-lifterlms-discord' ); ?>">
 				  <?php wp_nonce_field( 'send_support_mail', 'ets_discord_send_support_mail' ); ?>
 				</div>
 				<div class="ets-form-group">
-				  <label><?php esc_html_e( 'Contact Email', 'lifterlms-discord-addon' ); ?></label>
-				  <input type="text" name="ets_user_email" class="form-control contact-input" value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" placeholder="<?php esc_html_e( 'Write Your Email', 'lifterlms-discord-addon' ); ?>">
+				  <label><?php esc_html_e( 'Contact Email', 'connect-lifterlms-discord' ); ?></label>
+				  <input type="text" name="ets_user_email" class="form-control contact-input" value="<?php echo esc_attr( get_option( 'admin_email' ) ); ?>" placeholder="<?php esc_html_e( 'Write Your Email', 'connect-lifterlms-discord' ); ?>">
 				</div>
 				<div class="ets-form-group">
-				  <label><?php esc_html_e( 'Subject', 'lifterlms-discord-addon' ); ?></label>
-				  <input type="text" name="ets_support_subject" class="form-control contact-input" placeholder="<?php esc_html_e( 'Write Your Subject', 'lifterlms-discord-addon' ); ?>" required="">
+				  <label><?php esc_html_e( 'Subject', 'connect-lifterlms-discord' ); ?></label>
+				  <input type="text" name="ets_support_subject" class="form-control contact-input" placeholder="<?php esc_html_e( 'Write Your Subject', 'connect-lifterlms-discord' ); ?>" required="">
 				</div>
 				<div class="ets-form-group">
-				  <label><?php esc_html_e( 'Message', 'lifterlms-discord-addon' ); ?></label>
+				  <label><?php esc_html_e( 'Message', 'connect-lifterlms-discord' ); ?></label>
 				  <textarea name="ets_support_msg" class="form-control contact-textarea" required=""></textarea>
 				</div>
 				<div class="submit-btn d-flex align-items-center w-100 pt-3">
 				  <input type="submit" name="save" id="save" class="btn btn-submit ets-bg-green" value="Submit">                  
-				  <a href="skype:ravi.soni971?chat" class="btn btn-skype ml-auto"><?php esc_html_e( 'Skype', 'lifterlms-discord-addon' ); ?></a>
+				  <a href="skype:ravi.soni971?chat" class="btn btn-skype ml-auto"><?php esc_html_e( 'Skype', 'connect-lifterlms-discord' ); ?></a>
 				</div>
 			  </div>
 			</div>
@@ -48,26 +48,26 @@ if ( $currentUser ) {
 				<div class="contact-details d-inline-block w-100 mb-4">
 				  <div class="top-icon-title d-flex align-items-center w-100">
 					<i class="fas fa-envelope title-icon fa-lg fa-inverse" aria-hidden="true"></i>
-					<p><?php esc_html_e( 'Email', 'lifterlms-discord-addon' ); ?></p>
+					<p><?php esc_html_e( 'Email', 'connect-lifterlms-discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
 					<p><a href="mailto:contact@expresstechsoftwares.com"><?php echo esc_html( 'contact@expresstechsoftwares.com' ); ?></a></p>
-					<p><a href="mailto:business@expresstechsoftwares.com"><?php echo esc_html( 'business@expresstechsoftwares.com' ); ?></a></p>
+					<p><a href="mailto:vinod.tiwari@expresstechsoftwares.com"><?php echo esc_html( 'vinod.tiwari@expresstechsoftwares.com' ); ?></a></p>
 				  </div>
 				</div>
 				<div class="contact-details d-inline-block w-100 mb-4">
 				  <div class="top-icon-title d-flex align-items-center w-100">
 					<i class="fab fa-skype title-icon fa-lg fa-inverse" aria-hidden="true"></i>
-					<p><?php esc_html_e( 'Skype', 'lifterlms-discord-addon' ); ?></p>
+					<p><?php esc_html_e( 'Skype', 'connect-lifterlms-discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
-					<p><?php esc_html_e( 'ravi.soni971', 'lifterlms-discord-addon' ); ?></p>
+					<p><?php esc_html_e( 'ravi.soni971', 'connect-lifterlms-discord' ); ?></p>
 				  </div>
 				</div>
 				<div class="contact-details d-inline-block w-100">
 				  <div class="top-icon-title d-flex align-items-center w-100">
 					<i class="fab fa-whatsapp title-icon fa-lg fa-inverse" aria-hidden="true"></i>
-					<p><?php esc_html_e( 'Whatsapp / Phone', 'lifterlms-discord-addon' ); ?></p>
+					<p><?php esc_html_e( 'Whatsapp / Phone', 'connect-lifterlms-discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
 					<p><?php echo esc_html( '+91-9806724185' ); ?></p>

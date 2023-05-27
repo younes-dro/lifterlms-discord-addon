@@ -176,12 +176,12 @@ class Lifterlms_Discord_Addon_Public {
 				$disconnect_btn_bg_color  = 'style="background-color:' . $ets_lifterlms_discord_disconnect_button_bg_color . '"';
 				$restrictcontent_discord .= '<div class="">';
 				$restrictcontent_discord .= '<div class="">';
-				$restrictcontent_discord .= '<label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'lifterlms-discord-addon' ) . '</label>';
+				$restrictcontent_discord .= '<label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'connect-lifterlms-discord' ) . '</label>';
 				$restrictcontent_discord .= '</div>';
 				$restrictcontent_discord .= '<div class="">';
 				$restrictcontent_discord .= '<a href="#" class="ets-btn lifterlms-discord-addon-btn-disconnect"' . $disconnect_btn_bg_color . ' id="lifterlms-discord-addon-disconnect-discord" data-user-id="' . esc_attr( $user_id ) . '">' . esc_html__( $ets_lifterlms_discord_disconnect_button_text ) . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
 				$restrictcontent_discord .= '<span class="ets-spinner"></span>';
-				$restrictcontent_discord .= '<p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'lifterlms-discord-addon' ) . '</p>';
+				$restrictcontent_discord .= '<p>' . esc_html__( sprintf( 'Connected account: %s', $_ets_lifterlms_discord_username ), 'connect-lifterlms-discord' ) . '</p>';
 				$restrictcontent_discord  = ets_lifterlms_discord_get_user_avatar( $discord_user_id, $discord_user_avatar, $restrictcontent_discord );
 				$restrictcontent_discord  = ets_lifterlms_discord_roles_assigned_message( $mapped_role_name, $default_role_name, $restrictcontent_discord );
 				$restrictcontent_discord .= '</div>';
@@ -193,7 +193,7 @@ class Lifterlms_Discord_Addon_Public {
 
 				$connect_btn_bg_color     = 'style="background-color:' . $ets_lifterlms_discord_connect_button_bg_color . '"';
 				$restrictcontent_discord .= '<div class="">';
-				$restrictcontent_discord .= '<h3 class="llms-sd-section-title">' . esc_html__( 'Discord connection', 'lifterlms-discord-addon' ) . '</h3>';
+				$restrictcontent_discord .= '<h3 class="llms-sd-section-title">' . esc_html__( 'Discord connection', 'connect-lifterlms-discord' ) . '</h3>';
 				$restrictcontent_discord .= '<div class="">';
 				$restrictcontent_discord .= '<a href="?action=lifterlms-discord-login" class="lifterlms-discord-addon-btn-connect ets-btn"' . $connect_btn_bg_color . ' >' . $ets_lifterlms_discord_loggedin_button_text . Lifterlms_Discord_Addon::get_discord_logo_white() . '</a>';
 				$restrictcontent_discord .= '</div>';
@@ -226,9 +226,8 @@ class Lifterlms_Discord_Addon_Public {
 	}
 
 	/**
-	 *  initialize discord authentication.
+	 *  Initialize discord authentication.
 	 */
-
 	public function ets_lifterlms_discord_login() {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
@@ -245,8 +244,8 @@ class Lifterlms_Discord_Addon_Public {
 				exit;
 			}
 
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'lifterlms-discord' ) {
-				$code     = sanitize_text_field( trim( $_GET['code'] ) );
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'connect-lifterlms-discord' ) {
+				$code     = sanitize_text_field( wp_unslash( trim( $_GET['code'] ) ) );
 				$response = $this->ets_lifterlms_discord_auth_token( $code, $user_id );
 
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {

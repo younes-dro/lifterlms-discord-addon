@@ -23,7 +23,7 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 <div class="notice notice-warning ets-notice">
 	<p>
 		<i class='fas fa-info'></i>
-		<?php esc_html_e( 'Drag and Drop the Discord Roles over to the LifterLMS Courses', 'lifterlms-discord-addon' ); ?>
+		<?php esc_html_e( 'Drag and Drop the Discord Roles over to the LifterLMS Courses', 'connect-lifterlms-discord' ); ?>
 	</p>
 </div>
 
@@ -32,14 +32,14 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 <div class="row-container">
 
 	<div class="ets-column discord-roles-col">
-		<h2><?php esc_html_e( 'Discord Roles', 'lifterlms-discord-addon' ); ?></h2>
+		<h2><?php esc_html_e( 'Discord Roles', 'connect-lifterlms-discord' ); ?></h2>
 		<hr>
 			<div class="discord-roles">
 				<span class="spinner"></span>
 			</div>
 	</div>
 	<div class="ets-column">
-		<h2><?php esc_html_e( 'LifterLMS Courses ', 'lifterlms-discord-addon' ); ?></h2>
+		<h2><?php esc_html_e( 'LifterLMS Courses ', 'connect-lifterlms-discord' ); ?></h2>
 		<hr>
 
 		<?php
@@ -61,19 +61,19 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 	<table class="form-table" role="presentation">
 		<tbody>
 		<tr>
-				<th scope="row"><label for="defaultRole"><?php esc_html_e( 'Default Role', 'lifterlms-discord-addon' ); ?></label></th>
+				<th scope="row"><label for="defaultRole"><?php esc_html_e( 'Default Role', 'connect-lifterlms-discord' ); ?></label></th>
 					<td>
 									<?php wp_nonce_field( 'discord_role_mappings_nonce', 'ets_lifterlms_discord_role_mappings_nonce' ); ?>
 									
 									<input type="hidden" id="selected_default_role" value="<?php echo esc_attr( $default_role ); ?>">
 									<select id="defaultRole" name="defaultRole">
-										<option value="none"><?php esc_html_e( '-None-', 'lifterlms-discord-addon' ); ?></option>
+										<option value="none"><?php esc_html_e( '-None-', 'connect-lifterlms-discord' ); ?></option>
 									</select>
-								<p class="description"><?php esc_html_e( 'This Role will be assigned to all level members', 'lifterlms-discord-addon' ); ?></p>
+								<p class="description"><?php esc_html_e( 'This Role will be assigned to all level students', 'connect-lifterlms-discord' ); ?></p>
 				</td>
 		</tr>
 		<tr>
-				<th scope="row"><label><?php esc_html_e( 'Allow non-members', 'lifterlms-discord-addon' ); ?></label></th>
+				<th scope="row"><label><?php esc_html_e( 'Allow non-students', 'connect-lifterlms-discord' ); ?></label></th>
 				<td>
 					<fieldset>
 									<label><input type="radio" name="allow_none_member" value="yes"  
@@ -81,13 +81,13 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 									if ( 'yes' === $allow_none_member ) {
 										echo esc_attr( 'checked="checked"' ); }
 									?>
-									> <span><?php esc_html_e( 'Yes', 'lifterlms-discord-addon' ); ?></span></label><br>
+									> <span><?php esc_html_e( 'Yes', 'connect-lifterlms-discord' ); ?></span></label><br>
 									<label><input type="radio" name="allow_none_member" value="no" 
 									<?php
 									if ( empty( $allow_none_member ) || 'no' === $allow_none_member ) {
 										echo esc_attr( 'checked="checked"' ); }
 									?>
-									> <span><?php esc_html_e( 'No', 'lifterlms-discord-addon' ); ?></span></label>
+									> <span><?php esc_html_e( 'No', 'connect-lifterlms-discord' ); ?></span></label>
 									<p></p>
 					</fieldset>
 				</td>
@@ -109,11 +109,11 @@ $allow_none_member = sanitize_text_field( trim( get_option( 'ets_lifterlms_allow
 
   <div class="bottom-btn">
 		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
-			<?php esc_html_e( 'Save Settings', 'lifterlms-discord-add-on' ); ?>
+			<?php esc_html_e( 'Save Settings', 'connect-lifterlms-discord' ); ?>
 		</button>
 
 		<button id="lifterlmsRevertMapping" name="flush" class="ets-submit ets-bg-red">
-			<?php esc_html_e( 'Flush Mappings', 'lifterlms-discord-add-on' ); ?>
+			<?php esc_html_e( 'Flush Mappings', 'connect-lifterlms-discord' ); ?>
 		</button>
   </div>
 </form>

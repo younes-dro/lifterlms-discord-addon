@@ -20,9 +20,9 @@ if ( $handle ) {
 		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.reload()">
 	</div>
 	<div class="form-group">
-		<a href="<?php echo esc_url( content_url( '/' ) . $filename ); ?>" class="ets-submit ets-bg-download" download><?php esc_html_e( 'Download', 'lifterlms-discord-addon' ); ?></a>
+		<a href="<?php echo esc_url( content_url( '/' ) . $filename ); ?>" class="ets-submit ets-bg-download" download><?php esc_html_e( 'Download', 'connect-lifterlms-discord' ); ?></a>
 	</div>
 	<div class="form-group">
-			<a href="<?php echo esc_url( get_admin_url( '', 'tools.php' ) ) . '?page=action-scheduler&status=pending&s=lifterlms'; ?>" class="ets-submit ets-lifterlms-bg-scheduled-actions"><?php esc_html_e( 'Scheduled Actions', 'lifterlms-discord-addon' ); ?></a>
+			<a href="<?php echo esc_url( get_admin_url( '', 'tools.php' ) ) . '?page=action-scheduler&status=pending&s=lifterlms'; ?>" class="ets-submit ets-lifterlms-bg-scheduled-actions"><?php esc_html_e( 'Scheduled Actions', 'connect-lifterlms-discord' ); ?></a>
 	</div>    
 </div>
