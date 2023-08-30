@@ -14,7 +14,7 @@ $ets_lifterlms_discord_achievement_earned_message = sanitize_text_field( trim( g
 $ets_lifterlms_discord_send_certificate_earned_dm = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_send_certificate_earned_dm' ) ) );
 $ets_lifterlms_discord_certificate_earned_message = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_certificate_earned_message' ) ) );
 
-$embed_messaging_feature                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
+$embed_messaging_feature = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_embed_messaging_feature' ) ) );
 
 $retry_failed_api     = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_retry_failed_api' ) ) );
 $kick_upon_disconnect = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_kick_upon_disconnect' ) ) );
@@ -22,6 +22,8 @@ $retry_api_count      = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 $set_job_cnrc         = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_job_queue_concurrency' ) ) );
 $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_job_queue_batch_size' ) ) );
 $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_log_api_response' ) ) );
+
+$ets_lifterlms_discord_number_of_courses = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_number_of_courses' ) ) );
 
 ?>
 <form method="post" action="<?php echo esc_url( get_site_url() . '/wp-admin/admin-post.php' ); ?>">
@@ -37,7 +39,17 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 		<br/>
 		<small><?php esc_html_e( 'Use this shortcode [lifterlms_discord] to display connect to discord button on any page.', 'connect-lifterlms-discord' ); ?></small>
 		</fieldset></td>
-	</tr> 
+	</tr>
+	<tr>
+		<th scope="row"><?php esc_html_e( 'Number of courses to return', 'connect-lifterlms-discord' ); ?></th>
+		<td> 
+			<fieldset>
+				<?php $ets_lifterlms_discord_number_of_courses_value = isset( $ets_lifterlms_discord_number_of_courses ) ? intval( $ets_lifterlms_discord_number_of_courses ) : 20; ?>
+		<input name="ets_lifterlms_discord_number_of_courses" type="number" min="1" id="ets_lifterlms_discord_number_of_courses" value="<?php echo esc_attr( $ets_lifterlms_discord_number_of_courses_value ); ?>">
+		<br /><small><?php esc_html_e( 'The number of enrollments to retrieve(min : 20).', 'connect-lifterlms-discord' ); ?></small>	
+		</fieldset>
+	</td>
+	  </tr>	 
 	<tr>
 		<th scope="row"><?php esc_html_e( 'Use rich embed messaging feature?', 'connect-lifterlms-discord' ); ?></th>
 		<td> <fieldset>
@@ -47,8 +59,8 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_lifterlms_di
 			echo esc_attr( 'checked="checked"' ); }
 		?>
 		 value="1">
-                <br/>
-                <small>Use [LINEBREAK] to split lines.</small>                
+				<br/>
+				<small>Use [LINEBREAK] to split lines.</small>                
 		</fieldset></td>
 	  </tr> 	           
 	<tr>
