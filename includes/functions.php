@@ -588,8 +588,9 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 	if ( ! $user_id ) {
 		return null;
 	}
-	$student      = llms_get_student( $user_id );
-	$user_courses = $student->get_courses()['results'];
+	$number_of_courses = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_number_of_courses' ) ) );
+	$student           = llms_get_student( $user_id );
+	$user_courses      = $student->get_courses( array( 'limit' => $number_of_courses ) )['results'];
 	if ( $user_courses ) {
 		return $user_courses;
 	} else {

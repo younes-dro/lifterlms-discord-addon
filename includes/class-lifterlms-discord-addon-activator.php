@@ -54,6 +54,7 @@ class Lifterlms_Discord_Addon_Activator {
 		update_option( 'ets_lifterlms_discord_disconnect_button_text', 'Disconnect From Discord' );
 		update_option( 'ets_lifterlms_discord_embed_messaging_feature', false );
 		update_option( 'ets_lifterlms_discord_uuid_file_name', wp_generate_uuid4() );
+		update_option( 'ets_lifterlms_discord_number_of_courses', 20 );
 	}
 
 }

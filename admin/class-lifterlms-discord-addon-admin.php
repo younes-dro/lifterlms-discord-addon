@@ -434,6 +434,7 @@ class Lifterlms_Discord_Addon_Admin {
 			$set_job_cnrc                                     = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
 			$set_job_q_batch_size                             = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
 			$log_api_res                                      = isset( $_POST['log_api_res'] ) ? sanitize_textarea_field( trim( $_POST['log_api_res'] ) ) : '';
+			$ets_lifterlms_discord_number_of_courses          = isset( $_POST['ets_lifterlms_discord_number_of_courses'] ) ? sanitize_textarea_field( trim( $_POST['ets_lifterlms_discord_number_of_courses'] ) ) : 20;
 			$ets_current_url                                  = sanitize_text_field( trim( $_POST['current_url'] ) );
 
 		if ( isset( $_POST['ets_lifterlms_discord_advance_settings_nonce'] ) && wp_verify_nonce( $_POST['ets_lifterlms_discord_advance_settings_nonce'], 'lifterlms_discord_advance_settings_nonce' ) ) {
@@ -484,7 +485,7 @@ class Lifterlms_Discord_Addon_Admin {
 				} else {
 					update_option( 'ets_lifterlms_discord_send_certificate_earned_dm', false );
 
-					// send 
+					// send
 				}
 				if ( isset( $_POST['ets_lifterlms_discord_certificate_earned_message'] ) && $_POST['ets_lifterlms_discord_certificate_earned_message'] != '' ) {
 					update_option( 'ets_lifterlms_discord_certificate_earned_message', $ets_lifterlms_discord_certificate_earned_message );
@@ -532,6 +533,13 @@ class Lifterlms_Discord_Addon_Admin {
 					update_option( 'ets_lifterlms_discord_embed_messaging_feature', true );
 				} else {
 					update_option( 'ets_lifterlms_discord_embed_messaging_feature', false );
+				}
+				if ( isset( $_POST['ets_lifterlms_discord_number_of_courses'] ) ) {
+					if ( $ets_lifterlms_discord_number_of_courses < 20 ) {
+						update_option( 'ets_lifterlms_discord_number_of_courses', 20 );
+					} else {
+						update_option( 'ets_lifterlms_discord_number_of_courses', $ets_lifterlms_discord_number_of_courses );
+					}
 				}
 
 				$message      = esc_html__( 'Your settings are saved successfully.', 'connect-lifterlms-discord' );
