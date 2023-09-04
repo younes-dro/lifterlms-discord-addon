@@ -360,8 +360,35 @@
 					complete: function () {
 						$(".clr-log.spinner").removeClass("is-active").hide();
 					}
+			});
+		});	
+		
+		$(document).ready(function(){
+			$(' .ets-lifterlms-discord-review-notice > button.notice-dismiss' ).on('click', function() {
+
+				$.ajax({
+					type: "POST",
+					dataType: "JSON",
+					url: ets_lifterlms_js_params.admin_ajax,
+					data: { 
+						'action': 'ets_lifterlms_discord_notice_dismiss', 
+						'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce
+					},
+					beforeSend: function () {
+						console.log('sending...');
+					},
+					success: function (response) {
+						console.log(response);
+					},
+					error: function (response) {
+						console.error(response);
+					},
+					complete: function () {
+						// 
+					}
 				});
 			});			
+		});		
 
 		/*Tab options*/
 		if ($.skeletabs ) {
