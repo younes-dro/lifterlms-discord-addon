@@ -526,3 +526,13 @@ div.ets-lifterlms-discord-review-notice div.ets-lifterlms-discord-notice-icon{
 div.ets-lifterlms-discord-review-notice div.ets-lifterlms-discord-notice-content{
   padding: 20px;
 }
+div.ets-lifterlms-discord-review-notice div.ets-lifterlms-discord-notice-content p.ets-lifterlms-discord-signature {
+  display: flex; 
+  align-items: center;
+}
+div.ets-lifterlms-discord-review-notice div.ets-lifterlms-discord-notice-content img{
+  width: 45px;
+  height: auto;
+  border-radius: 50%;
+  margin-left: 15px;
+}
