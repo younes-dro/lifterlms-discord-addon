@@ -759,7 +759,7 @@ class Lifterlms_Discord_Addon_Admin {
 		$order        = new LLMS_Order( $order_id );
 		$order_status = $order->get_access_status();
 
-		if ( $order_status == 'inactive' ) {
+		if ( $order_status == 'inactive' || $order_status == 'expired' ) {
 			$user_id                            = $order->get( 'user_id' );
 			$membership                         = new LLMS_Membership( $order->get( 'product_id' ) );
 			$course_ids                         = $membership->get_auto_enroll_courses();
