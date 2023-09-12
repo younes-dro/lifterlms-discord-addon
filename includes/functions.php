@@ -578,7 +578,7 @@ function ets_lifterlms_discord_get_rich_embed_message( $message ) {
 }
 
 /**
- * Get student's course.
+ * Get student's enrolled course.
  *
  * @param INT $user_id
  *
@@ -590,7 +590,12 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 	}
 	$number_of_courses = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_number_of_courses' ) ) );
 	$student           = llms_get_student( $user_id );
-	$user_courses      = $student->get_courses( array( 'limit' => $number_of_courses ) )['results'];
+	$user_courses      = $student->get_courses(
+		array(
+			'limit'  => $number_of_courses,
+			'status' => 'enrolled',
+		)
+	)['results'];
 	if ( $user_courses ) {
 		return $user_courses;
 	} else {
