@@ -226,6 +226,20 @@ $ets_lifterlms_discord_number_of_courses = sanitize_text_field( trim( get_option
 		 value="1">
 		</fieldset></td>
 	  </tr>
+	  <tr>
+	  <th scope="row"><?php esc_html_e( 'Update Discord Roles for All students', 'connect-lifterlms-discord' ); ?></th>
+	  <td> <fieldset>
+		<button id="update-discord-roles-for-all-students"><?php esc_html_e( 'RUN', 'connect-lifterlms-discord' ); ?></button>
+		<span></span>
+	  </fieldset></td>
+	  </tr>
+	  <tr>
+	  <th scope="row"><?php esc_html_e( 'Update Discord Roles for All students', 'connect-lifterlms-discord' ); ?></th>
+	  <td> <fieldset>
+		<button id="disconnect-all-students"><?php esc_html_e( 'Disconnect all students', 'connect-lifterlms-discord' ); ?></button>
+		<span></span>
+	  </fieldset></td>
+	  </tr>
 	
 	</tbody>
   </table>
