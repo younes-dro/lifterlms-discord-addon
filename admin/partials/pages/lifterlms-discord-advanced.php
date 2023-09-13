@@ -234,7 +234,7 @@ $ets_lifterlms_discord_number_of_courses = sanitize_text_field( trim( get_option
 	  </fieldset></td>
 	  </tr>
 	  <tr>
-	  <th scope="row"><?php esc_html_e( 'Update Discord Roles for All students', 'connect-lifterlms-discord' ); ?></th>
+	  <th scope="row"><?php esc_html_e( 'Force disconnect all students', 'connect-lifterlms-discord' ); ?></th>
 	  <td> <fieldset>
 		<button id="disconnect-all-students"><?php esc_html_e( 'Disconnect all students', 'connect-lifterlms-discord' ); ?></button>
 		<span></span>
