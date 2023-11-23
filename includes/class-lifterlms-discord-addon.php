@@ -70,7 +70,7 @@ class Lifterlms_Discord_Addon {
 		if ( defined( 'LIFTERLMS_DISCORD_ADDON_VERSION' ) ) {
 			$this->version = LIFTERLMS_DISCORD_ADDON_VERSION;
 		} else {
-			$this->version = '1.0.6';
+			$this->version = '1.0.7';
 		}
 		$this->plugin_name = 'lifterlms-discord-addon';
 
@@ -199,6 +199,8 @@ class Lifterlms_Discord_Addon {
 		// $this->loader->add_action( 'lifterlms_after_template_part', $plugin_admin, 'ets_lifterlms_after_template_part', 10, 4);
 		$this->loader->add_action( 'llms_reporting_single_student_overview_after_widgets', $plugin_admin, 'ets_lifterlms_reporting_single_student_overview', 99, 1 );
 		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_notice_dismiss', $plugin_admin, 'ets_lifterlms_discord_notice_dismiss' );
+		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_update_all_students_roles', $plugin_admin, 'ets_lifterlms_discord_update_all_students_roles' );
+		$this->loader->add_action( 'wp_ajax_ets_lifterlms_discord_disconnect_all_students', $plugin_admin, 'ets_lifterlms_discord_disconnect_all_students' );
 	}
 
 	/**

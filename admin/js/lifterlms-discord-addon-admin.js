@@ -362,6 +362,69 @@
 					}
 			});
 		});	
+
+		$('button#update-discord-roles-for-all-students').on('click', function(e){
+			e.preventDefault();
+			var spanElement = $(this).next('span')
+			
+			$.ajax({
+				type: "POST",
+				dataType: "JSON",
+				url: ets_lifterlms_js_params.admin_ajax,
+				data: { 
+					'action': 'ets_lifterlms_discord_update_all_students_roles', 
+					'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce
+				},
+				beforeSend: function () {
+					spanElement.text('processing ... ')
+				},
+				success: function (response) {
+					console.log(response);
+					spanElement.text(response.message)
+				},
+				error: function (response) {
+					console.error(response);
+				},
+				complete: function () {
+					// 
+				}
+			});
+		})
+
+		
+
+		$('button#disconnect-all-students').on('click', function(e){
+			e.preventDefault();
+
+			var confirmation = confirm("Wait!\nAre you sure you want to disconnect all users from Discord?");
+
+			if ( !confirmation) return
+
+			var spanElement = $(this).next('span')
+			
+			$.ajax({
+				type: "POST",
+				dataType: "JSON",
+				url: ets_lifterlms_js_params.admin_ajax,
+				data: { 
+					'action': 'ets_lifterlms_discord_disconnect_all_students', 
+					'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce
+				},
+				beforeSend: function () {
+					spanElement.text('processing ... ')
+				},
+				success: function (response) {
+					console.log(response);
+					spanElement.text(response.message)
+				},
+				error: function (response) {
+					console.error(response);
+				},
+				complete: function () {
+					// 
+				}
+			});
+		})		
 		
 		$(document).ready(function(){
 			$(' .ets-lifterlms-discord-review-notice > button.notice-dismiss' ).on('click', function() {
@@ -375,10 +438,11 @@
 						'ets_lifterlms_discord_nonce': ets_lifterlms_js_params.ets_lifterlms_discord_nonce
 					},
 					beforeSend: function () {
+						$(this).next('span').css({'display':'inline'})
 						console.log('sending...');
 					},
 					success: function (response) {
-						console.log(response);
+						console.log(response.message);
 					},
 					error: function (response) {
 						console.error(response);

@@ -1,0 +1,4 @@
+= 1.0.7 =
+- Add update discord roles for all students button
+- Add Forcedisconnect all students
+- Display student's roles on user list

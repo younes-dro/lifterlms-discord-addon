@@ -604,6 +604,57 @@ function ets_lifterlms_discord_get_student_courses_id( $user_id = '' ) {
 }
 
 /**
+ * Get student's expired course.
+ *
+ * @param INT $user_id
+ *
+ * @return ARRAY|NULL
+ */
+function ets_lifterlms_discord_get_student_expired_courses_id( $user_id = '' ) {
+	if ( ! $user_id ) {
+		return null;
+	}
+	$number_of_courses = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_number_of_courses' ) ) );
+	$student           = llms_get_student( $user_id );
+	$user_courses      = $student->get_courses(
+		array(
+			'limit'  => $number_of_courses,
+			'status' => 'expired',
+		)
+	)['results'];
+	if ( $user_courses ) {
+		return $user_courses;
+	} else {
+		return null;
+	}
+}
+/**
+ * Get student's cancelled course.
+ *
+ * @param INT $user_id
+ *
+ * @return ARRAY|NULL
+ */
+function ets_lifterlms_discord_get_student_cancelled_courses_id( $user_id = '' ) {
+	if ( ! $user_id ) {
+		return null;
+	}
+	$number_of_courses = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_number_of_courses' ) ) );
+	$student           = llms_get_student( $user_id );
+	$user_courses      = $student->get_courses(
+		array(
+			'limit'  => $number_of_courses,
+			'status' => 'cancelled',
+		)
+	)['results'];
+	if ( $user_courses ) {
+		return $user_courses;
+	} else {
+		return null;
+	}
+}
+
+/**
  * The roles assigned message displayed under Connect / Disconnect to discord button.
  *
  * @param STRING $mapped_role_name
@@ -730,4 +781,44 @@ function ets_lifterlms_discord_get_user_avatar( $discord_user_id, $user_avatar, 
 		$restrictcontent_discord .= ets_lifterlms_discord_allowed_html( $avatar_url );
 	}
 	return $restrictcontent_discord;
+}
+
+/**
+ *  Display the roles next to the discord account on the user list
+ *
+ * @param INT $user_id
+ *
+ * @return STRING
+ */
+
+function ets_lifterlms_discord_user_roles_on_user_list( $user_id ) {
+
+	$enrolled_courses                   = ets_lifterlms_discord_get_student_courses_id( $user_id );
+	$ets_lifterlms_discord_role_mapping = json_decode( get_option( 'ets_lifterlms_discord_role_mapping' ), true );
+	$all_roles                          = unserialize( get_option( 'ets_lifterlms_discord_all_roles' ) );
+	$roles_color                        = unserialize( get_option( 'ets_lifterlms_discord_roles_color' ) );
+	$default_role                       = sanitize_text_field( trim( get_option( 'ets_lifterlms_discord_default_role_id' ) ) );
+	$mapped_role_name                   = '';
+	$default_role_name                  = '';
+	if ( is_array( $enrolled_courses ) && is_array( $all_roles ) && is_array( $ets_lifterlms_discord_role_mapping ) ) {
+		$lastKey = array_key_last( $enrolled_courses );
+		foreach ( $enrolled_courses as $key => $enrolled_course_id ) {
+			if ( array_key_exists( 'course_id_' . $enrolled_course_id, $ets_lifterlms_discord_role_mapping ) ) {
+
+				$mapped_role_id = $ets_lifterlms_discord_role_mapping[ 'course_id_' . $enrolled_course_id ];
+
+				if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
+					$mapped_role_name .= '<span> <i style="background-color:#' . dechex( $roles_color[ $mapped_role_id ] ) . '"></i>' . $all_roles[ $mapped_role_id ] . '</span>';
+				}
+			}
+		}
+	}
+
+	if ( is_array( $all_roles ) ) {
+		if ( $default_role != 'none' && array_key_exists( $default_role, $all_roles ) ) {
+			$default_role_name = '<span><i style="background-color:#' . dechex( $roles_color[ $default_role ] ) . '"></i> ' . $all_roles[ $default_role ] . '</span>';
+		}
+	}
+
+	return $mapped_role_name . $default_role_name;
 }
