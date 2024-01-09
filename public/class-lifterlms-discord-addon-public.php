@@ -370,9 +370,11 @@ class Lifterlms_Discord_Addon_Public {
 	 * @return NONE
 	 */
 	public function add_discord_member_in_guild( $_ets_lifterlms_discord_user_id, $user_id, $access_token ) {
-		if ( ! is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+		// Check if the $user_id is available and valid
+		if ( empty( $user_id ) || ! is_numeric( $user_id ) ) {
+
+			wp_send_json_error( 'Invalid user ID', 400 );
+			return;
 		}
 		$enrolled_coures = map_deep( ets_lifterlms_discord_get_student_courses_id( $user_id ), 'sanitize_text_field' );
 		if ( $enrolled_coures !== null ) {
@@ -469,9 +471,14 @@ class Lifterlms_Discord_Addon_Public {
 	public function get_discord_current_user( $access_token ) {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			return;
 		}
+
 		$user_id = get_current_user_id();
+		if ( empty( $user_id ) || ! is_numeric( $user_id ) ) {
+			wp_send_json_error( 'Invalid user ID', 400 );
+			return;
+		}
 
 		$discord_cuser_api_url = LIFTERLMS_DISCORD_API_URL . 'users/@me';
 		$param                 = array(
@@ -550,7 +557,7 @@ class Lifterlms_Discord_Addon_Public {
 	 * Discord DM a member using bot.
 	 *
 	 * @param INT    $user_id Student's id.
-	 * @param MIXED $course
+	 * @param MIXED  $course
 	 * @param STRING $type (warning|expired).
 	 * @param INT    $related (quiz_attempt|Realted achievment post)
 	 */
@@ -690,7 +697,7 @@ class Lifterlms_Discord_Addon_Public {
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			return;
 		}
 
 		// Check for nonce security
@@ -994,13 +1001,13 @@ class Lifterlms_Discord_Addon_Public {
 
 	public function ets_lifterlms_quiz_attempt_results( $attempt ) {
 
-		$student = $attempt->get_student();
-		$user_id = $student->get( 'id' );
-		$access_token                       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
-		$refresh_token                      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
-		if ( $access_token && $refresh_token && is_object( $attempt) &&  $attempt->get_count( 'gradeable_questions' )  ) {
-			$user_attempt_dm_send  = 	sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_atttempt_' . $attempt->get_key(), true ) ) );
-			if ( $user_attempt_dm_send ){
+		$student       = $attempt->get_student();
+		$user_id       = $student->get( 'id' );
+		$access_token  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
+		$refresh_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
+		if ( $access_token && $refresh_token && is_object( $attempt ) && $attempt->get_count( 'gradeable_questions' ) ) {
+			$user_attempt_dm_send = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_atttempt_' . $attempt->get_key(), true ) ) );
+			if ( $user_attempt_dm_send ) {
 				/**
 				 * Attempt DM already sent.
 				 * Stop here to avoid re-send mesage when user refresh the attempt page.
@@ -1015,7 +1022,6 @@ class Lifterlms_Discord_Addon_Public {
 					return;
 				}
 			}
-
 		}
 	}
 
