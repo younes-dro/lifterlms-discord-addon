@@ -70,7 +70,7 @@ class Lifterlms_Discord_Addon {
 		if ( defined( 'LIFTERLMS_DISCORD_ADDON_VERSION' ) ) {
 			$this->version = LIFTERLMS_DISCORD_ADDON_VERSION;
 		} else {
-			$this->version = '1.0.8';
+			$this->version = '1.0.9';
 		}
 		$this->plugin_name = 'lifterlms-discord-addon';
 

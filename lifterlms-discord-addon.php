@@ -16,7 +16,7 @@
  * Plugin Name:       Connect LifterLMS to Discord
  * Plugin URI:        https://www.expresstechsoftwares.com/?page_id=18295&preview=true
  * Description:       Create an engaging community/forum of your LifterLMS online courses, sell private content. Discord is the #1 tool for students to learn in groups, chat and video.
- * Version:           1.0.8
+ * Version:           1.0.9
  * Author:            ExpressTech Softwares Solutions Pvt Ltd
  * Author URI:        https://www.expresstechsoftwares.com
  * License:           GPL-2.0+
