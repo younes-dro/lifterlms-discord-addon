@@ -1,3 +1,11 @@
+= 1.0.9 =
+- Improved handling of unauthorized and anonymous users during Discord integration.
+- Replaced 'exit()' with 'return' for better compatibility with WordPress actions and filters.
+- Added user-friendly messages for Discord integration, guiding users to log in or notifying them about the delay in processing anonymous accounts.
+
+= 1.0.8 =
+- Added documentation links for enhanced user guidance.
+
 = 1.0.7 =
 - Add update discord roles for all students button
 - Add Forcedisconnect all students

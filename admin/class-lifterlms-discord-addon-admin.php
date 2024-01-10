@@ -1078,7 +1078,7 @@ class Lifterlms_Discord_Addon_Admin {
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			return;
 		}
 
 		// Check for nonce security
@@ -1086,8 +1086,12 @@ class Lifterlms_Discord_Addon_Admin {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 		}
-
-		update_user_meta( get_current_user_id(), '_ets_lifterlms_discord_dismissed_notification', true );
+		$user_id  = get_current_user_id();
+		if ( empty( $user_id ) || ! is_numeric( $user_id ) ) {
+			wp_send_json_error( 'Invalid user ID', 400 );
+			return;
+		}
+		update_user_meta( $user_id, '_ets_lifterlms_discord_dismissed_notification', true );
 		$event_res = array(
 			'status'  => 1,
 			'message' => __( 'success', 'connect-lifterlms-and-discord' ),
@@ -1105,7 +1109,7 @@ class Lifterlms_Discord_Addon_Admin {
 	public function ets_lifterlms_discord_update_all_students_roles() {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			return;
 		}
 
 		// Check for nonce security
@@ -1146,7 +1150,7 @@ class Lifterlms_Discord_Addon_Admin {
 	public function ets_lifterlms_discord_disconnect_all_students() {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			return;
 		}
 
 		// Check for nonce security
