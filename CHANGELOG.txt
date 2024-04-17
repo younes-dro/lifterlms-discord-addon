@@ -1,3 +1,6 @@
+= 1.0.10 =
+- Updated plugin to support WordPress version 6.5
+
 = 1.0.9 =
 - Improved handling of unauthorized and anonymous users during Discord integration.
 - Replaced 'exit()' with 'return' for better compatibility with WordPress actions and filters.
