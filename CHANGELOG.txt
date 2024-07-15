@@ -1,3 +1,7 @@
+= 1.0.11 =
+- **Enhancement:** Added validation to ensure `$attempt` is set and is a valid `LLMS_Quiz_Attempt` object.
+- **Enhancement:** Added validation to ensure `$student` is set and is a valid `LLMS_Student` object.
+
 = 1.0.10 =
 - Updated plugin to support WordPress version 6.5
 
