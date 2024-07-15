@@ -1001,7 +1001,18 @@ class Lifterlms_Discord_Addon_Public {
 
 	public function ets_lifterlms_quiz_attempt_results( $attempt ) {
 
-		$student       = $attempt->get_student();
+		// Ensure $attempt is set and a valid LLMS_Quiz_Attempt object
+		if ( ! $attempt || ! $attempt instanceof LLMS_Quiz_Attempt ) {
+			return;
+		}
+
+		$student = $attempt->get_student();
+
+		// Ensure $student is set and a valid LLMS_Student object
+		if ( ! $student || ! $student instanceof LLMS_Student ) {
+			return;
+		}
+
 		$user_id       = $student->get( 'id' );
 		$access_token  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_access_token', true ) ) );
 		$refresh_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_lifterlms_discord_refresh_token', true ) ) );
